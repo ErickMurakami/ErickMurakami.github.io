@@ -36,7 +36,17 @@ const title = pt ? "Certificações" : "Certifications";
             </time>
           </p>
           <EntryHeading>{entry.data.title}</EntryHeading>
-          <a class="text-link" href={entry.data.credentialUrl}>
+          <a
+            class="text-link"
+            href={entry.data.credentialUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={
+              pt
+                ? "Verificar credencial (abre em nova aba)"
+                : "Verify credential (opens in a new tab)"
+            }
+          >
             {pt ? "Verificar credencial ↗" : "Verify credential ↗"}
           </a>
         </article>
