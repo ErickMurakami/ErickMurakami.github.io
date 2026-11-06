@@ -254,12 +254,18 @@ test("blog stays hidden unless that language has published articles", async ({
     await expect(
       page
         .locator(".primary-nav")
-        .getByRole("link", { name: "Blog", exact: true }),
+        .getByRole("link", {
+          name: home === "/pt/" ? "Artigos" : "Writing",
+          exact: true,
+        }),
     ).toHaveCount(published ? 1 : 0);
     if (published) {
       await page
         .locator(".primary-nav")
-        .getByRole("link", { name: "Blog", exact: true })
+        .getByRole("link", {
+          name: home === "/pt/" ? "Artigos" : "Writing",
+          exact: true,
+        })
         .click();
       await expect(page.locator("h1")).toHaveCount(1);
     }

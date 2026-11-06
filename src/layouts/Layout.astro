@@ -14,7 +14,6 @@ const localized = (en: string, br: string) => (pt ? br : en);
 const paths = languagePaths(Astro.url.pathname);
 const home = pt ? "/pt/" : "/";
 const posts = await getPublishedPosts(pt ? "pt" : "en");
-const certifications = await getPublishedCertifications(pt ? "pt" : "en");
 const onCertifications = Astro.url.pathname === `${home}certifications/`;
 const onBlog = Astro.url.pathname.startsWith(`${home}blog/`);
 const blogSlug = onBlog
@@ -60,16 +59,11 @@ const sectionLink = (section: string) =>
   onHome ? `${home}#${section}` : `${home}${section}/`;
 const links = [
   [sectionLink("projects"), localized("Projects", "Projetos")],
-  [sectionLink("courses"), localized("Education", "Cursos")],
   [sectionLink("about"), localized("About", "Sobre")],
   [sectionLink("contact"), localized("Contact", "Contato")],
 ];
-if (posts.length) links.splice(1, 0, [sectionLink("blog"), "Blog"]);
-if (certifications.length)
-  links.splice(posts.length ? 2 : 1, 0, [
-    sectionLink("certifications"),
-    localized("Certifications", "Certificações"),
-  ]);
+if (posts.length)
+  links.splice(1, 0, [sectionLink("blog"), localized("Writing", "Artigos")]);
 ---
 
 <!doctype html>
@@ -159,7 +153,7 @@ if (certifications.length)
           )}
         >
           <span class="brand-symbol">
-            em<span>.</span>
+            EM<span>.</span>
           </span>
           <span>Erick Murakami</span>
         </a>
@@ -242,7 +236,7 @@ if (certifications.length)
           href={home}
           aria-label={localized("Home", "Início")}
         >
-          em<span>.</span>
+          EM<span>.</span>
         </a>
       </div>
       <div class="footer-links">

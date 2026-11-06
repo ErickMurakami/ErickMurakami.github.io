@@ -55,13 +55,13 @@ try {
   }
   await writeFile(paths[1], fixture(false));
   build();
-  assert.match(
-    await read("dist/pt/index.html"),
-    /href="\/pt\/#certifications"/,
+  assert.ok(
+    !(await read("dist/pt/index.html")).includes('href="/pt/#certifications"'),
   );
-  assert.match(
-    await read("dist/pt/projects/index.html"),
-    /href="\/pt\/certifications\/"/,
+  assert.ok(
+    !(await read("dist/pt/projects/index.html")).includes(
+      'href="/pt/certifications/"',
+    ),
   );
   const ptPage = await read("dist/pt/certifications/index.html");
   assert.ok(ptPage.includes("Temporary QA credential"));
@@ -69,7 +69,9 @@ try {
   assert.match(await read("dist/sitemap.xml"), /\/pt\/certifications\//);
   await writeFile(paths[0], fixture(false));
   build();
-  assert.match(await read("dist/index.html"), /href="\/#certifications"/);
+  assert.ok(
+    !(await read("dist/index.html")).includes('href="/#certifications"'),
+  );
   assert.match(
     await read("dist/certifications/index.html"),
     /href="\/pt\/certifications\/"/,

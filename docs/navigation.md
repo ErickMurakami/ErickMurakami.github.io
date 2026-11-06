@@ -1,6 +1,6 @@
 # Navegação
 
-Na home, o menu rola para `#projects`, `#blog`, `#certifications`, `#courses`, `#about` e `#contact`. Fora da home, os links abrem as páginas equivalentes no idioma atual. Blog e Certificações só entram no menu quando têm conteúdo publicado nesse idioma.
+O menu principal contém Projects / Projetos, Writing / Artigos, About / Sobre e Contact / Contato. Writing só aparece quando houver artigos publicados no idioma atual. Na home, os links rolam para as seções; fora dela, abrem as páginas equivalentes. As URLs existentes de artigos continuam sob `/blog/` e `/pt/blog/`.
 
 Projetos, Formação e cursos, Sobre e Contato têm páginas em `/projects/`, `/courses/`, `/about/` e `/contact/`, com equivalentes sob `/pt/`. Os estudos de caso retornam à galeria de projetos. A troca de idioma preserva a página equivalente.
 

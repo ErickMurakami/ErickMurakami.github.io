@@ -5,7 +5,7 @@ for (const prefix of ["", "/pt"]) {
     page,
   }) => {
     await page.goto(`${prefix}/`);
-    for (const section of ["projects", "courses", "about", "contact"]) {
+    for (const section of ["projects", "about", "contact"]) {
       await expect(
         page.locator(`.primary-nav a[href="${prefix}/#${section}"]`),
       ).toHaveCount(1);
@@ -14,7 +14,7 @@ for (const prefix of ["", "/pt"]) {
     await expect(page).toHaveURL(`${prefix}/#about`);
     await expect(page.locator("#about h2")).toBeInViewport();
     await page.goto(`${prefix}/projects/econolyze/`);
-    for (const section of ["projects", "courses", "about", "contact"]) {
+    for (const section of ["projects", "about", "contact"]) {
       const link = page.locator(`.primary-nav a[href="${prefix}/${section}/"]`);
       await expect(link).toHaveCount(1);
       await link.click();
@@ -74,4 +74,26 @@ test("Projects navigation scrolls progressively instead of jumping", async ({
   await expect(page.locator("#projects h2")).toBeInViewport();
   await page.goBack();
   await expect(page).toHaveURL("/");
+});
+
+test("header and footer use EM branding and a compact primary menu", async ({
+  page,
+}) => {
+  for (const home of ["/", "/pt/"]) {
+    await page.goto(home);
+    for (const mark of await page.locator(".brand-symbol").all())
+      await expect(mark).toHaveText("EM.");
+    await expect(page.locator('.primary-nav a[href*="courses"]')).toHaveCount(
+      0,
+    );
+    await expect(
+      page.locator('.primary-nav a[href*="certifications"]'),
+    ).toHaveCount(0);
+    const labels = await page.locator(".primary-nav a").allTextContents();
+    expect(labels.map((label) => label.trim())).toEqual(
+      home === "/"
+        ? ["Projects", "About", "Contact"]
+        : ["Projetos", "Sobre", "Contato"],
+    );
+  }
 });
