@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Econolyze",
+    "url": "https://github.com/ErickMurakami/Econolyze",
+    "description": null,
+    "language": "Java",
+    "topics": [],
+    "updatedAt": "2026-05-20T16:20:01Z",
+    "branch": "main",
+    "revision": "f849783",
+    "public": true
+  },
+  {
+    "name": "Logistic",
+    "url": "https://github.com/ErickMurakami/Logistic",
+    "description": null,
+    "language": "Java",
+    "topics": [],
+    "updatedAt": "2026-04-20T02:38:19Z",
+    "branch": "main",
+    "revision": "5d63a16",
+    "public": true
+  },
+  {
+    "name": "quarkus-rate-limiter",
+    "url": "https://github.com/ErickMurakami/quarkus-rate-limiter",
+    "description": null,
+    "language": "Java",
+    "topics": [],
+    "updatedAt": "2026-06-10T16:50:18Z",
+    "branch": "master",
+    "revision": "5834889",
+    "public": true
+  },
+  {
+    "name": "quarkus-schema-per-tenant",
+    "url": "https://github.com/ErickMurakami/quarkus-schema-per-tenant",
+    "description": null,
+    "language": "Java",
+    "topics": [],
+    "updatedAt": "2026-11-05T17:02:37Z",
+    "branch": "main",
+    "revision": "773e75e",
+    "public": true
+  }
+]
