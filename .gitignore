@@ -9,3 +9,7 @@ test-results/
 
 # Local article preview; never include it in commits.
 /src/content/notes/teste.md
+
+# Local certification mockups; excluded from production by localOnly as well.
+/src/content/certifications/mock-aws-cloud-practitioner.md
+/src/content/certifications-pt/mock-aws-cloud-practitioner.md

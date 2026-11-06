@@ -84,6 +84,9 @@ const posts = await getPublishedPosts("en");
             <h2>Projects</h2>
             <p>What each project does, how it works, and what I’d change.</p>
           </div>
+          <a class="text-link" href="/projects/">
+            View all projects →
+          </a>
         </div>
         <ProjectGallery projects={projects} locale="en" portion="lead" />
       </section>
@@ -91,11 +94,6 @@ const posts = await getPublishedPosts("en");
   </section>
   <div class="shell project-continuation">
     <ProjectGallery projects={projects} locale="en" portion="continuation" />
-    <div class="actions">
-      <a class="text-link" href="/projects/">
-        View all projects →
-      </a>
-    </div>
   </div>
   <BlogPreview posts={posts} locale="en" />
   <Certifications entries={certifications} locale="en" />
