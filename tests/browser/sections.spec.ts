@@ -5,7 +5,7 @@ for (const prefix of ["", "/pt"]) {
     page,
   }) => {
     await page.goto(`${prefix}/`);
-    for (const section of ["projects", "about", "contact"]) {
+    for (const section of ["projects", "courses", "about", "contact"]) {
       await expect(
         page.locator(`.primary-nav a[href="${prefix}/#${section}"]`),
       ).toHaveCount(1);
@@ -14,12 +14,19 @@ for (const prefix of ["", "/pt"]) {
     await expect(page).toHaveURL(`${prefix}/#about`);
     await expect(page.locator("#about h2")).toBeInViewport();
     await page.goto(`${prefix}/projects/econolyze/`);
-    for (const section of ["projects", "about", "contact"]) {
+    for (const section of ["projects", "courses", "about", "contact"]) {
       const link = page.locator(`.primary-nav a[href="${prefix}/${section}/"]`);
       await expect(link).toHaveCount(1);
       await link.click();
       await expect(page).toHaveURL(`${prefix}/${section}/`);
       await expect(page.locator("h1")).toHaveCount(1);
+      if (section === "courses") {
+        await expect(page.locator("#courses")).toContainText("FATEC Rio Preto");
+        await expect(page.locator("#courses")).toContainText(
+          prefix ? "Junho de 2026" : "June 2026",
+        );
+        await expect(page.locator(".learning-group")).toHaveCount(1);
+      }
       await expect(
         page.locator(`.primary-nav a[aria-current="page"]`),
       ).toHaveAttribute("href", `${prefix}/${section}/`);

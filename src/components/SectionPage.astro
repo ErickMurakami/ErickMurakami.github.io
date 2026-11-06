@@ -1,18 +1,29 @@
 ---
 import { getCollection } from "astro:content";
+import LearningSection from "./LearningSection.astro";
 import Layout from "../layouts/Layout.astro";
 import ProjectGallery from "./ProjectGallery.astro";
 import AboutSection from "./AboutSection.astro";
 import ContactSection from "./ContactSection.astro";
 interface Props {
-  section: "projects" | "about" | "contact";
+  section: "projects" | "courses" | "about" | "contact";
   locale: "en" | "pt";
 }
 const { section, locale } = Astro.props;
 const pt = locale === "pt";
 const titles = pt
-  ? { projects: "Projetos", about: "Sobre mim", contact: "Entre em contato" }
-  : { projects: "Projects", about: "About me", contact: "Get in touch" };
+  ? {
+      projects: "Projetos",
+      courses: "Formação e cursos",
+      about: "Sobre mim",
+      contact: "Entre em contato",
+    }
+  : {
+      projects: "Projects",
+      courses: "Education & courses",
+      about: "About me",
+      contact: "Get in touch",
+    };
 const projects =
   section === "projects"
     ? (await getCollection(pt ? "projectsPt" : "projects")).sort(
@@ -29,6 +40,8 @@ const projects =
       </div>
       <ProjectGallery projects={projects} locale={locale} />
     </section>
+  ) : section === "courses" ? (
+    <LearningSection locale={locale} standalone />
   ) : section === "about" ? (
     <AboutSection locale={locale} standalone />
   ) : (

@@ -74,3 +74,5 @@ The default origin remains GitHub Pages. No domain cutover is automatic.
 
 Navigation and home listing limits: [navigation guide](docs/navigation.md).
 To add a verified certification: [certifications guide](docs/certifications.md). The section stays hidden until a credential is published.
+
+Education and courses from the supplied resumes: [content guide](docs/education.md).

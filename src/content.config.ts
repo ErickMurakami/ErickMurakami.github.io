@@ -31,6 +31,19 @@ const certificationSchema = z.object({
   localOnly: z.boolean().default(false),
 });
 export const collections = {
+  learning: defineCollection({
+    loader: glob({ pattern: "**/*.md", base: "./src/content/learning" }),
+    schema: z.object({
+      locale: z.enum(["en", "pt"]),
+      kind: z.enum(["education", "course"]),
+      title: z.string().min(1),
+      institution: z.string().min(1),
+      location: z.string().optional(),
+      period: z.string().min(1),
+      order: z.number().default(0),
+      draft: z.boolean().default(false),
+    }),
+  }),
   certifications: defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/certifications" }),
     schema: certificationSchema,

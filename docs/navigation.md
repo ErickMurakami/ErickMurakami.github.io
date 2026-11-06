@@ -1,8 +1,8 @@
 # Navegação
 
-Na home, o menu rola para `#projects`, `#blog`, `#certifications`, `#about` e `#contact`. Fora da home, os links abrem as páginas equivalentes no idioma atual. Blog e Certificações só entram no menu quando têm conteúdo publicado nesse idioma.
+Na home, o menu rola para `#projects`, `#blog`, `#certifications`, `#courses`, `#about` e `#contact`. Fora da home, os links abrem as páginas equivalentes no idioma atual. Blog e Certificações só entram no menu quando têm conteúdo publicado nesse idioma.
 
-Projetos, Sobre e Contato têm páginas em `/projects/`, `/about/` e `/contact/`, com equivalentes sob `/pt/`. Os estudos de caso retornam à galeria de projetos. A troca de idioma preserva a página equivalente.
+Projetos, Formação e cursos, Sobre e Contato têm páginas em `/projects/`, `/courses/`, `/about/` e `/contact/`, com equivalentes sob `/pt/`. Os estudos de caso retornam à galeria de projetos. A troca de idioma preserva a página equivalente.
 
 A navegação para Projetos considera a posição final da seção após o hero sticky. A rolagem é suave, exceto com movimento reduzido ativado.
 

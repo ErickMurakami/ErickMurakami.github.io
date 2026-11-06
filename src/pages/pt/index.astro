@@ -3,6 +3,7 @@ import AboutSection from "../../components/AboutSection.astro";
 import ContactSection from "../../components/ContactSection.astro";
 import Certifications from "../../components/Certifications.astro";
 import { getPublishedCertifications } from "../../lib/certifications";
+import LearningSection from "../../components/LearningSection.astro";
 import Layout from "../../layouts/Layout.astro";
 import ProjectGallery from "../../components/ProjectGallery.astro";
 import TechLabel from "../../components/TechLabel.astro";
@@ -103,6 +104,7 @@ const posts = await getPublishedPosts("pt");
   </div>
   <BlogPreview posts={posts} locale="pt" />
   <Certifications entries={certifications} locale="pt" />
+  <LearningSection locale="pt" />
   <AboutSection locale="pt" />
   <ContactSection locale="pt" />
 </Layout>
