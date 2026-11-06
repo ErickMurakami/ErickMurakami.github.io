@@ -78,3 +78,5 @@ To add a verified certification: [certifications guide](docs/certifications.md).
 Education and courses from the supplied resumes: [content guide](docs/education.md).
 
 About now brings together resume-backed professional experience, education and certifications. See [content evidence and remaining gaps](docs/about.md). The header About link always opens the full profile; the home keeps backward-compatible anchors and expandable position details.
+
+Technical education and manually approved professional training are documented in [the education guide](docs/education.md). Empty training sections stay hidden.

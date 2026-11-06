@@ -1,15 +1,25 @@
 # Formação e cursos
 
-Os dados ficam em `src/content/learning/*.md`. A seção aparece dentro de About na home e na página de perfil. Permanecem disponíveis as páginas legadas `/courses/` e `/pt/courses/`. O menu Sobre abre o perfil agregado em `/about/` ou `/pt/about/`; a âncora `#courses` continua válida.
+Na home, cada formação aparece resumida e uma seta abre seus detalhes com teclado ou clique, inclusive sem JavaScript. A página Sobre exibe o conteúdo completo.
 
-A formação inicial foi transcrita dos currículos locais fornecidos pelo proprietário:
+Os dados ficam em `src/content/learning/*.md`. About reúne experiência, formação, certificações e, somente quando houver conteúdo aprovado, Cursos e Capacitação. As páginas legadas `/courses/` e `/pt/courses/` e a âncora `#courses` continuam funcionando.
 
-- `public/resume/erick-murakami-curriculo-pt.pdf`, seção “Formação acadêmica”.
-- `public/resume/erick-murakami-resume-en.pdf`, seção “Education”.
+## Formação e fontes
 
-Ambos listam FATEC Rio Preto, Informática para Negócios / Business Informatics, em São José do Rio Preto, com data de junho de 2026. A data é exibida como consta no currículo, sem acrescentar período de início ou outra qualificação. Não há cursos complementares listados nos arquivos; nenhum foi inventado. A palestra Java Day não foi classificada como curso ou formação.
+A formação está ordenada do mais recente para o mais antigo pelo campo `order`:
 
-Para adicionar um curso real, crie um Markdown com estes campos preenchidos:
+1. FATEC Rio Preto: Informática para Negócios / Business Informatics, São José do Rio Preto, junho de 2026. Fonte: PDFs PT/EN em `public/resume/`. A data é exibida como consta no currículo.
+2. ETEC Philadelpho Gouvêa Netto: janeiro de 2017 a dezembro de 2019. Fonte: informações fornecidas diretamente pelo proprietário em 6 de novembro de 2026. Não há diploma ou documento com o título oficial da habilitação nos materiais disponíveis; por isso usamos “Formação Técnica em Informática” / “Technical Education in Information Technology”, sem classificá-la como graduação.
+
+A ETEC inclui a base acadêmica informada: Java, C#, C++, JavaScript, PHP, HTML/CSS, MySQL e Android Studio. Não se trata de uma lista de especializações profissionais atuais. O projeto de conclusão foi uma aplicação para compra e venda de livros usados, com C# e MySQL; não foram acrescentadas funcionalidades, métricas, arquitetura ou implantação.
+
+Para adicionar formação, use `kind: education`, `title`, `institution`, `period`, `locale` e `order` (mais recente primeiro). `location`, `background` e `finalProject` são opcionais. Faça uma versão por idioma com informações equivalentes.
+
+## Cursos e Capacitação
+
+O campo `kind: course` usa a mesma coleção, com renderização separada da formação e das certificações. A subseção aparece depois de Certificações. Nenhum curso real foi adicionado porque não foram fornecidos cursos verificáveis.
+
+Modelo para preencher com dados reais, inicialmente oculto:
 
 ```yaml
 ---
@@ -17,10 +27,22 @@ locale: pt
 kind: course
 title: "Nome real do curso"
 institution: "Instituição responsável"
-period: "Período conforme o comprovante"
-order: 2
+area: "Área técnica relevante"
+status: in-progress
+approved: false
 draft: true
+order: 1
 ---
 ```
 
-Use `kind: education` para formação acadêmica. `location` é opcional. Defina `draft: false` para exibir. Crie outro arquivo com `locale: en` para a tradução; mantenha os mesmos dados verificáveis. Não inclua instruções ou dados fictícios como cursos publicados.
+Campos suportados:
+
+- `status`: `completed` ou `in-progress`; o padrão é `in-progress`.
+- `completionDate`: data ISO opcional, apenas se a conclusão for verificável. Só aparece para cursos concluídos.
+- `certificateUrl`: URL HTTPS opcional do certificado, aberta em nova aba. Não invente URLs.
+- `approved`: padrão `false`. Defina `true` somente após conferir os dados e a relevância profissional.
+- `draft`: use `false` para publicar, juntamente com `approved: true`.
+
+Priorize Java avançado, Spring Boot/Quarkus, arquitetura, DDD, cloud/AWS, sistemas distribuídos, bancos de dados, performance backend e engenharia de IA. Não existe importação automática de currículos ou LinkedIn. A aprovação é uma curadoria manual; o sistema não valida a autenticidade do certificado em serviços externos. Sem cursos aprovados, não há seção vazia nem placeholder.
+
+Crie uma versão com `locale: en` para a tradução. A palestra Java Day não foi classificada como curso ou formação.

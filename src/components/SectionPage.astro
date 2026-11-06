@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import TrainingSection from "./TrainingSection.astro";
 import LearningSection from "./LearningSection.astro";
 import Layout from "../layouts/Layout.astro";
 import ProjectGallery from "./ProjectGallery.astro";
@@ -41,7 +42,10 @@ const projects =
       <ProjectGallery projects={projects} locale={locale} />
     </section>
   ) : section === "courses" ? (
-    <LearningSection locale={locale} standalone />
+    <>
+      <LearningSection locale={locale} standalone />
+      <TrainingSection locale={locale} />
+    </>
   ) : section === "about" ? (
     <AboutSection locale={locale} standalone />
   ) : (

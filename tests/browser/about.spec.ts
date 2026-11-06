@@ -11,6 +11,13 @@ for (const prefix of ["", "/pt"]) {
     );
     await expect(about.locator("#courses")).toContainText("FATEC Rio Preto");
     await expect(about.locator("#experience article")).toHaveCount(2);
+    const educationPreview = about.locator("#courses .education-more").last();
+    await expect(
+      educationPreview.locator(".education-details"),
+    ).not.toBeVisible();
+    await educationPreview.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(educationPreview.locator(".education-project")).toBeVisible();
     const first = about.locator("#experience article").first();
     await expect(first).toContainText("Genesys Software");
     await expect(first.locator(".experience-details")).not.toBeVisible();
@@ -35,6 +42,29 @@ for (const prefix of ["", "/pt"]) {
         : "Technology Degree in Business Informatics",
     );
     await expect(page.locator("#experience")).not.toContainText("Econolyze");
+    const education = page.locator("#courses .education-entry");
+    await expect(education).toHaveCount(2);
+    await expect(education.first()).toContainText("FATEC Rio Preto");
+    await expect(education.last()).toContainText(
+      "ETEC Philadelpho Gouvêa Netto",
+    );
+    await expect(education.last()).toContainText(
+      prefix
+        ? "Janeiro de 2017 — Dezembro de 2019"
+        : "January 2017 — December 2019",
+    );
+    await expect(education.last()).toContainText(
+      prefix
+        ? "Formação Técnica em Informática"
+        : "Technical Education in Information Technology",
+    );
+    await expect(education.last()).toContainText("C#");
+    await expect(education.last()).toContainText("MySQL");
+    await expect(education.last()).toContainText(
+      prefix ? "livros usados" : "second-hand book",
+    );
+    await expect(education.last()).not.toContainText("Bachelor");
+    await expect(page.locator("#training")).toHaveCount(0);
     await page.locator(".language-toggle").click();
     await expect(page).toHaveURL(prefix ? "/about/" : "/pt/about/");
     await expect(page.locator("#experience article")).toHaveCount(2);

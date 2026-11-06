@@ -1617,3 +1617,59 @@ nav a {
 .experience-more[open] summary svg {
   transform: rotate(180deg);
 }
+
+.education-entry :is(h2, h3, h4),
+.training-list :is(h3, h4) {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.education-background,
+.education-project {
+  max-width: 78ch;
+  margin-top: 16px;
+}
+.training-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.education-heading .post-meta {
+  display: block;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.education-title {
+  display: block;
+}
+.education-more summary {
+  cursor: pointer;
+  list-style: none;
+}
+.education-more summary::-webkit-details-marker {
+  display: none;
+}
+.education-more .education-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 0 8px;
+}
+.education-more .post-meta {
+  grid-column: 1 / -1;
+}
+.education-more .education-title {
+  align-self: center;
+}
+.education-more summary svg {
+  color: var(--link);
+  place-self: center;
+  transition: transform 180ms ease;
+}
+.education-more[open] summary svg {
+  transform: rotate(180deg);
+}
+.education-more .education-details {
+  margin-top: 16px;
+}

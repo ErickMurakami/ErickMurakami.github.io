@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+interface Props {
+  locale: "en" | "pt";
+  embedded?: boolean;
+  headingLevel?: 2 | 3;
+}
+const { locale, embedded = false, headingLevel = 2 } = Astro.props;
+const pt = locale === "pt";
+const courses = (
+  await getCollection(
+    "learning",
+    (entry) =>
+      entry.data.kind === "course" &&
+      entry.data.locale === locale &&
+      !entry.data.draft &&
+      entry.data.approved,
+  )
+).sort((a, b) => a.data.order - b.data.order);
+const Heading = headingLevel === 2 ? "h2" : "h3";
+const EntryHeading = headingLevel === 2 ? "h3" : "h4";
+---
+
+{courses.length > 0 && (
+  <section
+    id="training"
+    class={embedded ? "about-subsection" : "shell section"}
+  >
+    <div class="section-heading">
+      <Heading>{pt ? "Cursos e Capacitação" : "Courses & Training"}</Heading>
+    </div>
+    <ul class="training-list">
+      {courses.map((course) => (
+        <li class="post-item">
+          <p class="post-meta">
+            {course.data.institution} · {course.data.area}
+          </p>
+          <EntryHeading>{course.data.title}</EntryHeading>
+          <p class="post-meta">
+            {course.data.status === "completed"
+              ? pt
+                ? "Concluído"
+                : "Completed"
+              : pt
+                ? "Em andamento"
+                : "In progress"}
+            {course.data.status === "completed" &&
+              course.data.completionDate && (
+                <>
+                  {" "}
+                  ·{" "}
+                  <time datetime={course.data.completionDate.toISOString()}>
+                    {course.data.completionDate.toLocaleDateString(
+                      pt ? "pt-BR" : "en-GB",
+                      { timeZone: "UTC" },
+                    )}
+                  </time>
+                </>
+              )}
+          </p>
+          {course.data.certificateUrl && (
+            <a
+              class="text-link"
+              href={course.data.certificateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={
+                pt
+                  ? "Ver certificado do curso (abre em nova aba)"
+                  : "View course certificate (opens in a new tab)"
+              }
+            >
+              {pt ? "Ver certificado ↗" : "View certificate ↗"}
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

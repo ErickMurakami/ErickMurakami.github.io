@@ -1,6 +1,7 @@
 ---
 import { experience } from "../data/experience";
 import { getPublishedCertifications } from "../lib/certifications";
+import TrainingSection from "./TrainingSection.astro";
 import LearningSection from "./LearningSection.astro";
 import Certifications from "./Certifications.astro";
 interface Props {
@@ -108,11 +109,17 @@ const paragraphs = pt
       ))}
     </ol>
   </section>
-  <LearningSection locale={locale} embedded headingLevel={standalone ? 2 : 3} />
+  <LearningSection
+    locale={locale}
+    embedded
+    headingLevel={standalone ? 2 : 3}
+    compact={!standalone}
+  />
   <Certifications
     entries={certifications}
     locale={locale}
     embedded
     headingLevel={standalone ? 2 : 3}
   />
+  <TrainingSection locale={locale} embedded headingLevel={standalone ? 2 : 3} />
 </section>

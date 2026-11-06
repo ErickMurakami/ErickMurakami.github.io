@@ -13,7 +13,7 @@
     "validate:content": "node scripts/validate-content.mjs",
     "validate:site": "node scripts/validate-site.mjs",
     "test:browser": "playwright test",
-    "verify": "npm test && npm run test:blog && node tests/certifications-visibility.mjs && npm run validate:content && npm run check && npm run build && npm run validate:site",
+    "verify": "npm test && npm run test:blog && node tests/certifications-visibility.mjs && node tests/training-visibility.mjs && npm run validate:content && npm run check && npm run build && npm run validate:site",
     "test:blog": "node tests/blog-visibility.mjs"
   },
   "dependencies": {
