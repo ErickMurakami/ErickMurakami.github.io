@@ -53,6 +53,7 @@ export const collections = {
         location: z.string().optional(),
         period: z.string().min(1).optional(),
         background: z.array(z.string().min(1)).optional(),
+        academicFocus: z.array(z.string().min(1)).min(1).optional(),
         finalProject: z.string().min(1).optional(),
         area: z.string().min(1).optional(),
         completionDate: z.coerce.date().optional(),

@@ -91,6 +91,16 @@ const EntryHeading = embedded
             </Summary>
             <div class="education-details">
               {entry.data.location && <p>{entry.data.location}</p>}
+              {entry.data.academicFocus && (
+                <div class="education-background education-focus">
+                  <span class="small-label">
+                    {pt ? "FOCO ACADÊMICO" : "ACADEMIC FOCUS"}
+                  </span>
+                  {entry.data.academicFocus.map((paragraph) => (
+                    <p class="education-project">{paragraph}</p>
+                  ))}
+                </div>
+              )}
               {!!entry.data.background?.length && (
                 <p class="education-background">
                   <span class="small-label">

@@ -8,12 +8,12 @@ Os dados ficam em `src/content/learning/*.md`. About reúne experiência, forma�
 
 A formação está ordenada do mais recente para o mais antigo pelo campo `order`:
 
-1. FATEC Rio Preto: Informática para Negócios / Business Informatics, São José do Rio Preto, junho de 2026. Fonte: PDFs PT/EN em `public/resume/`. A data é exibida como consta no currículo.
+1. FATEC Rio Preto: Informática para Negócios / Business Informatics, São José do Rio Preto, São Paulo, julho de 2024 a junho de 2026. O nome do curso e o término constam nos PDFs PT/EN em `public/resume/`. O período completo e o texto de foco acadêmico foram fornecidos posteriormente pelo proprietário. A classificação permanece graduação tecnológica, sem declarar bacharelado ou alterar a situação de conclusão.
 2. ETEC Philadelpho Gouvêa Netto: janeiro de 2017 a dezembro de 2019. Fonte: informações fornecidas diretamente pelo proprietário em 6 de novembro de 2026. Não há diploma ou documento com o título oficial da habilitação nos materiais disponíveis; por isso usamos “Formação Técnica em Informática” / “Technical Education in Information Technology”, sem classificá-la como graduação.
 
 A ETEC inclui a base acadêmica informada: Java, C#, C++, JavaScript, PHP, HTML/CSS, MySQL e Android Studio. Não se trata de uma lista de especializações profissionais atuais. O projeto de conclusão foi uma aplicação para compra e venda de livros usados, com C# e MySQL; não foram acrescentadas funcionalidades, métricas, arquitetura ou implantação.
 
-Para adicionar formação, use `kind: education`, `title`, `institution`, `period`, `locale` e `order` (mais recente primeiro). `location`, `background` e `finalProject` são opcionais. Faça uma versão por idioma com informações equivalentes.
+Para adicionar formação, use `kind: education`, `title`, `institution`, `period`, `locale` e `order` (mais recente primeiro). `location`, `background`, `academicFocus` (lista de parágrafos) e `finalProject` são opcionais. O foco acadêmico da FATEC não é apresentado como projeto de conclusão. Faça uma versão por idioma com informações equivalentes.
 
 ## Cursos e Capacitação
 

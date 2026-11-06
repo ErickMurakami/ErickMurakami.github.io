@@ -11,6 +11,13 @@ for (const prefix of ["", "/pt"]) {
     );
     await expect(about.locator("#courses")).toContainText("FATEC Rio Preto");
     await expect(about.locator("#experience article")).toHaveCount(2);
+    const fatecPreview = about.locator("#courses .education-more").first();
+    await expect(fatecPreview.locator(".education-focus")).not.toBeVisible();
+    await fatecPreview.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(fatecPreview.locator(".education-focus")).toBeVisible();
+    await page.keyboard.press("Enter");
+    await expect(fatecPreview.locator(".education-focus")).not.toBeVisible();
     const educationPreview = about.locator("#courses .education-more").last();
     await expect(
       educationPreview.locator(".education-details"),
@@ -45,6 +52,23 @@ for (const prefix of ["", "/pt"]) {
     const education = page.locator("#courses .education-entry");
     await expect(education).toHaveCount(2);
     await expect(education.first()).toContainText("FATEC Rio Preto");
+    await expect(education.first()).toContainText(
+      prefix ? "Julho de 2024 — Junho de 2026" : "July 2024 — June 2026",
+    );
+    await expect(education.first().locator(".education-focus")).toBeVisible();
+    await expect(education.first().locator(".education-focus")).toContainText(
+      prefix ? "FOCO ACADÊMICO" : "ACADEMIC FOCUS",
+    );
+    await expect(education.first().locator(".education-focus p")).toHaveCount(
+      2,
+    );
+    await expect(education.first()).toContainText(
+      prefix ? "Graduação tecnológica" : "Undergraduate technology program",
+    );
+    await expect(education.first()).not.toContainText("Bachelor");
+    await expect(education.first().locator(".education-project")).toHaveCount(
+      2,
+    );
     await expect(education.last()).toContainText(
       "ETEC Philadelpho Gouvêa Netto",
     );
