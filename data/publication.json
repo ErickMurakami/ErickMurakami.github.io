@@ -1,0 +1,9 @@
+{
+  "owner": "ErickMurakami",
+  "approved": [
+    "Econolyze",
+    "Logistic",
+    "quarkus-rate-limiter",
+    "quarkus-schema-per-tenant"
+  ]
+}
