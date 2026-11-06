@@ -94,10 +94,13 @@ test("content works without JavaScript and reduced motion is honored", async ({
   const staticPage = await context.newPage();
   await staticPage.goto("/#projects");
   await expect(
-    staticPage.getByRole("link", { name: "Explore case study" }),
+    staticPage
+      .locator(".project-card")
+      .getByRole("link", { name: "Read case study" }),
   ).toHaveCount(4);
   await staticPage
     .getByRole("link", { name: "Econolyze", exact: true })
+    .first()
     .click();
   await expect(
     staticPage.getByRole("heading", { name: "Architecture", exact: true }),

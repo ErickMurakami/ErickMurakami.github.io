@@ -1,7 +1,7 @@
 ---
 title: "Quarkus Rate Limiter"
 repo: "quarkus-rate-limiter"
-description: "Janelas fixas e deslizantes avaliadas atomicamente no Redis, com controle de requisições HTTP."
+description: "Experimento de controle de requisições que compara janelas fixas e deslizantes com scripts Lua atômicos no Redis."
 focus: "Limitação atômica de requisições"
 stack: ["Java 21", "Quarkus", "Redis", "Lua", "OpenTelemetry"]
 order: 3

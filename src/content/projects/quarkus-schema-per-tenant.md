@@ -1,7 +1,7 @@
 ---
 title: "Schema per Tenant"
 repo: "quarkus-schema-per-tenant"
-description: "JWT tenant resolution routes customer operations to separate PostgreSQL schemas."
+description: "Customer API that selects a PostgreSQL schema from a JWT tenant claim, with Flyway migrations per tenant."
 focus: "Tenant isolation & persistence"
 stack: ["Java 25", "Quarkus", "Hibernate ORM", "PostgreSQL", "Flyway"]
 order: 4

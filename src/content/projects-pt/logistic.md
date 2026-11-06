@@ -1,7 +1,7 @@
 ---
 title: "Logistic"
 repo: "Logistic"
-description: "Regras do ciclo de pedidos, consultas em cache e eventos de envio coordenados com transações do banco."
+description: "API de entregas com transições de status validadas, cache Redis e eventos de envio publicados após o commit."
 focus: "Regras de domínio e entrega de eventos"
 stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "RabbitMQ"]
 order: 2

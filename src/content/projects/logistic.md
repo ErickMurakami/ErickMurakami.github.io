@@ -1,7 +1,7 @@
 ---
 title: "Logistic"
 repo: "Logistic"
-description: "Order lifecycle rules, cached reads and shipment events coordinated with database transactions."
+description: "Delivery order API with validated status transitions, Redis caching and shipment events sent after commit."
 focus: "Domain rules & event delivery"
 stack: ["Java 21", "Spring Boot", "PostgreSQL", "Redis", "RabbitMQ"]
 order: 2

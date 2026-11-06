@@ -1,7 +1,7 @@
 ---
 title: "Quarkus Rate Limiter"
 repo: "quarkus-rate-limiter"
-description: "Fixed and sliding request windows evaluated atomically in Redis, with HTTP enforcement."
+description: "API rate-limiting experiment comparing fixed and sliding windows through atomic Lua scripts in Redis."
 focus: "Atomic rate limiting"
 stack: ["Java 21", "Quarkus", "Redis", "Lua", "OpenTelemetry"]
 order: 3

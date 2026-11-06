@@ -14,12 +14,6 @@ const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
 ---
 
 <article class="project-card">
-  <div class="card-top">
-    <span class="project-number">
-      0{p.order} / {pt ? "ESTUDO DE CASO" : "CASE STUDY"}
-    </span>
-    <Icon name="layers" />
-  </div>
   <p class="eyebrow">{p.focus}</p>
   <h3>
     <a href={projectPath}>{p.title}</a>
@@ -34,7 +28,7 @@ const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
   </ul>
   <div class="card-links">
     <a href={projectPath}>
-      {pt ? "Explorar estudo de caso" : "Explore case study"}{" "}
+      {pt ? "Ler estudo de caso" : "Read case study"}{" "}
       <span aria-hidden="true">→</span>
     </a>
     <a

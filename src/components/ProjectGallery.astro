@@ -21,11 +21,11 @@ const additional = githubProjects.filter(
 </div>
 {additional.length > 0 && (
   <div class="additional-projects">
-    <h3>{pt ? "Mais projetos públicos" : "More public work"}</h3>
+    <h3>{pt ? "Mais projetos públicos" : "More projects"}</h3>
     <p>
       {pt
-        ? "Metadados do GitHub; estudos de caso ainda não preparados."
-        : "GitHub metadata; case studies have not been curated yet."}
+        ? "Outros repositórios, ainda sem estudo de caso."
+        : "Other repositories, without a case study yet."}
     </p>
     <div class="project-grid">
       {additional.map((repo) => (

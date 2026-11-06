@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import ProjectGallery from "../../components/ProjectGallery.astro";
 import TechLabel from "../../components/TechLabel.astro";
 import Icon from "../../components/Icon.astro";
+import ProjectFocus from "../../components/ProjectFocus.astro";
 import BlogPreview from "../../components/BlogPreview.astro";
 import { getPublishedPosts } from "../../lib/blog";
 import { getCollection } from "astro:content";
@@ -15,9 +16,6 @@ const posts = await getPublishedPosts("pt");
 <Layout title="Engenheiro de Software Back-end">
   <section class="shell hero">
     <div class="hero-copy">
-      <p class="eyebrow hero-label">
-        <span class="dot" /> ECOSSISTEMA JAVA · ENGENHARIA BACKEND
-      </p>
       <h1>
         Erick Murakami
         <span class="role">
@@ -48,47 +46,8 @@ const posts = await getPublishedPosts("pt");
           Baixar currículo ↓
         </a>
       </div>
-      <p class="hero-caption">Java · Quarkus · Spring Boot · PostgreSQL</p>
     </div>
-    <div
-      class="architecture"
-      aria-label="Foco de engenharia: contratos de API, regras de domínio e persistência"
-    >
-      <div class="diagram-header">
-        <span class="dot" /> API, DOMÍNIO E DADOS
-      </div>
-      <div class="diagram-line">
-        <span>01</span>
-        <Icon name="globe" />
-        <div>
-          <strong>API</strong>
-          <small>Endpoints e integrações</small>
-        </div>
-      </div>
-      <div class="connector"></div>
-      <div class="diagram-line core">
-        <span>02</span>
-        <Icon name="code" />
-        <div>
-          <strong>Regras de negócio</strong>
-          <small>Validações e operações</small>
-        </div>
-        <span class="core-label">NÚCLEO</span>
-      </div>
-      <div class="connector"></div>
-      <div class="diagram-line">
-        <span>03</span>
-        <Icon name="layers" />
-        <div>
-          <strong>Dados</strong>
-          <small>Banco de dados e testes</small>
-        </div>
-      </div>
-      <div class="diagram-footer">
-        <span>CONTRATO → DOMÍNIO → DADOS</span>
-        <span aria-hidden="true">↗</span>
-      </div>
-    </div>
+    <ProjectFocus locale="pt" />
   </section>
   <div class="specialty-strip">
     <div class="shell">
@@ -113,7 +72,6 @@ const posts = await getPublishedPosts("pt");
   <section id="projects" class="shell section">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">PROJETOS</p>
         <h2>Projetos</h2>
         <p>
           O que fiz em cada projeto, como funciona e o que ainda pode melhorar.
@@ -125,19 +83,18 @@ const posts = await getPublishedPosts("pt");
   <BlogPreview posts={posts} locale="pt" />
   <section id="about" class="shell section about-summary">
     <div>
-      <p class="eyebrow">SOBRE</p>
       <h2>Sobre mim</h2>
     </div>
     <div>
       <p>
-        Sou o Erick, engenheiro backend. Trabalho com Java, Spring Boot e
-        Quarkus e me interesso por APIs, bancos de dados e sistemas
-        distribuídos.
+        Meus projetos em Java exploram como os dados mudam ao longo de uma
+        aplicação: registrar pagamentos, avançar pedidos pelas etapas de entrega
+        e separar os dados de clientes entre tenants.
       </p>
       <p>
-        Reuni aqui projetos de finanças pessoais, gestão de pedidos, controle de
-        requisições e multitenancy. Os estudos de caso mostram a implementação,
-        as escolhas e as limitações de cada um.
+        Me interesso pelas fronteiras das transações e pelas falhas ao redor
+        delas: quando uma atualização de saldo falha, uma mensagem não chega ao
+        broker ou requisições disputam o mesmo contador.
       </p>
       <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
         LinkedIn ↗
@@ -145,7 +102,6 @@ const posts = await getPublishedPosts("pt");
     </div>
   </section>
   <section id="contact" class="shell contact-banner">
-    <p class="eyebrow">CONTATO</p>
     <h2>Entre em contato</h2>
     <a class="button primary" href="https://www.linkedin.com/in/erick-murakami">
       LinkedIn <Icon />

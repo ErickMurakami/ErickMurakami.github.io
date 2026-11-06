@@ -38,8 +38,8 @@ const {
   title,
   projectTitle,
   description = localized(
-    "Java, Quarkus and Spring Boot. Explore Erick Murakami’s backend projects, architecture decisions and engineering trade-offs.",
-    "Java, Quarkus e Spring Boot. Conheça os projetos backend, decisões de arquitetura e compromissos técnicos de Erick Murakami.",
+    "Backend projects by Erick Murakami: personal finance, delivery orders, Redis rate limiting and PostgreSQL multitenancy.",
+    "Projetos backend de Erick Murakami: finanças pessoais, gestão de pedidos, controle de requisições com Redis e multitenancy com PostgreSQL.",
   ),
 } = Astro.props;
 const isNotFound =
@@ -211,7 +211,6 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
         >
           em<span>.</span>
         </a>
-        <p>Java · Quarkus · Spring Boot</p>
       </div>
       <div class="footer-links">
         <a href="https://github.com/ErickMurakami">GitHub ↗</a>

@@ -1,7 +1,7 @@
 ---
 title: "Econolyze"
 repo: "Econolyze"
-description: "Financial transactions, payments and account balances implemented through reactive application services."
+description: "Personal finance backend that records payments and updates account balances in a reactive transaction."
 focus: "Reactive financial workflows"
 stack: ["Java 21", "Quarkus", "PostgreSQL", "Mutiny"]
 order: 1

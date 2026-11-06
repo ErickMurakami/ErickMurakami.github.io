@@ -1,7 +1,7 @@
 ---
 title: "Econolyze"
 repo: "Econolyze"
-description: "Transações, pagamentos e saldos de contas implementados com serviços de aplicação reativos."
+description: "Backend de finanças pessoais que registra pagamentos e atualiza saldos em uma transação reativa."
 focus: "Fluxos financeiros reativos"
 stack: ["Java 21", "Quarkus", "PostgreSQL", "Mutiny"]
 order: 1

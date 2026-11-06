@@ -192,12 +192,6 @@ nav a {
   letter-spacing: 0.13em;
   color: var(--link);
 }
-.hero-label {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 28px;
-}
 .dot {
   display: inline-block;
   width: 6px;
@@ -259,87 +253,36 @@ nav a {
   background: color-mix(in srgb, var(--primary) 70%, black);
   color: #fff;
 }
-.hero-caption {
-  font-size: 11px;
-  margin-top: 28px;
-}
-.architecture {
-  position: relative;
-  padding: 28px 24px 0;
+.project-focus {
+  padding: 32px;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  background:
-    radial-gradient(
-      ellipse at 70% 0%,
-      color-mix(in srgb, var(--primary) 9%, transparent),
-      transparent 75%
-    ),
-    var(--card);
-  box-shadow: 0 30px 100px -60px var(--primary);
+  border-radius: calc(var(--radius) + 4px);
+  background: var(--card);
 }
-.diagram-header {
-  font:
-    9px ui-monospace,
-    monospace;
-  letter-spacing: 0.08em;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  color: var(--muted-foreground);
-  padding-bottom: 32px;
+.project-focus h2 {
+  font-size: 32px;
+  margin-block: 12px 24px;
 }
-.diagram-line {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 17px 13px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--background);
+.project-focus h3 {
+  font-size: 21px;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
 }
-.diagram-line > span {
-  font:
-    9px ui-monospace,
-    monospace;
-  color: var(--muted-foreground);
+.project-focus p:not(.eyebrow) {
+  font-size: 14px;
+  line-height: 1.8;
+  margin-block: 14px;
 }
-.diagram-line svg {
-  color: var(--link);
-}
-.diagram-line strong {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-}
-.diagram-line small {
-  font-size: 10px;
-  color: var(--muted-foreground);
-}
-.diagram-line.core {
-  border-color: color-mix(in srgb, var(--primary) 60%, var(--border));
-  background: color-mix(in srgb, var(--primary) 8%, var(--background));
-}
-.core-label {
-  margin-left: auto !important;
-  font-size: 8px !important;
-  color: var(--link) !important;
-}
-.connector {
-  height: 26px;
-  border-left: 1px dashed var(--border);
-  margin-left: 52px;
-}
-.diagram-footer {
-  display: flex;
-  justify-content: space-between;
-  font:
-    8px ui-monospace,
-    monospace;
-  letter-spacing: 0.1em;
-  color: var(--muted-foreground);
+.project-focus .focus-limit {
   border-top: 1px solid var(--border);
-  margin-top: 30px;
-  padding-block: 17px;
+  padding-top: 18px;
+}
+.focus-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  font-size: 12px;
 }
 .specialty-strip {
   border-block: 1px solid var(--border);
@@ -410,19 +353,6 @@ nav a {
 }
 .project-card:hover {
   border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-}
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28px;
-  color: var(--muted-foreground);
-}
-.project-number {
-  font:
-    9px ui-monospace,
-    monospace;
-  letter-spacing: 0.1em;
 }
 .project-card h3 {
   margin-block: 10px 13px;
@@ -700,15 +630,6 @@ nav a {
   .shell {
     padding-inline: 24px;
   }
-  .architecture {
-    padding-inline: 16px;
-  }
-  .diagram-line {
-    gap: 10px;
-  }
-  .core-label {
-    display: none;
-  }
   .brand > span:last-child {
     display: none;
   }
@@ -746,16 +667,12 @@ nav a {
     gap: 45px;
     padding-block: 58px;
   }
-  .hero-label {
-    font-size: 9px;
-  }
   .role {
     font-size: 46px;
   }
-  .architecture {
-    max-width: 460px;
+  .project-focus {
     width: 100%;
-    transform: none;
+    padding: 24px;
   }
   .section {
     padding-block: 58px;
@@ -868,9 +785,6 @@ nav a {
   }
   .language-toggle {
     margin-left: auto;
-  }
-  .hero-label {
-    flex-wrap: wrap;
   }
   html[lang="pt-BR"] .role {
     font-size: clamp(32px, 8.5vw, 46px);

@@ -7,7 +7,7 @@ Inspected actual source in Econolyze: app/globals.css, app/page.tsx, app/layout.
 - Inter sans-serif, semibold labels, bold display headings; max-w-6xl shells, 24px horizontal padding, 80px sections, 24px card padding and 32px grid gaps.
 - Base radius 10px, rounded-xl cards with thin border and slight shadow. Outline and solid-blue buttons; visible ring focus.
 - Landing header is sticky with translucent background/backdrop blur. App navigation has active blue-tint surfaces, muted inactive labels and 200ms transitions. Portfolio adapts this into a wrapping top navigation rather than reproducing the product's bottom app tabs.
-- Hero source uses canvas financial curves and parallax. Portfolio replaces those with a static blue architectural motif, avoiding decorative finance charts and continuous rendering.
+- Hero source uses canvas financial curves and parallax. Portfolio uses an editorial preview of the financial service’s transaction boundary, with a direct source link and its testing gap. It does not reproduce decorative charts or continuous rendering.
 - Cards and grids collapse on small screens. Portfolio adds explicit reduced-motion support and persistent theme controls.
 
 No original source repository was modified. Tokens are adapted as design reference; components are implemented in Astro without React or Next.js.

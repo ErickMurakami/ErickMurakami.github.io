@@ -1,7 +1,7 @@
 ---
 title: "Schema por Tenant"
 repo: "quarkus-schema-per-tenant"
-description: "Resolução de tenant por JWT direciona operações de clientes para schemas PostgreSQL separados."
+description: "API de clientes que seleciona o schema PostgreSQL pelo tenant do JWT, com migrações Flyway por tenant."
 focus: "Isolamento entre tenants e persistência"
 stack: ["Java 25", "Quarkus", "Hibernate ORM", "PostgreSQL", "Flyway"]
 order: 4
