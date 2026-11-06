@@ -10,6 +10,8 @@ jobs:
   build:
     if: ${{ vars.ENABLE_PAGES_DEPLOYMENT == 'true' }}
     runs-on: ubuntu-latest
+    env:
+      PORTFOLIO_SITE_URL: ${{ vars.PORTFOLIO_SITE_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

@@ -68,3 +68,6 @@ For the authorized first release and future updates:
 To prevent future releases, remove/set the variable to `false`. This does not take down a version already published; unpublishing is a separate intentional GitHub Pages setting.
 
 Canonical URLs, Open Graph PNG, robots.txt, sitemap.xml and `.nojekyll` are included. There are no secrets in the static build. See [verification report](docs/verification.md) for measured results and limits.
+
+Custom domain preparation: see [the manual migration guide](docs/domain-migration.md).
+The default origin remains GitHub Pages. No domain cutover is automatic.

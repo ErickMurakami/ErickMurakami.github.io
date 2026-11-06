@@ -3,7 +3,8 @@ import { join } from "node:path";
 import { parse } from "parse5";
 import assert from "node:assert/strict";
 const root = "dist";
-const origin = "https://erickmurakami.github.io";
+import { productionSite } from "../config/site.mjs";
+const origin = productionSite();
 async function walk(dir) {
   const files = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -30,6 +31,21 @@ for (const [file, nodes] of documents) {
     (n) => n.tagName === "link" && attrs(n).rel === "canonical",
   );
   assert.equal(attrs(canonical).href, origin + path, `Canonical: ${file}`);
+  assert.equal(
+    attrs(
+      nodes.find((n) => n.tagName === "meta" && attrs(n).property === "og:url"),
+    ).content,
+    origin + path,
+    `Open Graph URL: ${file}`,
+  );
+  const imageUrl = attrs(
+    nodes.find((n) => n.tagName === "meta" && attrs(n).property === "og:image"),
+  ).content;
+  assert.equal(
+    new URL(imageUrl).origin,
+    origin,
+    `Open Graph image origin: ${file}`,
+  );
   assert.equal(
     nodes.filter((n) => n.tagName === "h1").length,
     1,
@@ -58,6 +74,7 @@ for (const [file, nodes] of documents) {
       continue;
     assert.ok(alternate, `Missing language alternate in ${file}`);
     const alternateUrl = new URL(attrs(alternate).href);
+    assert.equal(alternateUrl.origin, origin, `Language origin: ${file}`);
     const alternatePath = join(
       root,
       alternateUrl.pathname,
@@ -125,4 +142,22 @@ const validation = await readFile(".github/workflows/validate.yml", "utf8");
 assert.ok(!validation.includes("deploy-pages"));
 console.log(
   "Pages publication requires manual dispatch and explicit ENABLE_PAGES_DEPLOYMENT opt-in.",
+);
+
+assert.ok(
+  (await readFile("dist/robots.txt", "utf8")).includes(
+    `Sitemap: ${origin}/sitemap.xml`,
+  ),
+);
+for (const value of [
+  "http://example.com",
+  "https://example.com/path",
+  "https://user:pass@example.com",
+  "https://example.com/?x=1",
+  "https://example.com/#hash",
+])
+  assert.throws(() => productionSite(value));
+assert.equal(productionSite("https://erickkami.dev/"), "https://erickkami.dev");
+console.log(
+  "Configurable site origin, robots and metadata consistency passed.",
 );

@@ -1,7 +1,8 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import { productionSite } from "./config/site.mjs";
 export default defineConfig({
-  site: "https://erickmurakami.github.io",
+  site: productionSite(),
   base: "/",
   output: "static",
   trailingSlash: "always",
