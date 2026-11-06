@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter, fade } from "astro:transitions";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
@@ -59,9 +60,10 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
 ---
 
 <!doctype html>
-<html lang={pt ? "pt-BR" : "en"} class="dark">
+<html lang={pt ? "pt-BR" : "en"} class="dark" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
+    <ClientRouter fallback="swap" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark light" />
@@ -129,7 +131,11 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
     <a class="skip" href="#main">
       {localized("Skip to content", "Ir para o conteúdo")}
     </a>
-    <header class="header">
+    <header
+      class="header"
+      transition:name="site-header"
+      transition:animate="none"
+    >
       <div class="shell nav-shell">
         <a
           class="brand"
@@ -206,7 +212,12 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
         </div>
       )}
     </header>
-    <main id="main" tabindex="-1">
+    <main
+      id="main"
+      tabindex="-1"
+      transition:name="page-content"
+      transition:animate={fade({ duration: "180ms" })}
+    >
       <slot />
     </main>
     <footer class="shell footer">
@@ -227,76 +238,7 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
       </div>
     </footer>
     <script>
-      const header = document.querySelector<HTMLElement>(".header");
-      const caseBar = document.querySelector("[data-case-bar]");
-      if (caseBar && header) {
-        const updateReadingHeader = () =>
-          header.classList.toggle("is-compact", window.scrollY > 64);
-        updateReadingHeader();
-        window.addEventListener("scroll", updateReadingHeader, {
-          passive: true,
-        });
-      }
-      if (header && "ResizeObserver" in window) {
-        new ResizeObserver(() =>
-          document.documentElement.style.setProperty(
-            "--header-offset",
-            `${header.getBoundingClientRect().height + 24}px`,
-          ),
-        ).observe(header);
-      }
-      const updateSectionNavigation = () => {
-        const languageToggle =
-          document.querySelector<HTMLAnchorElement>(".language-toggle");
-        if (
-          languageToggle &&
-          (location.pathname === "/" || location.pathname === "/pt/") &&
-          location.hash &&
-          document.getElementById(location.hash.slice(1))
-        ) {
-          languageToggle.hash = location.hash;
-        }
-
-        document
-          .querySelectorAll<HTMLAnchorElement>(".primary-nav a")
-          .forEach((link) => {
-            if (link.pathname === location.pathname && link.hash) {
-              if (link.hash === location.hash)
-                link.setAttribute("aria-current", "location");
-              else link.removeAttribute("aria-current");
-            }
-          });
-      };
-      updateSectionNavigation();
-      window.addEventListener("hashchange", updateSectionNavigation);
-      const button = document.querySelector<HTMLButtonElement>(".theme");
-      function updateTheme() {
-        const light = !document.documentElement.classList.contains("dark");
-        button?.setAttribute("aria-pressed", String(light));
-        button?.setAttribute(
-          "aria-label",
-          document.documentElement.lang === "pt-BR"
-            ? light
-              ? "Ativar tema escuro"
-              : "Ativar tema claro"
-            : light
-              ? "Switch to dark theme"
-              : "Switch to light theme",
-        );
-      }
-      updateTheme();
-      button?.addEventListener("click", () => {
-        document.documentElement.classList.toggle("dark");
-        try {
-          localStorage.setItem(
-            "theme",
-            document.documentElement.classList.contains("dark")
-              ? "dark"
-              : "light",
-          );
-        } catch {}
-        updateTheme();
-      });
+      import "../scripts/navigation";
     </script>
   </body>
 </html>

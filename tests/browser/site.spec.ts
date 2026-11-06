@@ -324,6 +324,8 @@ test("expertise cards replace one another in place and reverse with native scrol
           theme,
         );
         await page.goto(route);
+        // A document reload can restore the preceding iteration's scroll position.
+        await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
         const section = page.locator("[data-expertise-showcase]");
         await expect(section).toHaveClass(/is-scroll-showcase/);
         await page.evaluate(() => document.fonts.ready);
