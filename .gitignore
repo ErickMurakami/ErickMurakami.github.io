@@ -6,3 +6,6 @@ dist/
 !.env.example
 playwright-report/
 test-results/
+
+# Local article preview; never include it in commits.
+/src/content/notes/teste.md

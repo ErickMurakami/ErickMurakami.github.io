@@ -26,8 +26,8 @@ function build() {
     );
   }
 }
-function fixture(draft) {
-  return `---\ntitle: "Visibility test article"\ndescription: "Temporary content used only during verification."\ndate: 2026-01-01\ncategory: Java\ndraft: ${draft}\n---\n\n## Storage\n\n| Key | Value |\n| --- | --- |\n| language | Java |\n\n\`\`\`java\nString language = "Java";\n\`\`\`\n`;
+function fixture(draft, localOnly = false) {
+  return `---\ntitle: "Visibility test article"\ndescription: "Temporary content used only during verification."\ndate: 2026-01-01\ncategory: Java\ndraft: ${draft}\nlocalOnly: ${localOnly}\n---\n\n## Storage\n\n| Key | Value |\n| --- | --- |\n| language | Java |\n\n\`\`\`java\nString language = "Java";\n\`\`\`\n`;
 }
 for (const file of Object.values(files))
   assert.equal(
@@ -64,6 +64,14 @@ try {
   }
   assert.ok(!(await read("dist/sitemap.xml")).includes(slug));
 
+  await writeFile(files.pt, fixture(false, true));
+  build();
+  assert.equal(await exists(`dist/pt/blog/${slug}/index.html`), false);
+  assert.ok(
+    !(await read("dist/pt/index.html")).includes("Visibility test article"),
+  );
+  assert.ok(!(await read("dist/sitemap.xml")).includes(slug));
+
   await writeFile(files.pt, fixture(false));
   build();
   const ptHome = await read("dist/pt/index.html");
@@ -85,7 +93,7 @@ try {
   assert.ok(translated.includes(`href="/blog/${slug}/"`));
   assert.ok(/rel="alternate"\s+hreflang="en"/.test(translated));
   console.log(
-    "Blog visibility passed: drafts hidden, published routes listed, independent languages, translated links and Markdown rendering.",
+    "Blog visibility passed: drafts and local-only articles hidden, published routes listed, independent languages, translated links and Markdown rendering.",
   );
 } finally {
   for (const file of created) await unlink(file);

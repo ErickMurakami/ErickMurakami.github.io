@@ -15,6 +15,7 @@ const noteSchema = z.object({
   date: z.coerce.date(),
   category: z.string(),
   draft: z.boolean().default(false),
+  localOnly: z.boolean().default(false),
 });
 export const collections = {
   projects: defineCollection({

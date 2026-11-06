@@ -42,3 +42,9 @@ Você pode publicar só em português ou só em inglês. Não precisa traduzir p
 Se quiser uma tradução, use o mesmo nome de arquivo na outra pasta. O controle de idioma então liga as duas versões. Sem tradução, ele leva à inicial do outro idioma, sem criar um link para uma página inexistente.
 
 Os textos são escritos manualmente. A sincronização do GitHub não cria nem altera artigos.
+
+## Testar um artigo só localmente
+
+Use `draft: false` junto com `localOnly: true` para ver o artigo em `npm run dev`, sem incluí-lo em nenhum build de produção. O arquivo `src/content/notes/teste.md` também está no `.gitignore`, para continuar apenas no seu computador. Seu texto pode ser editado normalmente.
+
+`localOnly` é opcional e vale `false` por padrão. Para publicar um artigo real, use outro arquivo e mantenha `draft: false` e `localOnly: false` (ou remova `localOnly`).
