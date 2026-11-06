@@ -2,7 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 :root {
   --background: oklch(0.94 0.018 240);
-  --foreground: oklch(0.15 0.025 240);
+  --foreground: #000;
   --card: oklch(0.975 0.01 240);
   --primary: oklch(0.56 0.2 240);
   --secondary: oklch(0.9 0.018 240);
@@ -15,7 +15,7 @@
 }
 .dark {
   --background: rgb(9, 11, 14);
-  --foreground: oklch(0.98 0.005 240);
+  --foreground: #fff;
   --card: oklch(0.16 0.015 240);
   --primary: oklch(0.62 0.2 240);
   --secondary: oklch(0.22 0.02 240);
@@ -90,7 +90,7 @@ h3 {
   letter-spacing: -0.04em;
 }
 h1 {
-  font-size: clamp(2.7rem, 5.2vw, 4.5rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 600;
 }
 h2 {
@@ -102,7 +102,7 @@ h3 {
   font-weight: 600;
 }
 p {
-  color: var(--muted-foreground);
+  color: var(--foreground);
 }
 .shell {
   max-width: 1200px;
@@ -208,12 +208,12 @@ nav a {
   flex-shrink: 0;
 }
 .hero h1 {
-  font-size: 23px;
+  font-size: 30px;
   letter-spacing: -0.03em;
 }
 .role {
   display: block;
-  font-size: clamp(2.6rem, 4.3vw, 3.8rem);
+  font-size: clamp(2.9rem, 5vw, 4.4rem);
   margin-top: 13px;
   font-weight: 600;
   line-height: 1.12;
@@ -613,7 +613,7 @@ nav a {
 }
 .prose li {
   margin-block: 10px;
-  color: var(--muted-foreground);
+  color: var(--foreground);
 }
 .prose pre {
   border: 1px solid var(--border);
@@ -750,7 +750,7 @@ nav a {
     font-size: 9px;
   }
   .role {
-    font-size: 43px;
+    font-size: 46px;
   }
   .architecture {
     max-width: 460px;
@@ -873,7 +873,7 @@ nav a {
     flex-wrap: wrap;
   }
   html[lang="pt-BR"] .role {
-    font-size: clamp(30px, 8vw, 43px);
+    font-size: clamp(32px, 8.5vw, 46px);
   }
 }
 
@@ -914,12 +914,12 @@ nav a {
   align-items: center;
 }
 .case-title {
-  font-size: clamp(26px, 3vw, 38px);
+  font-size: clamp(32px, 3.5vw, 46px);
   line-height: 1.15;
   transition: font-size 0.22s ease;
 }
 .header.is-compact .case-title {
-  font-size: 22px;
+  font-size: 26px;
 }
 .header.is-compact .case-bar {
   padding-block: 8px 14px;
@@ -962,10 +962,10 @@ nav a {
 }
 @media (max-width: 650px) {
   .case-title {
-    font-size: 26px;
+    font-size: 32px;
   }
   .header.is-compact .case-title {
-    font-size: 20px;
+    font-size: 24px;
   }
   .case-bar {
     gap: 8px;

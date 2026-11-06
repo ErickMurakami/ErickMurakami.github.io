@@ -33,6 +33,12 @@ for (const theme of ["dark", "light"]) {
           route,
         ).toBeTruthy();
         await expect(page.locator("h1")).toHaveCount(1);
+        const bodyText = page.locator(".intro").first();
+        if (await bodyText.count())
+          await expect(bodyText).toHaveCSS(
+            "color",
+            theme === "dark" ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)",
+          );
         await expect(page.locator("html")).toHaveAttribute(
           "lang",
           route.startsWith("/pt/") ? "pt-BR" : "en",
