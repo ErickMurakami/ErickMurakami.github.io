@@ -9,11 +9,13 @@ order: 2
 
 ## Visão geral
 
-O Logistic é uma API de pedidos de entrega feita com Spring Boot. Combina um modelo de domínio enxuto com persistência, integração de cache e publicação de eventos de envio.
+O Logistic é uma prova de conceito de gestão de entregas. Seu README apresenta uma API REST Spring Boot consumida por um frontend React/Vite separado, com um ciclo de pedidos que passa por criação, processamento, envio e entrega. O PostgreSQL armazena os pedidos, o Redis apoia cache e controle de requisições, e o RabbitMQ recebe eventos de envio.
+
+O estudo se concentra em como regras do ciclo de vida, persistência, consultas em cache e publicação de eventos se articulam.
 
 ## Problema
 
-Atualizações de pedidos devem respeitar o ciclo de entrega. Um evento de envio não deve ser emitido antes do commit da transação no banco, e consultas em cache precisam ser invalidadas após alterações.
+Um pedido de entrega segue um ciclo de negócio: `CREATED → PROCESSING → SHIPPED → DELIVERED`. O backend precisa rejeitar transições inválidas, oferecer consultas filtradas e paginadas e notificar outros componentes quando um pedido é enviado. O estado no banco, as consultas em cache e as mensagens de saída precisam ser coordenados sem atribuir à implementação garantias de entrega que ela não oferece.
 
 ## Arquitetura
 
@@ -53,3 +55,5 @@ Avaliar um transactional outbox e consumidores idempotentes caso a entrega durá
 - [src/main/java/com/erickkamii/logistic/domain/entity/OrderEntity.java](https://github.com/ErickMurakami/Logistic/blob/5d63a16/src/main/java/com/erickkamii/logistic/domain/entity/OrderEntity.java)
 - [src/test/java/com/erickkamii/logistic/service/OrderEventPublisherTest.java](https://github.com/ErickMurakami/Logistic/blob/5d63a16/src/test/java/com/erickkamii/logistic/service/OrderEventPublisherTest.java)
 - [docker-compose.yml](https://github.com/ErickMurakami/Logistic/blob/5d63a16/docker-compose.yml)
+
+- [README do projeto](https://github.com/ErickMurakami/Logistic/blob/5d63a16/README.md)

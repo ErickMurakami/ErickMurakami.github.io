@@ -9,11 +9,13 @@ order: 4
 
 ## Visão geral
 
-Uma demonstração de multitenancy com escopo deliberadamente limitado, usando Quarkus, Hibernate ORM, PostgreSQL, Flyway e autenticação JWT.
+Esta pequena API REST demonstra multitenancy com um schema por tenant. Como explica seu README, os usuários compartilham uma tabela de login no schema `public`, enquanto cada tenant tem sua própria tabela de clientes. O exemplo limita o escopo de negócio à listagem e criação de clientes para deixar a fronteira de persistência evidente.
+
+Quarkus, Hibernate ORM, PostgreSQL, Flyway e JWT compõem o fluxo de requisição; testes unitários e de integração com banco real explicam as garantias pretendidas pelo exemplo.
 
 ## Problema
 
-Dados de clientes precisam permanecer isolados entre tenants sem repetir um predicado de tenant em toda consulta do repositório. O desafio passa a ser selecionar o contexto correto de persistência.
+Em um modelo de schema compartilhado, toda consulta de clientes precisa preservar o discriminador de tenant. Este projeto explora outra abordagem: manter as consultas sem predicados de tenant e deixar o Hibernate direcioná-las ao schema selecionado a partir de um JWT assinado. A questão central passa a ser se cada operação executa no contexto correto de tenant, em vez de depender da repetição do predicado correto em toda consulta.
 
 ## Arquitetura
 

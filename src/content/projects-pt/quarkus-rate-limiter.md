@@ -9,11 +9,13 @@ order: 3
 
 ## Visão geral
 
-Um experimento focado em Quarkus para comparar limitação por janela fixa e janela deslizante usando um armazenamento Redis compartilhado.
+O README apresenta este projeto como uma investigação de como a limitação de requisições funciona por dentro. Uma API HTTP Quarkus expõe um endpoint rápido de ping e outro que simula uma operação lenta, com algoritmos configuráveis de janela fixa e deslizante apoiados pelo Redis.
+
+O objetivo é tornar concreta a diferença entre as estratégias de contagem: o estado armazenado, o comportamento nas fronteiras das janelas e o motivo de executar suas decisões em Lua dentro do Redis.
 
 ## Problema
 
-Contadores locais divergem quando uma API possui múltiplas réplicas. Uma leitura seguida de uma escrita separada também permite que requisições concorrentes disputem o mesmo limite.
+Uma API precisa decidir se um cliente pode fazer outra requisição dentro de uma janela de tempo. Com múltiplas instâncias, contadores locais não fornecem uma visão compartilhada. Ler e atualizar um contador em operações separadas também introduz disputas concorrentes. A implementação explora contadores compartilhados e registros de timestamps, documentando os picos permitidos pela janela fixa.
 
 ## Arquitetura
 
@@ -53,3 +55,5 @@ Testar chamadas concorrentes e fronteiras de tempo, configurar proxies confiáve
 - [src/main/java/dev/erickkamii/ratelimiter/filter/RateLimitFilter.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/main/java/dev/erickkamii/ratelimiter/filter/RateLimitFilter.java)
 - [src/main/java/dev/erickkamii/ratelimiter/service/RateLimiterService.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/main/java/dev/erickkamii/ratelimiter/service/RateLimiterService.java)
 - [src/test/java/dev/erickkamii/ratelimiter/integration/SlidingWindowIT.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/test/java/dev/erickkamii/ratelimiter/integration/SlidingWindowIT.java)
+
+- [README do projeto](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/README.md)

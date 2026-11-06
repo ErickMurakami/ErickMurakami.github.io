@@ -8,10 +8,14 @@ order: 2
 ---
 
 ## Overview
-Logistic is a Spring Boot delivery-order API. It combines a small domain model with persistence, cache integration and shipment event publishing.
+
+Logistic is a proof-of-concept delivery management system. Its README presents a Spring Boot REST API consumed by a separate React/Vite frontend, with an order lifecycle from creation through processing, shipment and delivery. PostgreSQL stores orders, Redis supports caching and request limits, and RabbitMQ receives shipment events.
+
+The case study focuses on how lifecycle rules, persistence, cached reads and event publication fit together.
 
 ## Problem
-Order updates must respect the delivery lifecycle. A shipment event should not be emitted before the database transaction has committed, and cached reads must be invalidated after mutations.
+
+A delivery order follows a business lifecycle: `CREATED → PROCESSING → SHIPPED → DELIVERED`. The backend needs to reject invalid transitions, provide filtered and paginated access, and notify other components when an order ships. Database state, cached reads and outbound messages must be coordinated without claiming stronger delivery guarantees than the implementation provides.
 
 ## Architecture
 REST controllers accept request DTOs and call `OrderService`. JPA repositories persist entities and Specifications implement filtered pagination. Redis is configured through Redisson; RabbitMQ is the outbound messaging integration.
@@ -45,3 +49,5 @@ Evaluate a transactional outbox and idempotent consumers if durable delivery bec
 - [src/main/java/com/erickkamii/logistic/domain/entity/OrderEntity.java](https://github.com/ErickMurakami/Logistic/blob/5d63a16/src/main/java/com/erickkamii/logistic/domain/entity/OrderEntity.java)
 - [src/test/java/com/erickkamii/logistic/service/OrderEventPublisherTest.java](https://github.com/ErickMurakami/Logistic/blob/5d63a16/src/test/java/com/erickkamii/logistic/service/OrderEventPublisherTest.java)
 - [docker-compose.yml](https://github.com/ErickMurakami/Logistic/blob/5d63a16/docker-compose.yml)
+
+- [Project README](https://github.com/ErickMurakami/Logistic/blob/5d63a16/README.md)

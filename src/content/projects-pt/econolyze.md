@@ -9,21 +9,26 @@ order: 1
 
 ## Visão geral
 
-O Econolyze é uma aplicação de finanças pessoais com módulos separados de autenticação, gateway, finanças e IA. Este estudo se concentra no serviço financeiro, onde as evidências de implementação são mais fortes.
+O Econolyze é uma plataforma de finanças pessoais que reúne contas, transações, pagamentos, despesas recorrentes e metas financeiras. Seu README também descreve análise de investimentos e um assistente financeiro com IA. O repositório inclui uma interface Next.js e serviços backend Quarkus.
+
+Este estudo parte do contexto do produto e aprofunda o serviço financeiro: o modelo de transações e pagamentos, a persistência reativa e a atualização de saldos.
 
 ## Problema
 
-Uma transação e seus pagamentos representam conceitos relacionados, mas distintos. Registrar um pagamento também altera o saldo de uma conta; as atualizações precisam preservar as regras de domínio e uma fronteira consistente de persistência.
+Organizar finanças vai além de listar receitas e despesas: saldos, pagamentos parciais, compromissos recorrentes e metas precisam ser coerentes entre si. O desafio de engenharia é representar essas relações mantendo claras as responsabilidades da API e da persistência. Um pagamento altera tanto o status da transação quanto o saldo de uma conta; essas operações precisam de uma fronteira transacional consistente.
 
 ## Arquitetura
 
-O módulo financeiro separa serviços de aplicação e mapeamento de DTOs, entidades e enums de domínio e repositórios de infraestrutura. Utiliza Quarkus REST, Hibernate Reactive Panache, Mutiny e PostgreSQL. É uma implementação em camadas; os nomes dos pacotes, sozinhos, não comprovam inversão estrita de dependências.
+O README apresenta um gateway que conecta a interface web aos serviços de autenticação, finanças e IA. O PostgreSQL fornece persistência relacional; o módulo de IA documentado também usa pgvector.
 
 ```text
-Recurso REST → serviço de aplicação → repositório → PostgreSQL
-                       ↓
-                entidade + mapper de DTO
+Interface Next.js → gateway Quarkus
+                          ├─ serviço de autenticação
+                          ├─ serviço financeiro → PostgreSQL
+                          └─ serviço de IA → PostgreSQL / pgvector
 ```
+
+No serviço financeiro, serviços de aplicação e mapeamento de DTOs se articulam com entidades de domínio e repositórios de infraestrutura. Quarkus REST, Hibernate Reactive Panache e Mutiny sustentam o fluxo reativo. Os detalhes a seguir se concentram nesse caminho financeiro implementado.
 
 ## Decisões técnicas
 
@@ -52,3 +57,5 @@ Adicionar testes de rollback de pagamentos, alterações concorrentes de saldo e
 - [services/financial-service/src/main/java/dev/econolyze/application/services/AccountService.java](https://github.com/ErickMurakami/Econolyze/blob/f849783/services/financial-service/src/main/java/dev/econolyze/application/services/AccountService.java)
 - [services/financial-service/src/test/java/dev/econolyze/GreetingResourceTest.java](https://github.com/ErickMurakami/Econolyze/blob/f849783/services/financial-service/src/test/java/dev/econolyze/GreetingResourceTest.java)
 - [.github/workflows/deploy-backend.yml](https://github.com/ErickMurakami/Econolyze/blob/f849783/.github/workflows/deploy-backend.yml)
+
+- [README do projeto](https://github.com/ErickMurakami/Econolyze/blob/f849783/README.md)

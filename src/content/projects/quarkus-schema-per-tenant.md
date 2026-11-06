@@ -8,10 +8,14 @@ order: 4
 ---
 
 ## Overview
-A deliberately scoped multi-tenancy demonstration using Quarkus, Hibernate ORM, PostgreSQL, Flyway and JWT authentication.
+
+This small REST API demonstrates schema-per-tenant multitenancy. As explained in its README, users share a login table in the `public` schema, while each tenant has its own customer table. The example deliberately limits the business scope to listing and creating customers so the persistence boundary stays visible.
+
+Quarkus, Hibernate ORM, PostgreSQL, Flyway and JWT form the request path; unit tests and real-database integration tests explain what the example is intended to guarantee.
 
 ## Problem
-Customer data must remain isolated between tenants without repeating a tenant predicate in every repository query. The challenge moves to selecting the correct persistence context.
+
+In a shared-schema design, every customer query must preserve the tenant discriminator. This project explores an alternative: keep customer queries tenant-agnostic and let Hibernate route them to the schema selected from a signed JWT. The central question becomes whether each operation runs in the correct tenant context, rather than whether every query repeats the correct predicate.
 
 ## Architecture
 Login reads shared users from `public.app_users`. Authenticated customer operations resolve a signed JWT tenant claim into an allowed schema. Customer repositories use tenant-agnostic JPQL.

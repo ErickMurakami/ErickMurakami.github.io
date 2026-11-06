@@ -8,10 +8,14 @@ order: 3
 ---
 
 ## Overview
-A focused Quarkus experiment comparing fixed-window and sliding-window request limiting with a shared Redis store.
+
+The README frames this project as an exploration of how API rate limiting works under the hood. A Quarkus HTTP API exposes a fast ping endpoint and a simulated slow endpoint, with configurable fixed-window and sliding-window algorithms backed by Redis.
+
+The goal is to make the difference between counting strategies concrete: what state they store, how they behave at window boundaries, and why their decisions execute in Lua inside Redis.
 
 ## Problem
-Per-instance counters diverge when an API has multiple replicas. A read followed by a separate write also allows concurrent requests to race against a limit.
+
+An API needs to decide whether a client can make another request in a time window. With multiple application instances, local counters do not provide a shared view. Reading and updating a counter in separate operations also introduces races. The implementation explores shared counters and timestamp logs while documenting the burst behavior of fixed windows.
 
 ## Architecture
 A JAX-RS request filter builds an IP key and calls `RateLimiterService`. Configuration selects one of two Redis stores. Each store executes its decision as one Lua script.
@@ -45,3 +49,5 @@ Test concurrent callers and clock-boundary behavior, configure trusted proxy han
 - [src/main/java/dev/erickkamii/ratelimiter/filter/RateLimitFilter.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/main/java/dev/erickkamii/ratelimiter/filter/RateLimitFilter.java)
 - [src/main/java/dev/erickkamii/ratelimiter/service/RateLimiterService.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/main/java/dev/erickkamii/ratelimiter/service/RateLimiterService.java)
 - [src/test/java/dev/erickkamii/ratelimiter/integration/SlidingWindowIT.java](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/src/test/java/dev/erickkamii/ratelimiter/integration/SlidingWindowIT.java)
+
+- [Project README](https://github.com/ErickMurakami/quarkus-rate-limiter/blob/5834889/README.md)
