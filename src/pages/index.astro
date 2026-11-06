@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ProjectGallery from "../components/ProjectGallery.astro";
 import TechLabel from "../components/TechLabel.astro";
 import Icon from "../components/Icon.astro";
-import ProjectFocus from "../components/ProjectFocus.astro";
+import ExpertiseGrid from "../components/ExpertiseGrid.astro";
 import BlogPreview from "../components/BlogPreview.astro";
 import { getPublishedPosts } from "../lib/blog";
 import { getCollection } from "astro:content";
@@ -13,18 +13,20 @@ const projects = (await getCollection("projects")).sort(
 const posts = await getPublishedPosts("en");
 ---
 
-<Layout title="Back-end Software Engineer">
+<Layout title="Backend Software Engineer">
   <section class="shell hero">
     <div class="hero-copy">
       <h1>
         Erick Murakami
         <span class="role">
-          Back-end Software Engineer<span class="blue">.</span>
+          Backend Software Engineer<span class="blue">.</span>
         </span>
       </h1>
+    </div>
+    <div class="hero-details">
       <p class="intro">
-        I develop APIs and backend applications in Java, using Quarkus and
-        Spring Boot.
+        Building reliable Java backend systems with a focus on architecture,
+        performance, and maintainability.
       </p>
       <div class="actions">
         <a class="button primary" href="/#projects">
@@ -45,8 +47,8 @@ const posts = await getPublishedPosts("en");
         Download resume ↓
       </a>
     </div>
-    <ProjectFocus locale="en" />
   </section>
+  <ExpertiseGrid locale="en" />
   <div class="specialty-strip">
     <div class="shell">
       <span>TECHNOLOGIES</span>
@@ -83,14 +85,13 @@ const posts = await getPublishedPosts("en");
     </div>
     <div>
       <p>
-        My Java projects explore how data changes across an application:
-        recording payments, moving orders through delivery stages, and keeping
-        customer data separate between tenants.
+        In my professional work, I develop enterprise applications with Java and
+        Spring Boot. I care about understanding trade-offs and keeping
+        architecture simple enough for the software to evolve.
       </p>
       <p>
-        I’m interested in transaction boundaries and the failure cases around
-        them—what happens when a balance update fails, a message never reaches
-        the broker, or requests compete for the same counter.
+        Personal and academic projects give me room to explore new tools and
+        approaches beyond day-to-day requirements. My English proficiency is C1.
       </p>
       <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
         LinkedIn ↗

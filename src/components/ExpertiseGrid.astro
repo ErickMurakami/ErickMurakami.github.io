@@ -1,0 +1,66 @@
+---
+interface Props {
+  locale: "en" | "pt";
+}
+const pt = Astro.props.locale === "pt";
+const cards = pt
+  ? [
+      {
+        title: "Backend empresarial",
+        label: "Experiência profissional",
+        text: "Java e Spring Boot em aplicações com APIs REST, multitenancy, bancos relacionais e integrações com serviços externos.",
+      },
+      {
+        title: "Arquitetura backend",
+        label: "Decisões de engenharia",
+        text: "Clean Architecture, Domain-Driven Design e os compromissos de cada abordagem. Estruturas que acompanhem a evolução do software sem complexidade desnecessária.",
+      },
+      {
+        title: "Engenharia de IA",
+        label: "Projetos pessoais e acadêmicos",
+        text: "Exploração de integração com LLMs, agentes e MCP com Spring AI, LangChain4j e Quarkus.",
+      },
+      {
+        title: "Além da JVM",
+        label: "Escolha de ferramentas",
+        text: "Interesse em outras tecnologias quando elas se ajustam melhor ao problema. A escolha parte dos requisitos e das limitações de cada solução.",
+      },
+    ]
+  : [
+      {
+        title: "Enterprise Backend",
+        label: "Professional experience",
+        text: "Java and Spring Boot applications with REST APIs, multi-tenant systems, relational databases and external service integrations.",
+      },
+      {
+        title: "Backend Architecture",
+        label: "Engineering decisions",
+        text: "Clean Architecture, Domain-Driven Design and the trade-offs behind each approach. Structures that let software evolve without unnecessary complexity.",
+      },
+      {
+        title: "AI Engineering",
+        label: "Personal and academic projects",
+        text: "Exploring LLM integration, agents and MCP with Spring AI, LangChain4j and Quarkus.",
+      },
+      {
+        title: "Beyond the JVM",
+        label: "Tool selection",
+        text: "An interest in other technologies when they fit the problem better. Requirements and the limitations of each solution guide that choice.",
+      },
+    ];
+---
+
+<section
+  class="shell expertise"
+  aria-label={pt ? "Atuação e interesses" : "Work and interests"}
+>
+  <div class="expertise-grid">
+    {cards.map((card) => (
+      <article class="expertise-card">
+        <p class="expertise-label">{card.label}</p>
+        <h2>{card.title}</h2>
+        <p>{card.text}</p>
+      </article>
+    ))}
+  </div>
+</section>
