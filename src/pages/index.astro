@@ -3,13 +3,13 @@ import Layout from "../layouts/Layout.astro";
 import ProjectGallery from "../components/ProjectGallery.astro";
 import TechLabel from "../components/TechLabel.astro";
 import Icon from "../components/Icon.astro";
+import BlogPreview from "../components/BlogPreview.astro";
+import { getPublishedPosts } from "../lib/blog";
 import { getCollection } from "astro:content";
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order,
 );
-const notes = (await getCollection("notes"))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
+const posts = await getPublishedPosts("en");
 ---
 
 <Layout title="Back-end Software Engineer">
@@ -116,36 +116,7 @@ const notes = (await getCollection("notes"))
     </div>
     <ProjectGallery projects={projects} locale="en" />
   </section>
-  {notes.length > 0 && (
-    <>
-      <section id="notes" class="shell section writing">
-        <div>
-          <p class="eyebrow">03 / ENGINEERING NOTES</p>
-          <h2>Space for deeper thinking.</h2>
-          <p>
-            Implementation details, architectural questions, and lessons from
-            building.
-          </p>
-        </div>
-        <div class="notes-preview">
-          {notes.length ? (
-            notes.map((n) => <a href={`/notes/${n.id}/`}>{n.data.title} →</a>)
-          ) : (
-            <>
-              <span class="small-label">THE NOTEBOOK IS OPEN</span>
-              <p>
-                No articles published yet. For now, explore the technical
-                decisions documented in the project case studies.
-              </p>
-              <a class="text-link" href="/#notes">
-                Visit engineering notes →
-              </a>
-            </>
-          )}
-        </div>
-      </section>
-    </>
-  )}
+  <BlogPreview posts={posts} locale="en" />
   <section id="about" class="shell section about-summary">
     <div>
       <p class="eyebrow">ABOUT</p>

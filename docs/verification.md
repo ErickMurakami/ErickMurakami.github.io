@@ -57,3 +57,9 @@ The current layout consolidates Projects, About and Contact into each language's
 Case studies now introduce the purpose and product flow documented in each project's README, then retain source-backed implementation detail and limitations. README evidence links are pinned to the same inspected revision in both languages.
 
 Verification: 6 synchronization tests, 11 browser tests, strict types and static link/content checks passed. The browser suite includes 72 axe scans (12 routes × 3 widths × 2 themes), four sticky-header scenarios (EN/PT, mobile/desktop), return navigation and actual logo loading. Existing local dependency-file changes were excluded from the release commits.
+
+## Text and blog update
+
+Home copy in both languages now uses short descriptions of the work; the generic principles section was removed. The blog has Markdown article pages and a listing, both generated only when that language has published entries. Draft articles are excluded from Home, navigation, routes and the sitemap. Articles do not require a translation; alternate links are emitted only when the translated page exists.
+
+Verification includes 13 browser tests and build-level blog scenarios: drafts only, Portuguese-only publication and an English translation. The build checks article tables/code rendering and restores the original content afterward. No sample article is shipped. Authoring instructions are in `docs/writing.md`.

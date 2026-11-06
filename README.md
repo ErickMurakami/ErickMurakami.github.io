@@ -14,7 +14,7 @@ npm run dev
 Open the Local URL printed by Astro (normally `http://localhost:4321`). No GitHub token or live API access is needed. `npm run build` writes static files to `dist/`; `npm run preview` serves that build.
 
 ```sh
-npm run verify                 # sync tests, content checks, types, build, static links
+npm run verify                 # sync/blog tests, content checks, types, build, static links
 npx playwright install chromium
 npm run test:browser           # responsive, axe, keyboard, theme, no-JS checks
 ```
@@ -23,20 +23,20 @@ Linux CI installs browser system dependencies with `npx playwright install --wit
 
 ## Navigation and reading
 
-Each language has one main page with Projects, About and Contact sections. Case studies keep dedicated URLs; there are 12 generated HTML pages, including two localized error pages. Notes get individual routes only when published. A project title and return link stay in the sticky header, with a smaller title after scrolling. Reduced-motion preferences disable the size transition. Technology logos are served locally from Devicon v2.17.0; the upstream license is included in `public/technologies/LICENSE.txt`.
+Each language has one main page with Projects, About and Contact sections. Case studies keep dedicated URLs; there are 12 generated HTML pages, including two localized error pages. The Blog menu, listing and article routes appear only when there are published articles in that language. A project title and return link stay in the sticky header, with a smaller title after scrolling. Reduced-motion preferences disable the size transition. Technology logos are served locally from Devicon v2.17.0; the upstream license is included in `public/technologies/LICENSE.txt`.
 
 Case studies start with the project's README and business context, then explain verified implementation details and limits. If a future project has no README, use its actual source and technical context and state the documentation gap.
 
 ## Languages
 
-English is served at `/`; Brazilian Portuguese is served at `/pt/`. The language control shows one destination flag: the United Kingdom on Portuguese pages, or Brazil on English pages. Clicking it changes language and swaps the flag, preserving the equivalent route, including project case studies and Home sections. Flags are local SVG assets from flag-icons v7.5.0 with their upstream license included. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. A future technical note should have the same filename in both note collections before publication so the language switch has a matching destination.
+English is served at `/`; Brazilian Portuguese is served at `/pt/`. The language control shows one destination flag: the United Kingdom on Portuguese pages, or Brazil on English pages. Clicking it changes language and swaps the flag, preserving the equivalent route, including project case studies and Home sections. Flags are local SVG assets from flag-icons v7.5.0 with their upstream license included. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. Articles can be published independently in Portuguese or English. Use the same filename in both collections if you later add a translation.
 
 The Home primary resume download follows the current language. The Contact section offers both original PDFs.
 
 ## Content and evidence
 
 - `src/content/projects/*.md`: curated case studies. Required frontmatter: `title`, `repo`, `description`, `focus`, `stack`, `order`.
-- `src/content/notes/*.md`: genuine technical writing. Required frontmatter: `title`, `description`, `date` (ISO date) and `category`. File names become routes. The Home notes section appears only when real articles are available; no placeholder articles are published.
+- `src/content/notes/*.md`: genuine technical writing. Required frontmatter: `title`, `description`, `date` (ISO date) and `category`; optional `draft` controls publication. Portuguese articles go in `src/content/notes-pt/`. Published files become `/blog/<filename>/` or `/pt/blog/<filename>/`. Drafts are excluded from navigation, pages and the sitemap. See [how to write and publish an article](docs/writing.md).
 - `research/projects.json`: public API metadata and inspected source revisions.
 - `research/selection.md`: selection rationale and missing information.
 - `research/design-system.md`: audit of the original Econolyze implementation.

@@ -1,0 +1,70 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+interface Props {
+  posts: (CollectionEntry<"notes"> | CollectionEntry<"notesPt">)[];
+  post?: CollectionEntry<"notes"> | CollectionEntry<"notesPt">;
+  locale: "en" | "pt";
+}
+const { posts, post, locale } = Astro.props;
+const pt = locale === "pt";
+const home = pt ? "/pt/" : "/";
+const rendered = post ? await render(post) : null;
+const Content = rendered?.Content;
+---
+
+<Layout
+  title={post?.data.title ?? "Blog"}
+  description={
+    post?.data.description ??
+    (pt
+      ? "Artigos de Erick Murakami sobre desenvolvimento de software."
+      : "Articles by Erick Murakami about software development.")
+  }
+>
+  {post ? (
+    <article class="shell section prose note">
+      <a href={`${home}blog/`}>
+        {pt ? "← Todos os artigos" : "← All articles"}
+      </a>
+      <p class="eyebrow">{post.data.category}</p>
+      <h1>{post.data.title}</h1>
+      <p class="post-meta">
+        Erick Murakami ·{" "}
+        <time datetime={post.data.date.toISOString()}>
+          {post.data.date.toLocaleDateString(pt ? "pt-BR" : "en-GB", {
+            timeZone: "UTC",
+          })}
+        </time>
+      </p>
+      <p class="intro">{post.data.description}</p>
+      {Content && <Content />}
+    </article>
+  ) : (
+    <section class="shell section">
+      <div class="page-intro">
+        <p class="eyebrow">BLOG</p>
+        <h1>{pt ? "Artigos" : "Articles"}</h1>
+      </div>
+      <div class="post-list">
+        {posts.map((entry) => (
+          <article class="post-item">
+            <p class="post-meta">
+              <time datetime={entry.data.date.toISOString()}>
+                {entry.data.date.toLocaleDateString(pt ? "pt-BR" : "en-GB", {
+                  timeZone: "UTC",
+                })}
+              </time>{" "}
+              · {entry.data.category}
+            </p>
+            <h2>
+              <a href={`${home}blog/${entry.id}/`}>{entry.data.title}</a>
+            </h2>
+            <p>{entry.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+</Layout>

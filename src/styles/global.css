@@ -990,3 +990,26 @@ nav a {
 .nowrap {
   white-space: nowrap;
 }
+
+.blog-preview {
+  border-top: 1px solid var(--border);
+}
+.post-list {
+  max-width: 850px;
+}
+.post-item {
+  padding-block: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.post-item:first-child {
+  padding-top: 0;
+}
+.post-item h2,
+.post-item h3 {
+  margin-block: 12px;
+  font-size: 24px;
+}
+.post-meta {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}

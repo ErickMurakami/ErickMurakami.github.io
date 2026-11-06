@@ -50,6 +50,12 @@ for (const [file, nodes] of documents) {
         attrs(n).rel === "alternate" &&
         attrs(n).hreflang === language,
     );
+    if (
+      !alternate &&
+      path.includes("/blog/") &&
+      language !== (path.startsWith("/pt/") ? "pt-BR" : "en")
+    )
+      continue;
     assert.ok(alternate, `Missing language alternate in ${file}`);
     const alternateUrl = new URL(attrs(alternate).href);
     const alternatePath = join(

@@ -5,11 +5,30 @@ import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
 import "@fontsource/inter/latin-700.css";
 import Icon from "../components/Icon.astro";
+import { getPublishedPosts } from "../lib/blog";
 import { languagePaths } from "../lib/i18n";
 const pt = Astro.url.pathname.startsWith("/pt/");
 const localized = (en: string, br: string) => (pt ? br : en);
 const paths = languagePaths(Astro.url.pathname);
 const home = pt ? "/pt/" : "/";
+const posts = await getPublishedPosts(pt ? "pt" : "en");
+const onBlog = Astro.url.pathname.startsWith(`${home}blog/`);
+const blogSlug = onBlog
+  ? Astro.url.pathname.slice(`${home}blog/`.length).replace(/\/$/, "")
+  : "";
+const otherPosts = onBlog ? await getPublishedPosts(pt ? "en" : "pt") : [];
+const translatedPageExists =
+  !onBlog ||
+  (blogSlug
+    ? otherPosts.some((post) => post.id === blogSlug)
+    : otherPosts.length > 0);
+const languageTarget = translatedPageExists
+  ? pt
+    ? paths.en
+    : paths.pt
+  : pt
+    ? "/"
+    : "/pt/";
 interface Props {
   title: string;
   projectTitle?: string;
@@ -34,6 +53,7 @@ const links = [
   [`${home}#about`, localized("About", "Sobre")],
   [`${home}#contact`, localized("Contact", "Contato")],
 ];
+if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
 ---
 
 <!doctype html>
@@ -69,16 +89,29 @@ const links = [
     <title>{title} · Erick Murakami</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="en" href={new URL(paths.en, Astro.site)} />
-    <link
-      rel="alternate"
-      hreflang="pt-BR"
-      href={new URL(paths.pt, Astro.site)}
-    />
+    {(!pt || translatedPageExists) && (
+      <link
+        rel="alternate"
+        hreflang="en"
+        href={new URL(paths.en, Astro.site)}
+      />
+    )}
+    {(pt || translatedPageExists) && (
+      <link
+        rel="alternate"
+        hreflang="pt-BR"
+        href={new URL(paths.pt, Astro.site)}
+      />
+    )}
     <link
       rel="alternate"
       hreflang="x-default"
-      href={new URL(paths.en, Astro.site)}
+      href={
+        new URL(
+          pt && !translatedPageExists ? Astro.url.pathname : paths.en,
+          Astro.site,
+        )
+      }
     />
     <meta property="og:locale" content={pt ? "pt_BR" : "en_US"} />
     <script is:inline>
@@ -120,7 +153,9 @@ const links = [
                 href.endsWith("#projects") &&
                 Astro.url.pathname.includes("/projects/")
                   ? "true"
-                  : undefined
+                  : href === Astro.url.pathname
+                    ? "page"
+                    : undefined
               }
             >
               {label}
@@ -129,7 +164,7 @@ const links = [
         </nav>
         <a
           class="language-toggle"
-          href={pt ? paths.en : paths.pt}
+          href={languageTarget}
           hreflang={pt ? "en" : "pt-BR"}
           aria-label={localized(
             "Language: English. Switch to Portuguese",
@@ -176,12 +211,7 @@ const links = [
         >
           em<span>.</span>
         </a>
-        <p>
-          {localized(
-            "Java · Quarkus · Spring Boot",
-            "Java · Quarkus · Spring Boot",
-          )}
-        </p>
+        <p>Java · Quarkus · Spring Boot</p>
       </div>
       <div class="footer-links">
         <a href="https://github.com/ErickMurakami">GitHub ↗</a>
@@ -214,7 +244,7 @@ const links = [
           document.querySelector<HTMLAnchorElement>(".language-toggle");
         if (
           languageToggle &&
-          !caseBar &&
+          (location.pathname === "/" || location.pathname === "/pt/") &&
           location.hash &&
           document.getElementById(location.hash.slice(1))
         ) {

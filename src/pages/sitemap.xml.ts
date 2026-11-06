@@ -1,18 +1,21 @@
 import type { APIRoute } from "astro";
+import { getPublishedPosts } from "../lib/blog";
 import { getCollection } from "astro:content";
 export const GET: APIRoute = async ({ site }) => {
   const projects = await getCollection("projects");
-  const notes = await getCollection("notes");
+  const notes = await getPublishedPosts("en");
   const routes = [
     "/",
     ...projects.map((p) => `/projects/${p.id}/`),
-    ...notes.map((n) => `/notes/${n.id}/`),
+    ...notes.map((n) => `/blog/${n.id}/`),
   ];
   routes.push(
     "/pt/",
     ...(await getCollection("projectsPt")).map((p) => `/pt/projects/${p.id}/`),
-    ...(await getCollection("notesPt")).map((n) => `/pt/notes/${n.id}/`),
+    ...(await getPublishedPosts("pt")).map((n) => `/pt/blog/${n.id}/`),
   );
+  if (notes.length) routes.push("/blog/");
+  if ((await getPublishedPosts("pt")).length) routes.push("/pt/blog/");
   const escape = (value: string) =>
     value
       .replaceAll("&", "&amp;")

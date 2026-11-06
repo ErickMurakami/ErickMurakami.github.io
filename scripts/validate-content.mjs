@@ -75,13 +75,6 @@ for (const file of sourceFiles) {
 console.log(
   "Portuguese case studies match English routes and source evidence.",
 );
-const englishNotes = (await readdir("src/content/notes"))
-  .filter((file) => file.endsWith(".md"))
-  .sort();
-const portugueseNotes = (await readdir("src/content/notes-pt"))
-  .filter((file) => file.endsWith(".md"))
-  .sort();
-if (JSON.stringify(englishNotes) !== JSON.stringify(portugueseNotes))
-  throw new Error(
-    "Every published note requires an English and Portuguese route",
-  );
+console.log(
+  "Articles may be published independently in English or Portuguese.",
+);

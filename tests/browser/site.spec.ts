@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 const routes = [
@@ -225,4 +226,29 @@ test("single destination flag swaps between UK and Brazil while preserving secti
     "src",
     "/flags/brazil.svg",
   );
+});
+
+test("blog stays hidden unless that language has published articles", async ({
+  page,
+}) => {
+  for (const [home, file] of [
+    ["/", "dist/blog/index.html"],
+    ["/pt/", "dist/pt/blog/index.html"],
+  ]) {
+    const published = existsSync(file);
+    await page.goto(home);
+    await expect(page.locator("#blog")).toHaveCount(published ? 1 : 0);
+    await expect(
+      page
+        .locator(".primary-nav")
+        .getByRole("link", { name: "Blog", exact: true }),
+    ).toHaveCount(published ? 1 : 0);
+    if (published) {
+      await page
+        .locator(".primary-nav")
+        .getByRole("link", { name: "Blog", exact: true })
+        .click();
+      await expect(page.locator("h1")).toHaveCount(1);
+    }
+  }
 });

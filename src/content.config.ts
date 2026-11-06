@@ -14,6 +14,7 @@ const noteSchema = z.object({
   description: z.string(),
   date: z.coerce.date(),
   category: z.string(),
+  draft: z.boolean().default(false),
 });
 export const collections = {
   projects: defineCollection({
