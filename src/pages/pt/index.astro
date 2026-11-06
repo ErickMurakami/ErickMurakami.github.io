@@ -76,19 +76,23 @@ const posts = await getPublishedPosts("pt");
           </strong>
         </div>
       </div>
+      <section id="projects" class="shell section">
+        <div class="section-heading">
+          <div>
+            <h2>Projetos</h2>
+            <p>
+              O que fiz em cada projeto, como funciona e o que ainda pode
+              melhorar.
+            </p>
+          </div>
+        </div>
+        <ProjectGallery projects={projects} locale="pt" portion="lead" />
+      </section>
     </div>
   </section>
-  <section id="projects" class="shell section">
-    <div class="section-heading">
-      <div>
-        <h2>Projetos</h2>
-        <p>
-          O que fiz em cada projeto, como funciona e o que ainda pode melhorar.
-        </p>
-      </div>
-    </div>
-    <ProjectGallery projects={projects} locale="pt" />
-  </section>
+  <div class="shell project-continuation">
+    <ProjectGallery projects={projects} locale="pt" portion="continuation" />
+  </div>
   <BlogPreview posts={posts} locale="pt" />
   <section id="about" class="shell section about-summary">
     <div>

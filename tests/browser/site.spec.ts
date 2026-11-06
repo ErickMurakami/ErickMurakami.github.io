@@ -201,7 +201,7 @@ test("technology logos are local, loaded and paired with visible names", async (
   await page.goto("/");
   const strip = page.locator(".specialty-strip");
   await strip.scrollIntoViewIfNeeded();
-  await expect(strip.locator("img")).toHaveCount(5);
+  await expect(strip.locator("img")).toHaveCount(6);
   for (const img of await strip.locator("img").all()) {
     await expect(img).toHaveAttribute("src", /^\/technologies\//);
     await expect
@@ -210,7 +210,7 @@ test("technology logos are local, loaded and paired with visible names", async (
   }
 });
 
-test("single destination flag swaps between UK and Brazil while preserving sections", async ({
+test("current language flag swaps between UK and Brazil while preserving sections", async ({
   page,
 }) => {
   await page.goto("/#projects");
@@ -218,7 +218,7 @@ test("single destination flag swaps between UK and Brazil while preserving secti
   await expect(toggle.locator("img")).toHaveCount(1);
   await expect(toggle.locator("img")).toHaveAttribute(
     "src",
-    "/flags/brazil.svg",
+    "/flags/united-kingdom.svg",
   );
   await toggle.focus();
   await page.keyboard.press("Enter");
@@ -226,14 +226,14 @@ test("single destination flag swaps between UK and Brazil while preserving secti
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.locator(".language-toggle img")).toHaveAttribute(
     "src",
-    "/flags/united-kingdom.svg",
+    "/flags/brazil.svg",
   );
   await page.locator(".language-toggle").click();
   await expect(page).toHaveURL(/\/#projects$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator(".language-toggle img")).toHaveAttribute(
     "src",
-    "/flags/brazil.svg",
+    "/flags/united-kingdom.svg",
   );
 });
 
@@ -402,8 +402,19 @@ test("expertise cards replace one another in place and reverse with native scrol
             expect(box!.y + box!.height).toBeLessThanOrEqual(height);
           }
         }
-        await page.locator("#projects").scrollIntoViewIfNeeded();
-        await expect(page.locator("#projects")).toBeInViewport();
+        await page.locator(".project-continuation").scrollIntoViewIfNeeded();
+        await expect(
+          page.locator(".project-continuation .project-card").first(),
+        ).toBeInViewport();
+        const leadBottom = await page
+          .locator("#projects .project-card")
+          .last()
+          .evaluate((el) => el.getBoundingClientRect().bottom);
+        const continuationTop = await page
+          .locator(".project-continuation .project-card")
+          .first()
+          .evaluate((el) => el.getBoundingClientRect().top);
+        expect(continuationTop).toBeGreaterThanOrEqual(leadBottom - 1);
         const hero = await page.locator(".hero").boundingBox();
         expect(hero!.y).toBeLessThan(0);
       }
@@ -447,4 +458,105 @@ test("expertise has static mobile, reduced-motion and no-JavaScript fallbacks", 
     }
     await context.close();
   }
+});
+
+test("Projects is visible and unobscured at scroll zero, directly below technologies", async ({
+  browser,
+}) => {
+  for (const theme of ["dark", "light"]) {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 900 },
+    });
+    await context.addInitScript(
+      (value) => localStorage.setItem("theme", value),
+      theme,
+    );
+    const page = await context.newPage();
+    for (const route of ["/", "/pt/"]) {
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      await expect(page.locator("[data-expertise-showcase]")).toHaveClass(
+        /is-scroll-showcase/,
+      );
+      expect(await page.evaluate(() => scrollY)).toBe(0);
+      await expect(page.locator(".expertise-card.is-active")).toHaveCount(1);
+      const heading = page.locator("#projects h2");
+      await expect(heading).toBeInViewport();
+      const geometry = await heading.evaluate((el) => {
+        const box = el.getBoundingClientRect();
+        const hit = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + box.height / 2,
+        );
+        const projects = document
+          .querySelector("#projects")!
+          .getBoundingClientRect();
+        const strip = document
+          .querySelector(".specialty-strip")!
+          .getBoundingClientRect();
+        return {
+          unobscured: !!hit && el.contains(hit),
+          bottom: box.bottom,
+          gap: projects.top - strip.bottom,
+        };
+      });
+      expect(geometry.unobscured).toBe(true);
+      expect(geometry.bottom).toBeLessThan(900);
+      expect(geometry.gap).toBe(0);
+      await expect(
+        page.locator("#projects .project-card").first(),
+      ).toBeInViewport();
+      await expect(
+        page.locator("#projects .project-card h3 a").first(),
+      ).toBeInViewport();
+      await expect(page.locator(".project-card")).toHaveCount(4);
+      const parrot = page.locator(
+        '.specialty-strip img[src="/technologies/langchain4j.ico"]',
+      );
+      await expect(parrot).toHaveCount(1);
+      await expect
+        .poll(() =>
+          parrot.evaluate((el) => (el as HTMLImageElement).naturalWidth),
+        )
+        .toBeGreaterThan(0);
+    }
+    await context.close();
+  }
+});
+
+test("project cards share dimensions across both gallery groups without clipping", async ({
+  browser,
+}) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  for (const width of [
+    1440, 1366, 1001, 900, 768, 700, 651, 650, 390, 360, 320,
+  ]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of ["/", "/pt/"]) {
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      const sizes = await page.locator(".project-card").evaluateAll((cards) =>
+        cards.map((card) => {
+          const rect = card.getBoundingClientRect();
+          return {
+            width: rect.width,
+            height: rect.height,
+            clipped: card.scrollHeight > card.clientHeight + 1,
+          };
+        }),
+      );
+      expect(
+        Math.max(...sizes.map((s) => s.height)) -
+          Math.min(...sizes.map((s) => s.height)),
+        `${route} ${width}px heights`,
+      ).toBeLessThan(1);
+      expect(
+        Math.max(...sizes.map((s) => s.width)) -
+          Math.min(...sizes.map((s) => s.width)),
+      ).toBeLessThan(1);
+      expect(sizes.some((s) => s.clipped)).toBe(false);
+    }
+  }
+  await context.close();
 });

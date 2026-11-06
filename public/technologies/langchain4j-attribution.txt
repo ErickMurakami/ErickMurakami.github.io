@@ -1,0 +1,7 @@
+LangChain4j logo (parrot and coffee cup). Trademark of the LangChain4j project.
+Used as an informational graphic identifying the technology, without endorsement.
+Unmodified official asset:
+https://github.com/langchain4j/langchain4j/blob/c5c8c19a3f8737c9662634825aac64a25fed9f17/docs/static/img/favicon.ico
+Logo license:
+https://github.com/langchain4j/langchain4j/blob/c5c8c19a3f8737c9662634825aac64a25fed9f17/LOGO_LICENSE.md
+See LANGCHAIN4J_LOGO_LICENSE.md for the complete terms.

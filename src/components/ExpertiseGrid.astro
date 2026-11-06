@@ -118,8 +118,16 @@ const cards = pt
         .getBoundingClientRect().height;
       section!.style.setProperty("--showcase-top", `${top}px`);
       section!.classList.toggle("is-scroll-showcase", media.matches);
-      // Short screens use the static presentation instead of clipping the introduction.
-      if (media.matches && sticky.offsetHeight > innerHeight - top - 12)
+      // Projects begins inside the visual frame. Increasing the scroll runway
+      // below that frame therefore never delays its initial visibility.
+      const introduction = sticky.querySelector<HTMLElement>(".hero")!;
+      const strip = sticky.querySelector<HTMLElement>(".specialty-strip")!;
+      const heading = sticky.querySelector<HTMLElement>(
+        "#projects .section-heading",
+      )!;
+      const essentialHeight =
+        introduction.offsetHeight + strip.offsetHeight + heading.offsetHeight;
+      if (media.matches && essentialHeight > innerHeight - top - 12)
         section!.classList.remove("is-scroll-showcase");
       section!.style.setProperty(
         "--showcase-height",
@@ -127,7 +135,7 @@ const cards = pt
       );
       section!.style.setProperty(
         "--showcase-travel",
-        `${3 * Math.min(180, Math.max(130, innerHeight * 0.18))}px`,
+        `${3 * Math.min(320, Math.max(240, innerHeight * 0.3))}px`,
       );
       schedule();
     }

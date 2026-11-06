@@ -5,6 +5,7 @@ interface Props {
 const { name } = Astro.props;
 const normalized = name.toLowerCase();
 const logos: Record<string, string> = {
+  langchain4j: "langchain4j",
   java: "java",
   quarkus: "quarkus",
   spring: "spring",
@@ -21,7 +22,7 @@ const key = Object.keys(logos).find((key) => normalized.startsWith(key));
 <span class="tech-label">
   {key && (
     <img
-      src={`/technologies/${logos[key]}.svg`}
+      src={`/technologies/${logos[key]}.${key === "langchain4j" ? "ico" : "svg"}`}
       alt=""
       width="22"
       height="22"

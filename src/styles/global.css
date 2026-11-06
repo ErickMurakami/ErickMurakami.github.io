@@ -318,6 +318,7 @@ nav a {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 340px;
   transition: border-color 0.2s;
 }
 .project-card:hover {
@@ -1265,21 +1266,20 @@ nav a {
   .is-scroll-showcase .showcase-sticky {
     position: sticky;
     top: var(--showcase-top);
-    /* Leave room for the Projects heading as the last card settles. */
-    min-height: min(560px, calc(100svh - var(--showcase-top) - 150px));
     display: grid;
     grid-template-rows: 1fr auto;
     background: var(--background);
   }
   .is-scroll-showcase .hero {
     width: 100%;
+    padding-block: 24px;
   }
   .is-scroll-showcase .expertise-grid {
     display: grid;
   }
   .is-scroll-showcase .expertise-card {
     grid-area: 1 / 1;
-    min-height: 320px;
+    min-height: 280px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1344,4 +1344,43 @@ nav a {
 /* Authored article titles may be longer than repository names. */
 .case-title {
   overflow-wrap: anywhere;
+}
+
+/* Keep the project introduction in the same frame, without a gap after the strip. */
+.expertise-showcase #projects.section {
+  width: 100%;
+  padding-block: 16px 24px;
+}
+.expertise-showcase #projects .section-heading {
+  margin-bottom: 24px;
+}
+.project-continuation {
+  padding-bottom: 64px;
+}
+@media (max-width: 650px) {
+  .project-continuation {
+    padding-bottom: 46px;
+  }
+}
+
+/* Uniform project cards across the lead and continuation grids; content can grow at text zoom. */
+@media (max-width: 1100px) {
+  .project-card {
+    min-height: 400px;
+  }
+}
+@media (min-width: 651px) and (max-width: 750px) {
+  .project-card {
+    min-height: 480px;
+  }
+}
+@media (max-width: 650px) {
+  .project-card {
+    min-height: 360px;
+  }
+}
+@media (max-width: 360px) {
+  .project-card {
+    min-height: 440px;
+  }
 }
