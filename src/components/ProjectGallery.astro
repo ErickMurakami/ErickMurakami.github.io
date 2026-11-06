@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProjectCard from "./ProjectCard.astro";
+import TechLabel from "./TechLabel.astro";
+import { githubProjects } from "../lib/projects";
+interface Props {
+  projects: (CollectionEntry<"projects"> | CollectionEntry<"projectsPt">)[];
+  locale?: "en" | "pt";
+}
+const { projects, locale = "en" } = Astro.props;
+const pt = locale === "pt";
+const additional = githubProjects.filter(
+  (repo) => !projects.some((project) => project.data.repo === repo.name),
+);
+---
+
+<div class="project-grid">
+  {projects.map((project) => (
+    <ProjectCard project={project} locale={locale} />
+  ))}
+</div>
+{additional.length > 0 && (
+  <div class="additional-projects">
+    <h3>{pt ? "Mais projetos públicos" : "More public work"}</h3>
+    <p>
+      {pt
+        ? "Metadados do GitHub; estudos de caso ainda não preparados."
+        : "GitHub metadata; case studies have not been curated yet."}
+    </p>
+    <div class="project-grid">
+      {additional.map((repo) => (
+        <article class="project-card">
+          <h3>
+            <a href={repo.url}>{repo.name}</a>
+          </h3>
+          <p>{repo.description}</p>
+          {repo.language && (
+            <ul class="tags">
+              <li>
+                <TechLabel name={repo.language} />
+              </li>
+            </ul>
+          )}
+          <a class="text-link" href={repo.url}>
+            {pt ? "Ver código no GitHub ↗" : "View source on GitHub ↗"}
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+)}

@@ -8,7 +8,7 @@ To add automatic listings:
 2. Add its exact name to `data/publication.json` after reviewing it for publication.
 3. Add the `portfolio` topic on GitHub.
 4. Run `npm run sync`, or manually trigger **Synchronize public project metadata**. Its weekly schedule runs Mondays at 09:20 UTC (06:20 São Paulo).
-5. Commit the snapshot locally. The workflow commits only the snapshot automatically. Builds show approved metadata-only projects on `/projects/`; they do not pretend those projects have a case study.
+5. Commit the snapshot locally. The workflow commits only the snapshot automatically. Builds show approved metadata-only projects in the Home Projects section (`/#projects` and `/pt/#projects`); they do not pretend those projects have a case study.
 
 Removing the topic, approval, or public availability removes an automatic listing after the next successful sync. A failed API request leaves the previous snapshot unchanged and exits unsuccessfully. No stale status is presented as a fresh fetch. To remove information immediately, remove its snapshot entry and build again. Curated case studies are intentional editorial publications: remove their Markdown separately if a source repository becomes private or should no longer be featured. Automated sync never modifies them.
 

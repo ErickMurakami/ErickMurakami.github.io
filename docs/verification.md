@@ -49,3 +49,11 @@ The implementation is organized into exactly four requested semantic commits. Ru
 The owner supplied LinkedIn and original English/Portuguese resume PDFs, and approved publishing only this repository publicly. The site now has 20 HTML routes across English and Brazilian Portuguese, four translated studies with identical source evidence, localized resume downloads and route-preserving language links. Strict types, content parity, alternate-language routes, assets and the sitemap are checked. The browser matrix now covers 20 routes × 3 widths × 2 themes, plus keyboard navigation and language/download behavior. The initial four commits above describe the original implementation; follow-up commits are split by profile, localization and delivery context and use the owner's configured Git identity.
 
 Follow-up results: six synchronization tests and six browser tests passed; 120 axe route/theme/viewport scans returned no violations. Twenty routes, both resume assets and alternate-language links passed static validation. Type checking returned zero errors, warnings and hints.
+
+## Navigation and reading refinement
+
+The current layout consolidates Projects, About and Contact into each language's Home, reducing output from 20 to 12 HTML pages (including two error pages). The empty notes section is hidden until real writing is published. Project pages retain dedicated URLs and have a sticky title/return link; the title becomes smaller after scrolling, with reduced-motion support. The hero card is aligned without rotation. Devicon v2.17.0 logos are local assets with the upstream license included.
+
+Case studies now introduce the purpose and product flow documented in each project's README, then retain source-backed implementation detail and limitations. README evidence links are pinned to the same inspected revision in both languages.
+
+Verification: 6 synchronization tests, 11 browser tests, strict types and static link/content checks passed. The browser suite includes 72 axe scans (12 routes × 3 widths × 2 themes), four sticky-header scenarios (EN/PT, mobile/desktop), return navigation and actual logo loading. Existing local dependency-file changes were excluded from the release commits.

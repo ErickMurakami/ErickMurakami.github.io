@@ -12,10 +12,12 @@ const paths = languagePaths(Astro.url.pathname);
 const home = pt ? "/pt/" : "/";
 interface Props {
   title: string;
+  projectTitle?: string;
   description?: string;
 }
 const {
   title,
+  projectTitle,
   description = localized(
     "Java, Quarkus and Spring Boot. Explore Erick Murakami’s backend projects, architecture decisions and engineering trade-offs.",
     "Java, Quarkus e Spring Boot. Conheça os projetos backend, decisões de arquitetura e compromissos técnicos de Erick Murakami.",
@@ -28,9 +30,9 @@ const canonical = new URL(
   Astro.site,
 );
 const links = [
-  [`${home}projects/`, localized("Projects", "Projetos")],
-  [`${home}notes/`, localized("Engineering notes", "Notas técnicas")],
-  [`${home}about/`, localized("About", "Sobre")],
+  [`${home}#projects`, localized("Projects", "Projetos")],
+  [`${home}#about`, localized("About", "Sobre")],
+  [`${home}#contact`, localized("Contact", "Contato")],
 ];
 ---
 
@@ -107,12 +109,18 @@ const links = [
           </span>
           <span>Erick Murakami</span>
         </a>
-        <nav aria-label={localized("Main navigation", "Navegação principal")}>
+        <nav
+          class="primary-nav"
+          aria-label={localized("Main navigation", "Navegação principal")}
+        >
           {links.map(([href, label]) => (
             <a
               href={href}
               aria-current={
-                Astro.url.pathname.startsWith(href) ? "page" : undefined
+                href.endsWith("#projects") &&
+                Astro.url.pathname.includes("/projects/")
+                  ? "true"
+                  : undefined
               }
             >
               {label}
@@ -149,6 +157,14 @@ const links = [
           <Icon name="sun" />
         </button>
       </div>
+      {projectTitle && (
+        <div class="shell case-bar" data-case-bar>
+          <a class="case-back" href={`${home}#projects`}>
+            {localized("← All projects", "← Todos os projetos")}
+          </a>
+          <h1 class="case-title">{projectTitle}</h1>
+        </div>
+      )}
     </header>
     <main id="main" tabindex="-1">
       <slot />
@@ -172,11 +188,42 @@ const links = [
       <div class="footer-links">
         <a href="https://github.com/ErickMurakami">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/erick-murakami">LinkedIn ↗</a>
-        <a href={`${home}contact/`}>{localized("Contact", "Contato")}</a>
+        <a href={`${home}#contact`}>{localized("Contact", "Contato")}</a>
         <span>© {new Date().getFullYear()} Erick Murakami</span>
       </div>
     </footer>
     <script>
+      const header = document.querySelector<HTMLElement>(".header");
+      const caseBar = document.querySelector("[data-case-bar]");
+      if (caseBar && header) {
+        const updateReadingHeader = () =>
+          header.classList.toggle("is-compact", window.scrollY > 64);
+        updateReadingHeader();
+        window.addEventListener("scroll", updateReadingHeader, {
+          passive: true,
+        });
+      }
+      if (header && "ResizeObserver" in window) {
+        new ResizeObserver(() =>
+          document.documentElement.style.setProperty(
+            "--header-offset",
+            `${header.getBoundingClientRect().height + 24}px`,
+          ),
+        ).observe(header);
+      }
+      const updateSectionNavigation = () => {
+        document
+          .querySelectorAll<HTMLAnchorElement>(".primary-nav a")
+          .forEach((link) => {
+            if (link.pathname === location.pathname && link.hash) {
+              if (link.hash === location.hash)
+                link.setAttribute("aria-current", "location");
+              else link.removeAttribute("aria-current");
+            }
+          });
+      };
+      updateSectionNavigation();
+      window.addEventListener("hashchange", updateSectionNavigation);
       const button = document.querySelector<HTMLButtonElement>(".theme");
       function updateTheme() {
         const light = !document.documentElement.classList.contains("dark");

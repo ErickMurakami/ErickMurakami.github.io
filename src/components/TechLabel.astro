@@ -1,0 +1,33 @@
+---
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+const normalized = name.toLowerCase();
+const logos: Record<string, string> = {
+  java: "java",
+  quarkus: "quarkus",
+  spring: "spring",
+  postgresql: "postgresql",
+  docker: "docker",
+  redis: "redis",
+  rabbitmq: "rabbitmq",
+  lua: "lua",
+  hibernate: "hibernate",
+};
+const key = Object.keys(logos).find((key) => normalized.startsWith(key));
+---
+
+<span class="tech-label">
+  {key && (
+    <img
+      src={`/technologies/${logos[key]}.svg`}
+      alt=""
+      width="22"
+      height="22"
+      loading="lazy"
+      decoding="async"
+    />
+  )}
+  <span>{name}</span>
+</span>

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import TechLabel from "./TechLabel.astro";
 import Icon from "./Icon.astro";
 interface Props {
   project: CollectionEntry<"projects"> | CollectionEntry<"projectsPt">;
@@ -26,7 +27,9 @@ const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
   <p class="card-description">{p.description}</p>
   <ul class="tags" aria-label={pt ? "Tecnologias" : "Technologies"}>
     {p.stack.map((t) => (
-      <li>{t}</li>
+      <li>
+        <TechLabel name={t} />
+      </li>
     ))}
   </ul>
   <div class="card-links">

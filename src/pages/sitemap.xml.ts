@@ -5,19 +5,11 @@ export const GET: APIRoute = async ({ site }) => {
   const notes = await getCollection("notes");
   const routes = [
     "/",
-    "/projects/",
-    "/notes/",
-    "/about/",
-    "/contact/",
     ...projects.map((p) => `/projects/${p.id}/`),
     ...notes.map((n) => `/notes/${n.id}/`),
   ];
   routes.push(
     "/pt/",
-    "/pt/projects/",
-    "/pt/notes/",
-    "/pt/about/",
-    "/pt/contact/",
     ...(await getCollection("projectsPt")).map((p) => `/pt/projects/${p.id}/`),
     ...(await getCollection("notesPt")).map((n) => `/pt/notes/${n.id}/`),
   );

@@ -2,14 +2,10 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 const routes = [
   "/",
-  "/projects/",
   "/projects/econolyze/",
   "/projects/logistic/",
   "/projects/quarkus-rate-limiter/",
   "/projects/quarkus-schema-per-tenant/",
-  "/notes/",
-  "/about/",
-  "/contact/",
   "/404.html",
 ];
 const allRoutes = [
@@ -78,7 +74,7 @@ test("keyboard skip link, focus, theme persistence and active navigation", async
     page
       .getByRole("navigation")
       .getByRole("link", { name: "Projects", exact: true }),
-  ).toHaveAttribute("aria-current", "page");
+  ).toHaveAttribute("aria-current", "location");
   await expect(
     page.getByRole("button", { name: "Switch to dark theme" }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -89,7 +85,7 @@ test("content works without JavaScript and reduced motion is honored", async ({
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const staticPage = await context.newPage();
-  await staticPage.goto("/projects/");
+  await staticPage.goto("/#projects");
   await expect(
     staticPage.getByRole("link", { name: "Explore case study" }),
   ).toHaveCount(4);
@@ -120,7 +116,8 @@ test("small-screen navigation remains usable at 320px", async ({ page }) => {
     .getByRole("navigation")
     .getByRole("link", { name: "About", exact: true })
     .click();
-  await expect(page.locator("h1")).toContainText("Curiosity");
+  await expect(page).toHaveURL(/#about$/);
+  await expect(page.locator("#about")).toBeInViewport();
 });
 
 test("language switch preserves case-study route and resume language", async ({
@@ -142,4 +139,48 @@ test("language switch preserves case-study route and resume language", async ({
   await expect(
     page.getByRole("link", { name: "Download resume", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-resume-en.pdf");
+});
+
+for (const locale of ["en", "pt"]) {
+  for (const width of [390, 1440]) {
+    test(`sticky project title and return link: ${locale} at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      const prefix = locale === "pt" ? "/pt" : "";
+      await page.goto(`${prefix}/projects/econolyze/`);
+      const heading = page.locator(".case-title");
+      await expect(heading).toHaveText("Econolyze");
+      const before = await heading.evaluate((el) =>
+        parseFloat(getComputedStyle(el).fontSize),
+      );
+      await page.evaluate(() => window.scrollTo(0, 650));
+      await expect(page.locator(".header")).toHaveClass(/is-compact/);
+      await expect
+        .poll(() =>
+          heading.evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+        )
+        .toBeLessThan(before);
+      await expect(heading).toBeInViewport();
+      const back = page.locator(".case-back");
+      await expect(back).toBeInViewport();
+      await back.click();
+      await expect(page).toHaveURL(new RegExp(`${prefix}/#projects$`));
+      await expect(page.locator("#projects")).toBeInViewport();
+    });
+  }
+}
+test("technology logos are local, loaded and paired with visible names", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const strip = page.locator(".specialty-strip");
+  await strip.scrollIntoViewIfNeeded();
+  await expect(strip.locator("img")).toHaveCount(5);
+  for (const img of await strip.locator("img").all()) {
+    await expect(img).toHaveAttribute("src", /^\/technologies\//);
+    await expect
+      .poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth))
+      .toBeGreaterThan(0);
+  }
 });
