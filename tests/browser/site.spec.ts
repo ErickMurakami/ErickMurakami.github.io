@@ -200,24 +200,29 @@ test("technology logos are local, loaded and paired with visible names", async (
   }
 });
 
-test("flag toggle identifies the current language and preserves home sections by keyboard", async ({
+test("single destination flag swaps between UK and Brazil while preserving sections", async ({
   page,
 }) => {
   await page.goto("/#projects");
   const toggle = page.locator(".language-toggle");
-  await expect(toggle).not.toHaveClass(/is-portuguese/);
-  await expect(toggle.locator("img")).toHaveCount(2);
-  await expect(toggle.locator("img").first()).toHaveAttribute(
-    "src",
-    "/flags/england.svg",
-  );
-  await expect(toggle.locator("img").last()).toHaveAttribute(
+  await expect(toggle.locator("img")).toHaveCount(1);
+  await expect(toggle.locator("img")).toHaveAttribute(
     "src",
     "/flags/brazil.svg",
   );
   await toggle.focus();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/pt\/#projects$/);
-  await expect(page.locator(".language-toggle")).toHaveClass(/is-portuguese/);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
+  await expect(page.locator(".language-toggle img")).toHaveAttribute(
+    "src",
+    "/flags/united-kingdom.svg",
+  );
+  await page.locator(".language-toggle").click();
+  await expect(page).toHaveURL(/\/#projects$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator(".language-toggle img")).toHaveAttribute(
+    "src",
+    "/flags/brazil.svg",
+  );
 });
