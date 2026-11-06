@@ -32,11 +32,13 @@ const languageTarget = translatedPageExists
 interface Props {
   title: string;
   projectTitle?: string;
+  articleTitle?: string;
   description?: string;
 }
 const {
   title,
   projectTitle,
+  articleTitle,
   description = localized(
     "Backend projects by Erick Murakami: personal finance, delivery orders, Redis rate limiting and PostgreSQL multitenancy.",
     "Projetos backend de Erick Murakami: finanças pessoais, gestão de pedidos, controle de requisições com Redis e multitenancy com PostgreSQL.",
@@ -190,12 +192,17 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
           <Icon name="sun" />
         </button>
       </div>
-      {projectTitle && (
+      {(projectTitle || articleTitle) && (
         <div class="shell case-bar" data-case-bar>
-          <a class="case-back" href={`${home}#projects`}>
-            {localized("← All projects", "← Todos os projetos")}
+          <a
+            class="case-back"
+            href={articleTitle ? `${home}blog/` : `${home}#projects`}
+          >
+            {articleTitle
+              ? localized("← All articles", "← Todos os artigos")
+              : localized("← All projects", "← Todos os projetos")}
           </a>
-          <h1 class="case-title">{projectTitle}</h1>
+          <h1 class="case-title">{projectTitle || articleTitle}</h1>
         </div>
       )}
     </header>

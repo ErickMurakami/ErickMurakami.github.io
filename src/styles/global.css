@@ -1334,3 +1334,7 @@ nav a {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* Authored article titles may be longer than repository names. */
+.case-title {
+  overflow-wrap: anywhere;
+}

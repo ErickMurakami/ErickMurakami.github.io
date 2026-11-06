@@ -81,6 +81,12 @@ try {
   assert.equal(await exists("dist/blog/index.html"), baseline.en);
   const article = await read(`dist/pt/blog/${slug}/index.html`);
   assert.ok(article.includes("<table>") && article.includes("<pre"));
+  assert.match(
+    article,
+    /class="case-title"[^>]*>Visibility test article<\/h1>/,
+  );
+  assert.match(article, /class="case-back"\s+href="\/pt\/blog\/"/);
+  assert.equal((article.match(/<h1[ >]/g) ?? []).length, 1);
   assert.match(article, /<a\s+class="language-toggle"\s+href="\/"/);
   assert.ok(!/rel="alternate"\s+hreflang="en"/.test(article));
   assert.ok((await read("dist/sitemap.xml")).includes(`/pt/blog/${slug}/`));
