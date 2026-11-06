@@ -127,27 +127,34 @@ const links = [
             </a>
           ))}
         </nav>
-        <nav class="languages" aria-label={localized("Language", "Idioma")}>
-          <a
-            href={paths.en}
-            lang="en"
-            hreflang="en"
-            aria-label="English"
-            aria-current={!pt ? "true" : undefined}
-          >
-            EN
-          </a>
-          <span aria-hidden="true">/</span>
-          <a
-            href={paths.pt}
-            lang="pt-BR"
-            hreflang="pt-BR"
-            aria-label="Português"
-            aria-current={pt ? "true" : undefined}
-          >
-            PT
-          </a>
-        </nav>
+        <a
+          class:list={["language-toggle", { "is-portuguese": pt }]}
+          href={pt ? paths.en : paths.pt}
+          hreflang={pt ? "en" : "pt-BR"}
+          aria-label={localized(
+            "Language: English. Switch to Portuguese",
+            "Idioma: português. Mudar para inglês",
+          )}
+          title={localized("Switch to Portuguese", "Mudar para inglês")}
+        >
+          <span class="language-thumb" aria-hidden="true"></span>
+          <img
+            class="language-flag"
+            src="/flags/england.svg"
+            alt=""
+            width="24"
+            height="18"
+            aria-hidden="true"
+          />
+          <img
+            class="language-flag"
+            src="/flags/brazil.svg"
+            alt=""
+            width="24"
+            height="18"
+            aria-hidden="true"
+          />
+        </a>
         <button
           class="theme"
           type="button"
@@ -212,6 +219,17 @@ const links = [
         ).observe(header);
       }
       const updateSectionNavigation = () => {
+        const languageToggle =
+          document.querySelector<HTMLAnchorElement>(".language-toggle");
+        if (
+          languageToggle &&
+          !caseBar &&
+          location.hash &&
+          document.getElementById(location.hash.slice(1))
+        ) {
+          languageToggle.hash = location.hash;
+        }
+
         document
           .querySelectorAll<HTMLAnchorElement>(".primary-nav a")
           .forEach((link) => {

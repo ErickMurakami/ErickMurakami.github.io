@@ -124,18 +124,33 @@ test("language switch preserves case-study route and resume language", async ({
   page,
 }) => {
   await page.goto("/projects/econolyze/");
-  await page.getByRole("link", { name: "Português", exact: true }).click();
+  await page
+    .getByRole("link", {
+      name: "Language: English. Switch to Portuguese",
+      exact: true,
+    })
+    .click();
   await expect(page).toHaveURL(/\/pt\/projects\/econolyze\/$/);
   await expect(
     page.getByRole("heading", { name: "Decisões técnicas", exact: true }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "English", exact: true }).click();
+  await page
+    .getByRole("link", {
+      name: "Idioma: português. Mudar para inglês",
+      exact: true,
+    })
+    .click();
   await expect(page).toHaveURL(/\/projects\/econolyze\/$/);
   await page.goto("/pt/");
   await expect(
     page.getByRole("link", { name: "Baixar currículo", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-curriculo-pt.pdf");
-  await page.getByRole("link", { name: "English", exact: true }).click();
+  await page
+    .getByRole("link", {
+      name: "Idioma: português. Mudar para inglês",
+      exact: true,
+    })
+    .click();
   await expect(
     page.getByRole("link", { name: "Download resume", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-resume-en.pdf");
@@ -183,4 +198,26 @@ test("technology logos are local, loaded and paired with visible names", async (
       .poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth))
       .toBeGreaterThan(0);
   }
+});
+
+test("flag toggle identifies the current language and preserves home sections by keyboard", async ({
+  page,
+}) => {
+  await page.goto("/#projects");
+  const toggle = page.locator(".language-toggle");
+  await expect(toggle).not.toHaveClass(/is-portuguese/);
+  await expect(toggle.locator("img")).toHaveCount(2);
+  await expect(toggle.locator("img").first()).toHaveAttribute(
+    "src",
+    "/flags/england.svg",
+  );
+  await expect(toggle.locator("img").last()).toHaveAttribute(
+    "src",
+    "/flags/brazil.svg",
+  );
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/pt\/#projects$/);
+  await expect(page.locator(".language-toggle")).toHaveClass(/is-portuguese/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
 });

@@ -29,7 +29,7 @@ Case studies start with the project's README and business context, then explain 
 
 ## Languages
 
-English is served at `/`; Brazilian Portuguese is served at `/pt/`. The EN/PT links preserve the equivalent route, including project case studies. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. A future technical note should have the same filename in both note collections before publication so the language switch has a matching destination.
+English is served at `/`; Brazilian Portuguese is served at `/pt/`. The flag toggle uses England for English and Brazil for Portuguese. It marks the current language and preserves the equivalent route, including project case studies and Home sections. Flags are local SVG assets from flag-icons v7.5.0 with their upstream license included. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. A future technical note should have the same filename in both note collections before publication so the language switch has a matching destination.
 
 The Home primary resume download follows the current language. The Contact section offers both original PDFs.
 

@@ -839,18 +839,46 @@ nav a {
   }
 }
 
-.languages {
-  margin-left: 0;
-  gap: 8px;
-  font-size: 11px;
-  white-space: nowrap;
+/* One navigation control, with its thumb marking the current language. */
+.language-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 84px;
+  height: 44px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
 }
-.languages a[aria-current] {
-  color: var(--link);
-  font-weight: 600;
+.language-toggle:hover {
+  border-color: var(--link);
 }
-.languages span {
-  color: var(--muted-foreground);
+.language-thumb {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 34px;
+  height: 32px;
+  border: 1px solid var(--link);
+  border-radius: 16px;
+  background: var(--secondary);
+  transition: transform 0.2s ease;
+}
+.language-toggle.is-portuguese .language-thumb {
+  transform: translateX(38px);
+}
+.language-flag {
+  position: relative;
+  z-index: 1;
+  border-radius: 2px;
+  object-fit: cover;
+}
+.language-toggle:not(.is-portuguese) .language-flag:last-child,
+.language-toggle.is-portuguese .language-flag:nth-child(2) {
+  opacity: 0.6;
 }
 @media (max-width: 650px) {
   .nav-shell > nav[aria-label="Main navigation"],
@@ -860,7 +888,7 @@ nav a {
     margin-left: 0;
     justify-content: center;
   }
-  .languages {
+  .language-toggle {
     margin-left: auto;
   }
   .hero-label {
