@@ -18,11 +18,45 @@ const source =
       ? "Um pagamento também altera o saldo."
       : "A payment also changes the balance."}
   </h3>
-  <p>
-    {pt
-      ? "No serviço financeiro, salvar uma transação registra o pagamento, recalcula seu status e atualiza o saldo da conta na mesma transação reativa."
-      : "In the financial service, saving a transaction records its payment, recalculates its status and updates the account balance within the same reactive transaction."}
-  </p>
+  <div class="transaction-boundary">
+    <p class="boundary-label">
+      <span>{pt ? "Serviço financeiro" : "Financial service"}</span>
+      <code>@WithTransaction</code>
+    </p>
+    <ol class="payment-flow">
+      <li>
+        <span class="flow-step" aria-hidden="true">
+          1
+        </span>
+        <div>
+          <strong>{pt ? "Registrar pagamento" : "Record payment"}</strong>
+          <small>
+            {pt
+              ? "Associar à transação e recalcular o status"
+              : "Attach to transaction and recalculate status"}
+          </small>
+        </div>
+      </li>
+      <li>
+        <span class="flow-step" aria-hidden="true">
+          2
+        </span>
+        <div>
+          <strong>{pt ? "Persistir transação" : "Persist transaction"}</strong>
+          <small>transactionRepository.persist</small>
+        </div>
+      </li>
+      <li>
+        <span class="flow-step" aria-hidden="true">
+          3
+        </span>
+        <div>
+          <strong>{pt ? "Atualizar saldo" : "Update balance"}</strong>
+          <small>accountService.updateAccountBalance</small>
+        </div>
+      </li>
+    </ol>
+  </div>
   <p class="focus-limit">
     {pt
       ? "A fronteira está no código. Testes de rollback e alterações concorrentes de saldo ainda são melhorias necessárias."

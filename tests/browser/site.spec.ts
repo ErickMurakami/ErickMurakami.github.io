@@ -261,3 +261,49 @@ test("blog stays hidden unless that language has published articles", async ({
     }
   }
 });
+
+test("homepage hero stays compact and primary actions stay aligned", async ({
+  browser,
+}) => {
+  for (const theme of ["dark", "light"]) {
+    const context = await browser.newContext();
+    await context.addInitScript(
+      (value) => localStorage.setItem("theme", value),
+      theme,
+    );
+    const page = await context.newPage();
+    for (const [width, height] of [
+      [1920, 1080],
+      [1440, 900],
+      [768, 1024],
+      [390, 844],
+      [320, 844],
+    ]) {
+      await page.setViewportSize({ width, height });
+      for (const route of ["/", "/pt/"]) {
+        await page.goto(route);
+        await page.evaluate(() => document.fonts.ready);
+        const metrics = await page.evaluate(() => {
+          const role = document.querySelector<HTMLElement>(".hero .role")!;
+          const actions = [...document.querySelectorAll(".hero .actions a")];
+          return {
+            lines:
+              role.getBoundingClientRect().height /
+              parseFloat(getComputedStyle(role).lineHeight),
+            rows: new Set(
+              actions.map((a) => Math.round(a.getBoundingClientRect().top)),
+            ).size,
+            overflow: document.documentElement.scrollWidth > innerWidth,
+          };
+        });
+        expect(metrics.lines, `${theme} ${route} ${width}`).toBeLessThanOrEqual(
+          2.1,
+        );
+        expect(metrics.rows).toBe(1);
+        expect(metrics.overflow).toBe(false);
+        await expect(page.locator(".hero-resume[download]")).toHaveCount(1);
+      }
+    }
+    await context.close();
+  }
+});

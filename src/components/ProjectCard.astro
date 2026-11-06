@@ -13,7 +13,7 @@ const pt = Astro.props.locale === "pt";
 const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
 ---
 
-<article class="project-card">
+<article class="project-card" data-project={p.repo}>
   <p class="eyebrow">{p.focus}</p>
   <h3>
     <a href={projectPath}>{p.title}</a>
