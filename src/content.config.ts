@@ -68,6 +68,7 @@ export const collections = {
           .optional(),
         status: z.enum(["completed", "in-progress"]).default("in-progress"),
         approved: z.boolean().default(false),
+        localOnly: z.boolean().default(false),
         order: z.number().default(0),
         draft: z.boolean().default(false),
       })

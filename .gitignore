@@ -13,3 +13,6 @@ test-results/
 # Local certification mockups; excluded from production by localOnly as well.
 /src/content/certifications/mock-aws-cloud-practitioner.md
 /src/content/certifications-pt/mock-aws-cloud-practitioner.md
+
+# Local-only course previews; excluded from production builds as well.
+/src/content/learning/mock-course-*.md

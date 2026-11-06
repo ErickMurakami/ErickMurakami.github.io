@@ -46,3 +46,7 @@ Campos suportados:
 Priorize Java avançado, Spring Boot/Quarkus, arquitetura, DDD, cloud/AWS, sistemas distribuídos, bancos de dados, performance backend e engenharia de IA. Não existe importação automática de currículos ou LinkedIn. A aprovação é uma curadoria manual; o sistema não valida a autenticidade do certificado em serviços externos. Sem cursos aprovados, não há seção vazia nem placeholder.
 
 Crie uma versão com `locale: en` para a tradução. A palestra Java Day não foi classificada como curso ou formação.
+
+## Prévia local de cursos
+
+Os arquivos `src/content/learning/mock-course-*.md` são exemplos fictícios em PT/EN, com um curso concluído e outro em andamento. `localOnly: true` os exclui do build de produção; também são ignorados pelo Git. Use `npm run dev` para visualizá-los em About. A instituição e os títulos identificam a prévia como fictícia. Não representam cursos ou certificados reais.

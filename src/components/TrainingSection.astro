@@ -14,7 +14,8 @@ const courses = (
       entry.data.kind === "course" &&
       entry.data.locale === locale &&
       !entry.data.draft &&
-      entry.data.approved,
+      entry.data.approved &&
+      (!entry.data.localOnly || import.meta.env.DEV),
   )
 ).sort((a, b) => a.data.order - b.data.order);
 const Heading = headingLevel === 2 ? "h2" : "h3";

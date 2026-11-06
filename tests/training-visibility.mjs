@@ -66,6 +66,21 @@ try {
       }
     }
   }
+  for (const [index, file] of files.entries()) {
+    await writeFile(
+      file,
+      fixture(index ? "pt" : "en", true, false).replace(
+        "approved: true",
+        "localOnly: true\napproved: true",
+      ),
+    );
+  }
+  build();
+  for (const prefix of ["", "pt/"]) {
+    assert.ok(
+      !(await read(`dist/${prefix}about/index.html`)).includes('id="training"'),
+    );
+  }
   console.log(
     "Training visibility passed: empty, unapproved and draft courses hidden; approved courses localized with accurate status/date and optional certificate links.",
   );
