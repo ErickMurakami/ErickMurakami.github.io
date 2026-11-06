@@ -157,7 +157,7 @@ test("language switch preserves case-study route and resume language", async ({
   await expect(page).toHaveURL(/\/projects\/econolyze\/$/);
   await page.goto("/pt/");
   await expect(
-    page.getByRole("link", { name: "Baixar currículo", exact: false }),
+    page.getByRole("link", { name: "Ver currículo", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-curriculo-pt.pdf");
   await page
     .getByRole("link", {
@@ -166,7 +166,7 @@ test("language switch preserves case-study route and resume language", async ({
     })
     .click();
   await expect(
-    page.getByRole("link", { name: "Download resume", exact: false }),
+    page.getByRole("link", { name: "View resume", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-resume-en.pdf");
 });
 
@@ -309,7 +309,9 @@ test("homepage hero stays compact and primary actions stay aligned", async ({
         );
         expect(metrics.rows).toBe(1);
         expect(metrics.overflow).toBe(false);
-        await expect(page.locator(".hero-resume[download]")).toHaveCount(1);
+        await expect(page.locator('.hero-resume[target="_blank"]')).toHaveCount(
+          1,
+        );
       }
     }
     await context.close();

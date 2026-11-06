@@ -38,7 +38,9 @@ const additional = githubProjects.filter(
       {additional.map((repo) => (
         <article class="project-card">
           <h3>
-            <a href={repo.url}>{repo.name}</a>
+            <a href={repo.url} target="_blank" rel="noopener noreferrer">
+              {repo.name}
+            </a>
           </h3>
           <p>{repo.description}</p>
           {repo.language && (
@@ -48,7 +50,12 @@ const additional = githubProjects.filter(
               </li>
             </ul>
           )}
-          <a class="text-link" href={repo.url}>
+          <a
+            class="text-link"
+            href={repo.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {pt ? "Ver código no GitHub ↗" : "View source on GitHub ↗"}
           </a>
         </article>
