@@ -17,7 +17,31 @@ const noteSchema = z.object({
   draft: z.boolean().default(false),
   localOnly: z.boolean().default(false),
 });
+const certificationSchema = z.object({
+  title: z.string().min(1),
+  issuer: z.string().min(1),
+  date: z.coerce.date(),
+  credentialUrl: z
+    .url()
+    .refine(
+      (value) => new URL(value).protocol === "https:",
+      "Use an HTTPS credential verification URL",
+    ),
+  draft: z.boolean().default(true),
+  localOnly: z.boolean().default(false),
+});
 export const collections = {
+  certifications: defineCollection({
+    loader: glob({ pattern: "**/*.md", base: "./src/content/certifications" }),
+    schema: certificationSchema,
+  }),
+  certificationsPt: defineCollection({
+    loader: glob({
+      pattern: "**/*.md",
+      base: "./src/content/certifications-pt",
+    }),
+    schema: certificationSchema,
+  }),
   projects: defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
     schema: projectSchema,

@@ -68,7 +68,7 @@ for (const [file, nodes] of documents) {
     );
     if (
       !alternate &&
-      path.includes("/blog/") &&
+      (path.includes("/blog/") || path.includes("/certifications/")) &&
       language !== (path.startsWith("/pt/") ? "pt-BR" : "en")
     )
       continue;

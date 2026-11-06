@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { getPublishedCertifications } from "../lib/certifications";
 import { getPublishedPosts } from "../lib/blog";
 import { getCollection } from "astro:content";
 export const GET: APIRoute = async ({ site }) => {
@@ -22,6 +23,10 @@ export const GET: APIRoute = async ({ site }) => {
   );
   if (notes.length) routes.push("/blog/");
   if ((await getPublishedPosts("pt")).length) routes.push("/pt/blog/");
+  for (const locale of ["en", "pt"] as const) {
+    if ((await getPublishedCertifications(locale)).length)
+      routes.push(`${locale === "pt" ? "/pt" : ""}/certifications/`);
+  }
   const escape = (value: string) =>
     value
       .replaceAll("&", "&amp;")

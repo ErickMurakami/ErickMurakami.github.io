@@ -6,6 +6,7 @@ import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
 import "@fontsource/inter/latin-700.css";
 import Icon from "../components/Icon.astro";
+import { getPublishedCertifications } from "../lib/certifications";
 import { getPublishedPosts } from "../lib/blog";
 import { languagePaths } from "../lib/i18n";
 const pt = Astro.url.pathname.startsWith("/pt/");
@@ -13,13 +14,16 @@ const localized = (en: string, br: string) => (pt ? br : en);
 const paths = languagePaths(Astro.url.pathname);
 const home = pt ? "/pt/" : "/";
 const posts = await getPublishedPosts(pt ? "pt" : "en");
+const certifications = await getPublishedCertifications(pt ? "pt" : "en");
+const onCertifications = Astro.url.pathname === `${home}certifications/`;
 const onBlog = Astro.url.pathname.startsWith(`${home}blog/`);
 const blogSlug = onBlog
   ? Astro.url.pathname.slice(`${home}blog/`.length).replace(/\/$/, "")
   : "";
 const otherPosts = onBlog ? await getPublishedPosts(pt ? "en" : "pt") : [];
-const translatedPageExists =
-  !onBlog ||
+const translatedPageExists = onCertifications
+  ? (await getPublishedCertifications(pt ? "en" : "pt")).length > 0
+  : !onBlog ||
     (blogSlug
       ? otherPosts.some((post) => post.id === blogSlug)
       : otherPosts.length > 0);
@@ -60,6 +64,11 @@ const links = [
   [sectionLink("contact"), localized("Contact", "Contato")],
 ];
 if (posts.length) links.splice(1, 0, [sectionLink("blog"), "Blog"]);
+if (certifications.length)
+  links.splice(posts.length ? 2 : 1, 0, [
+    sectionLink("certifications"),
+    localized("Certifications", "Certificações"),
+  ]);
 ---
 
 <!doctype html>

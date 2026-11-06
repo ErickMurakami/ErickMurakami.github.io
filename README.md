@@ -73,3 +73,4 @@ Custom domain preparation: see [the manual migration guide](docs/domain-migratio
 The default origin remains GitHub Pages. No domain cutover is automatic.
 
 Navigation and home listing limits: [navigation guide](docs/navigation.md).
+To add a verified certification: [certifications guide](docs/certifications.md). The section stays hidden until a credential is published.

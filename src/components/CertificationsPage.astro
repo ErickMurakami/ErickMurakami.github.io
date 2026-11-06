@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Certifications from "./Certifications.astro";
+import type { ComponentProps } from "astro/types";
+type Props = ComponentProps<typeof Certifications>;
+const { entries, locale } = Astro.props;
+---
+
+<Layout title={locale === "pt" ? "Certificações" : "Certifications"}>
+  <Certifications entries={entries} locale={locale} standalone />
+</Layout>

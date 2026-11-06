@@ -1,0 +1,12 @@
+---
+import CertificationsPage from "../../../components/CertificationsPage.astro";
+import { getPublishedCertifications } from "../../../lib/certifications";
+export async function getStaticPaths() {
+  const entries = await getPublishedCertifications("pt");
+  return entries.length
+    ? [{ params: { slug: undefined }, props: { entries } }]
+    : [];
+}
+---
+
+<CertificationsPage entries={Astro.props.entries} locale="pt" />

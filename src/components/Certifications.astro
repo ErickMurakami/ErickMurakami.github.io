@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+interface Props {
+  entries: (
+    CollectionEntry<"certifications"> | CollectionEntry<"certificationsPt">
+  )[];
+  locale: "en" | "pt";
+  standalone?: boolean;
+}
+const { entries, locale, standalone = false } = Astro.props;
+const pt = locale === "pt";
+const Heading = standalone ? "h1" : "h2";
+const EntryHeading = standalone ? "h2" : "h3";
+const title = pt ? "Certificações" : "Certifications";
+---
+
+{entries.length > 0 && (
+  <section id="certifications" class="shell section">
+    <div class="section-heading">
+      <Heading>{title}</Heading>
+      {!standalone && (
+        <a class="text-link" href={`${pt ? "/pt" : ""}/certifications/`}>
+          {pt ? "Ver todas →" : "View all →"}
+        </a>
+      )}
+    </div>
+    <div class="post-list">
+      {(standalone ? entries : entries.slice(0, 3)).map((entry) => (
+        <article class="post-item">
+          <p class="post-meta">
+            {entry.data.issuer} ·{" "}
+            <time datetime={entry.data.date.toISOString()}>
+              {entry.data.date.toLocaleDateString(pt ? "pt-BR" : "en-GB", {
+                timeZone: "UTC",
+              })}
+            </time>
+          </p>
+          <EntryHeading>{entry.data.title}</EntryHeading>
+          <a class="text-link" href={entry.data.credentialUrl}>
+            {pt ? "Verificar credencial ↗" : "Verify credential ↗"}
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+)}
