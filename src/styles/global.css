@@ -1262,10 +1262,16 @@ nav a {
   .is-scroll-showcase {
     height: calc(var(--showcase-height) + var(--showcase-travel));
   }
-  .is-scroll-showcase .hero {
-    min-height: min(620px, calc(100svh - var(--showcase-top) - 12px));
+  .is-scroll-showcase .showcase-sticky {
     position: sticky;
     top: var(--showcase-top);
+    min-height: min(700px, calc(100svh - var(--showcase-top) - 12px));
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background: var(--background);
+  }
+  .is-scroll-showcase .hero {
+    width: 100%;
   }
   .is-scroll-showcase .expertise-grid {
     display: grid;

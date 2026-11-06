@@ -311,65 +311,94 @@ test("homepage hero stays compact and primary actions stay aligned", async ({
 test("expertise cards replace one another in place and reverse with native scrolling", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  for (const route of ["/", "/pt/"])
-    for (const theme of ["dark", "light"]) {
-      await page.addInitScript(
-        (value) => localStorage.setItem("theme", value),
-        theme,
-      );
-      await page.goto(route);
-      const section = page.locator("[data-expertise-showcase]");
-      await expect(section).toHaveClass(/is-scroll-showcase/);
-      await page.evaluate(() => document.fonts.ready);
-      const geometry = await section.evaluate((el) => ({
-        start:
-          el.getBoundingClientRect().top +
-          scrollY -
-          parseFloat(
-            (el as HTMLElement).style.getPropertyValue("--showcase-top"),
-          ),
-        travel:
-          (el as HTMLElement).offsetHeight -
-          (el.querySelector(".hero") as HTMLElement).offsetHeight,
-      }));
-      let anchor: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-      } | null = null;
-      for (const index of [0, 1, 2, 3, 2, 1, 0]) {
-        await page.evaluate(
-          ({ y }) => window.scrollTo({ top: y, behavior: "instant" }),
-          {
-            y:
-              geometry.start +
-              geometry.travel * (index === 3 ? 0.94 : index / 3),
-          },
+  for (const [width, height] of [
+    [1920, 1080],
+    [1440, 900],
+    [1366, 768],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const route of ["/", "/pt/"])
+      for (const theme of ["dark", "light"]) {
+        await page.addInitScript(
+          (value) => localStorage.setItem("theme", value),
+          theme,
         );
-        await expect(section).toHaveAttribute(
-          "data-active-card",
-          String(index),
-        );
-        await expect(page.locator(".expertise-card.is-active")).toHaveCount(1);
-        await expect(page.locator(".expertise-card.is-active")).toHaveCSS(
-          "opacity",
-          "1",
-        );
-        const position = await page
-          .locator(".expertise-card.is-active")
+        await page.goto(route);
+        const section = page.locator("[data-expertise-showcase]");
+        await expect(section).toHaveClass(/is-scroll-showcase/);
+        await page.evaluate(() => document.fonts.ready);
+        const geometry = await section.evaluate((el) => ({
+          start:
+            el.getBoundingClientRect().top +
+            scrollY -
+            parseFloat(
+              (el as HTMLElement).style.getPropertyValue("--showcase-top"),
+            ),
+          travel:
+            (el as HTMLElement).offsetHeight -
+            (el.querySelector(".showcase-sticky") as HTMLElement).offsetHeight,
+        }));
+        await expect(page.locator(".specialty-strip")).toHaveCount(1);
+        await expect(page.locator(".specialty-strip")).toBeInViewport();
+        const stripAnchor = await page
+          .locator(".specialty-strip")
           .boundingBox();
-        if (!anchor) anchor = position;
-        expect(Math.abs(position!.y - anchor!.y)).toBeLessThan(2);
-        const intro = await page.locator(".hero-copy").boundingBox();
-        expect(intro!.y).toBeGreaterThanOrEqual(0);
+        const heroAnchor = await page.locator(".hero").boundingBox();
+        const introAnchor = await page.locator(".hero-copy").boundingBox();
+        expect(stripAnchor!.y + stripAnchor!.height).toBeLessThanOrEqual(
+          height,
+        );
+        expect(
+          Math.abs(stripAnchor!.y - (heroAnchor!.y + heroAnchor!.height)),
+        ).toBeLessThan(2);
+        let anchor: {
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+        } | null = null;
+        for (const index of [0, 1, 2, 3, 2, 1, 0]) {
+          await page.evaluate(
+            ({ y }) => window.scrollTo({ top: y, behavior: "instant" }),
+            {
+              y:
+                geometry.start +
+                geometry.travel * (index === 3 ? 0.94 : index / 3),
+            },
+          );
+          await expect(section).toHaveAttribute(
+            "data-active-card",
+            String(index),
+          );
+          await expect(page.locator(".expertise-card.is-active")).toHaveCount(
+            1,
+          );
+          await expect(page.locator(".expertise-card.is-active")).toHaveCSS(
+            "opacity",
+            "1",
+          );
+          const position = await page
+            .locator(".expertise-card.is-active")
+            .boundingBox();
+          if (!anchor) anchor = position;
+          expect(Math.abs(position!.y - anchor!.y)).toBeLessThan(2);
+          const intro = await page.locator(".hero-copy").boundingBox();
+          expect(intro!.y).toBeGreaterThanOrEqual(0);
+          expect(Math.abs(intro!.y - introAnchor!.y)).toBeLessThan(2);
+          const strip = await page.locator(".specialty-strip").boundingBox();
+          expect(Math.abs(strip!.y - stripAnchor!.y)).toBeLessThan(2);
+          expect(strip!.y + strip!.height).toBeLessThanOrEqual(height);
+          await expect(page.locator(".specialty-strip")).toHaveCSS(
+            "opacity",
+            "1",
+          );
+        }
+        await page.locator("#projects").scrollIntoViewIfNeeded();
+        await expect(page.locator("#projects")).toBeInViewport();
+        const hero = await page.locator(".hero").boundingBox();
+        expect(hero!.y).toBeLessThan(0);
       }
-      await page.locator("#projects").scrollIntoViewIfNeeded();
-      await expect(page.locator("#projects")).toBeInViewport();
-      const hero = await page.locator(".hero").boundingBox();
-      expect(hero!.y).toBeLessThan(0);
-    }
+  }
 });
 
 test("expertise has static mobile, reduced-motion and no-JavaScript fallbacks", async ({
@@ -391,6 +420,11 @@ test("expertise has static mobile, reduced-motion and no-JavaScript fallbacks", 
       await expect(page.locator("[data-expertise-showcase]")).not.toHaveClass(
         /is-scroll-showcase/,
       );
+      await expect(page.locator(".showcase-sticky")).not.toHaveCSS(
+        "position",
+        "sticky",
+      );
+      await expect(page.locator(".specialty-strip")).toHaveCount(1);
       for (const card of await page.locator(".expertise-card").all()) {
         await expect(card).toHaveCSS("opacity", "1");
         await expect(card).toHaveCSS("transform", "none");

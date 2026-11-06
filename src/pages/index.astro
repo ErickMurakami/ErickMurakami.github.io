@@ -15,61 +15,63 @@ const posts = await getPublishedPosts("en");
 
 <Layout title="Backend Software Engineer">
   <section class="expertise-showcase" data-expertise-showcase>
-    <div class="shell hero">
-      <div class="hero-copy">
-        <h1>
-          Erick Murakami
-          <span class="role">
-            Backend Software Engineer<span class="blue">.</span>
-          </span>
-        </h1>
+    <div class="showcase-sticky">
+      <div class="shell hero">
+        <div class="hero-copy">
+          <h1>
+            Erick Murakami
+            <span class="role">
+              Backend Software Engineer<span class="blue">.</span>
+            </span>
+          </h1>
 
-        <p class="intro">
-          Building reliable Java backend systems with a focus on architecture,
-          performance, and maintainability.
-        </p>
-        <div class="actions">
-          <a class="button primary" href="/#projects">
-            View projects <span aria-hidden="true">→</span>
-          </a>
-          <a class="button" href="https://github.com/ErickMurakami">
-            GitHub <Icon />
-          </a>
-          <a class="button" href="https://www.linkedin.com/in/erick-murakami">
-            LinkedIn <Icon />
+          <p class="intro">
+            Building reliable Java backend systems with a focus on architecture,
+            performance, and maintainability.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="/#projects">
+              View projects <span aria-hidden="true">→</span>
+            </a>
+            <a class="button" href="https://github.com/ErickMurakami">
+              GitHub <Icon />
+            </a>
+            <a class="button" href="https://www.linkedin.com/in/erick-murakami">
+              LinkedIn <Icon />
+            </a>
+          </div>
+          <a
+            class="text-link hero-resume"
+            href="/resume/erick-murakami-resume-en.pdf"
+            download
+          >
+            Download resume ↓
           </a>
         </div>
-        <a
-          class="text-link hero-resume"
-          href="/resume/erick-murakami-resume-en.pdf"
-          download
-        >
-          Download resume ↓
-        </a>
+        <ExpertiseGrid locale="en" />
       </div>
-      <ExpertiseGrid locale="en" />
+      <div class="specialty-strip">
+        <div class="shell">
+          <span>TECHNOLOGIES</span>
+          <strong>
+            <TechLabel name="Java" />
+          </strong>
+          <strong>
+            <TechLabel name="Quarkus" />
+          </strong>
+          <strong>
+            <TechLabel name="Spring Boot" />
+          </strong>
+          <strong>
+            <TechLabel name="PostgreSQL" />
+          </strong>
+          <strong>
+            <TechLabel name="Docker" />
+          </strong>
+        </div>
+      </div>
     </div>
   </section>
-  <div class="specialty-strip">
-    <div class="shell">
-      <span>TECHNOLOGIES</span>
-      <strong>
-        <TechLabel name="Java" />
-      </strong>
-      <strong>
-        <TechLabel name="Quarkus" />
-      </strong>
-      <strong>
-        <TechLabel name="Spring Boot" />
-      </strong>
-      <strong>
-        <TechLabel name="PostgreSQL" />
-      </strong>
-      <strong>
-        <TechLabel name="Docker" />
-      </strong>
-    </div>
-  </div>
   <section id="projects" class="shell section">
     <div class="section-heading">
       <div>
