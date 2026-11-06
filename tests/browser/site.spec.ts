@@ -339,6 +339,9 @@ test("expertise cards replace one another in place and reverse with native scrol
             (el.querySelector(".showcase-sticky") as HTMLElement).offsetHeight,
         }));
         await expect(page.locator(".specialty-strip")).toHaveCount(1);
+        await expect(page.locator(".specialty-strip")).toContainText(
+          "LangChain4j",
+        );
         await expect(page.locator(".specialty-strip")).toBeInViewport();
         const stripAnchor = await page
           .locator(".specialty-strip")
@@ -392,6 +395,12 @@ test("expertise cards replace one another in place and reverse with native scrol
             "opacity",
             "1",
           );
+          if (index === 3) {
+            const heading = page.locator("#projects h2");
+            await expect(heading).toBeInViewport();
+            const box = await heading.boundingBox();
+            expect(box!.y + box!.height).toBeLessThanOrEqual(height);
+          }
         }
         await page.locator("#projects").scrollIntoViewIfNeeded();
         await expect(page.locator("#projects")).toBeInViewport();

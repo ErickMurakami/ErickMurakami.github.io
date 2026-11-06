@@ -1265,7 +1265,8 @@ nav a {
   .is-scroll-showcase .showcase-sticky {
     position: sticky;
     top: var(--showcase-top);
-    min-height: min(700px, calc(100svh - var(--showcase-top) - 12px));
+    /* Leave room for the Projects heading as the last card settles. */
+    min-height: min(560px, calc(100svh - var(--showcase-top) - 150px));
     display: grid;
     grid-template-rows: 1fr auto;
     background: var(--background);
