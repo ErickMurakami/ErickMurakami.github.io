@@ -437,7 +437,7 @@ test("expertise has static short-screen, reduced-motion and no-JavaScript fallba
   browser,
 }) => {
   for (const options of [
-    { viewport: { width: 390, height: 400 } },
+    { viewport: { width: 390, height: 400 }, reducedMotion: "reduce" as const },
     {
       viewport: { width: 1440, height: 900 },
       reducedMotion: "reduce" as const,

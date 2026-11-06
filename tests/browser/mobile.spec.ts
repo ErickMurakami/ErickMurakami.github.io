@@ -108,3 +108,57 @@ test("phone header keeps links and touch controls usable on home and case studie
     }
   }
 });
+
+test("vertical card replacement survives browser chrome resizing and rotation", async ({
+  page,
+}) => {
+  for (const route of ["/", "/pt/"]) {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(route);
+    await page.evaluate(() => document.fonts.ready);
+    const section = page.locator("[data-expertise-showcase]");
+    const select = async (index: number) => {
+      await section.evaluate((el, index) => {
+        const top = parseFloat(
+          (el as HTMLElement).style.getPropertyValue("--showcase-top"),
+        );
+        const travel =
+          (el as HTMLElement).offsetHeight -
+          (el.querySelector(".showcase-sticky") as HTMLElement).offsetHeight;
+        scrollTo({
+          top:
+            el.getBoundingClientRect().top +
+            scrollY -
+            top +
+            (travel * index) / 3,
+          behavior: "instant",
+        });
+      }, index);
+      await expect(section).toHaveAttribute("data-active-card", String(index));
+      await expect(page.locator(".expertise-card.is-active")).toHaveCSS(
+        "opacity",
+        "1",
+      );
+    };
+    await select(1);
+    for (const viewport of [
+      { width: 390, height: 660 },
+      { width: 390, height: 844 },
+      { width: 844, height: 390 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await expect(section).toHaveClass(/is-scroll-showcase/);
+      await expect(section).toHaveAttribute("data-active-card", "1");
+      await expect(page.locator(".expertise-card.is-active")).toHaveCount(1);
+      await expect(page.locator(".expertise-card.is-active")).toBeInViewport();
+      for (const index of [2, 3, 2, 1]) await select(index);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+    }
+    for (const index of [2, 3, 2, 1, 0]) await select(index);
+  }
+});

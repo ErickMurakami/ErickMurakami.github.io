@@ -19,6 +19,9 @@ function initializeShowcase() {
     let frame = 0;
     let visible = true;
     let active = -1;
+    let viewportWidth = innerWidth;
+    let viewportHeight = innerHeight;
+    let progress = 0;
     function update() {
       frame = 0;
       if (!visible || !section!.classList.contains("is-scroll-showcase"))
@@ -27,11 +30,11 @@ function initializeShowcase() {
         section!.style.getPropertyValue("--showcase-top"),
       );
       const travel = section!.offsetHeight - sticky.offsetHeight;
-      const progress = Math.max(
-        0,
-        Math.min(1, (offset - section!.getBoundingClientRect().top) / travel),
+      progress =
+        (offset - section!.getBoundingClientRect().top) / Math.max(1, travel);
+      const index = Math.round(
+        Math.max(0, Math.min(1, progress)) * (cards.length - 1),
       );
-      const index = Math.round(progress * (cards.length - 1));
       if (index === active) return;
       active = index;
       cards.forEach((card, i) =>
@@ -46,6 +49,15 @@ function initializeShowcase() {
       if (!frame) frame = requestAnimationFrame(update);
     }
     function configure() {
+      const rotated = viewportWidth !== innerWidth;
+      const restoreProgress =
+        rotated && active >= 0 && progress >= 0 && progress <= 1;
+      const previousProgress = progress;
+      if (rotated) {
+        viewportWidth = innerWidth;
+        viewportHeight = innerHeight;
+      }
+      const mobile = innerWidth <= 1000;
       const top = document
         .querySelector(".header")!
         .getBoundingClientRect().height;
@@ -62,17 +74,43 @@ function initializeShowcase() {
         introduction.offsetHeight +
         strip.offsetHeight +
         (innerWidth > 1000 ? heading.offsetHeight : 0);
-      if (media.matches && essentialHeight > innerHeight - top - 12)
+      if (!mobile && media.matches && essentialHeight > innerHeight - top - 12)
         section!.classList.remove("is-scroll-showcase");
+      // Browser chrome changes height while scrolling. Keep the mobile layout
+      // enabled and its runway stable; only rotation changes its geometry.
+      if (mobile && essentialHeight > viewportHeight - top - 12) {
+        const expertise = sticky.querySelector<HTMLElement>(".expertise")!;
+        const expertiseOffset =
+          expertise.getBoundingClientRect().top -
+          sticky.getBoundingClientRect().top;
+        section!.style.setProperty(
+          "--showcase-top",
+          `${top - expertiseOffset}px`,
+        );
+      }
       section!.style.setProperty(
         "--showcase-height",
         `${sticky.offsetHeight}px`,
       );
       section!.style.setProperty(
         "--showcase-travel",
-        `${3 * Math.min(320, Math.max(240, innerHeight * 0.3))}px`,
+        `${3 * Math.min(320, Math.max(240, (mobile ? viewportHeight : innerHeight) * 0.3))}px`,
       );
-      schedule();
+      if (
+        restoreProgress &&
+        section!.classList.contains("is-scroll-showcase")
+      ) {
+        const offset = parseFloat(
+          section!.style.getPropertyValue("--showcase-top"),
+        );
+        const start = section!.getBoundingClientRect().top + scrollY - offset;
+        const travel = section!.offsetHeight - sticky.offsetHeight;
+        scrollTo({
+          top: start + previousProgress * travel,
+          behavior: "instant",
+        });
+      }
+      update();
     }
     const observer = new IntersectionObserver((entries) => {
       visible = entries[0].isIntersecting;
