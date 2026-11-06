@@ -1,4 +1,4 @@
-name: Publish portfolio (opt-in only)
+name: Publish portfolio
 on:
   workflow_dispatch:
 permissions:

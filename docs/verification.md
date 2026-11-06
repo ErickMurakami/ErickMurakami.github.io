@@ -1,6 +1,6 @@
 # Verification report
 
-Verified locally on 2026-11-06. No repository visibility change, remote push, GitHub Pages activation or deployment was performed.
+Initial local verification on 2026-11-06, before the owner authorized public delivery. No repository visibility change, remote push, GitHub Pages activation or deployment was performed during that initial implementation. See the follow-up section for the subsequent release.
 
 ## Source and design review
 
@@ -43,3 +43,9 @@ First contentful paint: 0.9s. Largest contentful paint: 0.9s. Total blocking tim
 - Automation does not overwrite or remove curated editorial studies. If source publication permission changes, remove the curated Markdown deliberately; metadata-only listings are removed on the next successful sync. API failure preserves the previous local snapshot.
 
 The implementation is organized into exactly four requested semantic commits. Run `git log --oneline --reverse` to inspect them; final hashes are provided in the delivery response.
+
+## Bilingual release follow-up
+
+The owner supplied LinkedIn and original English/Portuguese resume PDFs, and approved publishing only this repository publicly. The site now has 20 HTML routes across English and Brazilian Portuguese, four translated studies with identical source evidence, localized resume downloads and route-preserving language links. Strict types, content parity, alternate-language routes, assets and the sitemap are checked. The browser matrix now covers 20 routes × 3 widths × 2 themes, plus keyboard navigation and language/download behavior. The initial four commits above describe the original implementation; follow-up commits are split by profile, localization and delivery context and use the owner's configured Git identity.
+
+Follow-up results: six synchronization tests and six browser tests passed; 120 axe route/theme/viewport scans returned no violations. Twenty routes, both resume assets and alternate-language links passed static validation. Type checking returned zero errors, warnings and hints.

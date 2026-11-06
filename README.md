@@ -46,17 +46,17 @@ For an automatic basic listing, make the repository public, owned, non-fork and 
 
 For a substantial case study, review the actual code, write Markdown in `src/content/projects`, add pinned evidence and public research metadata, then run validation. Automation never writes technical explanations or overwrites curated content. See [synchronization details](docs/synchronization.md), including failure and removal behavior.
 
-## Delivery remains disabled
+## GitHub Pages delivery
 
-Nothing has been published or pushed by this implementation. Repository visibility is unchanged. The validation workflow builds and checks the site; it does not deploy. The Pages workflow has **only `workflow_dispatch`** and requires repository variable **`ENABLE_PAGES_DEPLOYMENT=true`**. Without that explicit opt-in, its jobs are skipped, even when manually triggered. The metadata workflow does not deploy.
+The owner authorized the first public release and making only this repository public on 2026-11-06. The validation workflow builds and checks the site; it does not deploy. The Pages workflow has **only `workflow_dispatch`** and requires repository variable **`ENABLE_PAGES_DEPLOYMENT=true`**. Without that explicit opt-in, its jobs are skipped, even when manually triggered. The metadata workflow does not deploy.
 
-When you intentionally decide to publish:
+For the authorized first release and future updates:
 
 1. Push the reviewed commits to GitHub yourself.
 2. In Settings → Pages, select **GitHub Actions** as the build/deployment source. Ensure Pages is available for the repository's chosen visibility; keep it private during development. GitHub's free public Pages option requires an intentionally public source repository.
 3. Configure the `github-pages` environment with any desired required reviewers.
 4. Add repository Actions variable `ENABLE_PAGES_DEPLOYMENT` with exact value `true`.
-5. Manually run **Publish portfolio (opt-in only)** from `main`. It verifies and builds before uploading `dist/` and deploying.
+5. Manually run **Publish portfolio** from `main`. It verifies and builds before uploading `dist/` and deploying.
 6. Confirm the resulting URL is `https://erickmurakami.github.io/`. There is no repository-name base path for this user site.
 
 To prevent future releases, remove/set the variable to `false`. This does not take down a version already published; unpublishing is a separate intentional GitHub Pages setting.
