@@ -1,0 +1,51 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+const notes = (await getCollection("notesPt")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<Layout title="Notas técnicas">
+  <section class="shell section">
+    <div class="page-intro">
+      <p class="eyebrow">CADERNO DE ENGENHARIA</p>
+      <h1>
+        Ideias que merecem
+        <br />
+        <span class="blue">ser exploradas.</span>
+      </h1>
+      <p>
+        Notas sobre Java, arquitetura backend e os aprendizados por trás das
+        escolhas de implementação.
+      </p>
+    </div>
+    {notes.length ? (
+      <div class="project-grid">
+        {notes.map((n) => (
+          <article class="project-card">
+            <p class="eyebrow">
+              {n.data.category} · {n.data.date.toISOString().slice(0, 10)}
+            </p>
+            <h2>
+              <a href={`/pt/notes/${n.id}/`}>{n.data.title}</a>
+            </h2>
+            <p>{n.data.description}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <span class="small-label">NENHUM ARTIGO PUBLICADO AINDA</span>
+        <h2>Boas reflexões levam tempo.</h2>
+        <p>
+          Os estudos de caso já documentam decisões reais de arquitetura e suas
+          limitações.
+        </p>
+        <a class="button" href="/pt/projects/">
+          Leia os estudos de caso →
+        </a>
+      </div>
+    )}
+  </section>
+</Layout>

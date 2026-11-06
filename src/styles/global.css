@@ -839,3 +839,35 @@ nav a {
     transition: none !important;
   }
 }
+
+.languages {
+  margin-left: 0;
+  gap: 8px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.languages a[aria-current] {
+  color: var(--link);
+  font-weight: 600;
+}
+.languages span {
+  color: var(--muted-foreground);
+}
+@media (max-width: 650px) {
+  .nav-shell > nav[aria-label="Main navigation"],
+  .nav-shell > nav[aria-label="Navegação principal"] {
+    order: 4;
+    flex-basis: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
+  .languages {
+    margin-left: auto;
+  }
+  .hero-label {
+    flex-wrap: wrap;
+  }
+  html[lang="pt-BR"] .role {
+    font-size: clamp(30px, 8vw, 43px);
+  }
+}

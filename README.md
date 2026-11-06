@@ -21,6 +21,12 @@ npm run test:browser           # responsive, axe, keyboard, theme, no-JS checks
 
 Linux CI installs browser system dependencies with `npx playwright install --with-deps chromium`. Dependency versions are locked; fonts are self-hosted. Runtime JavaScript is limited to theme initialization and its button; there is no React hydration, backend, external font request or analytics.
 
+## Languages
+
+English is served at `/`; Brazilian Portuguese is served at `/pt/`. The EN/PT links preserve the equivalent route, including project case studies. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. A future technical note should have the same filename in both note collections before publication so the language switch has a matching destination.
+
+The Home/About primary resume download follows the current language. Contact offers both original PDFs.
+
 ## Content and evidence
 
 - `src/content/projects/*.md`: curated case studies. Required frontmatter: `title`, `repo`, `description`, `focus`, `stack`, `order`.

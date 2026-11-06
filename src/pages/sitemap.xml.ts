@@ -12,6 +12,15 @@ export const GET: APIRoute = async ({ site }) => {
     ...projects.map((p) => `/projects/${p.id}/`),
     ...notes.map((n) => `/notes/${n.id}/`),
   ];
+  routes.push(
+    "/pt/",
+    "/pt/projects/",
+    "/pt/notes/",
+    "/pt/about/",
+    "/pt/contact/",
+    ...(await getCollection("projectsPt")).map((p) => `/pt/projects/${p.id}/`),
+    ...(await getCollection("notesPt")).map((n) => `/pt/notes/${n.id}/`),
+  );
   const escape = (value: string) =>
     value
       .replaceAll("&", "&amp;")

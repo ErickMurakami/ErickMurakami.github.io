@@ -12,6 +12,12 @@ const routes = [
   "/contact/",
   "/404.html",
 ];
+const allRoutes = [
+  ...routes,
+  ...routes.map((route) =>
+    route === "/404.html" ? "/pt/404/" : `/pt${route}`,
+  ),
+];
 for (const theme of ["dark", "light"]) {
   test(`${theme} theme: routes, accessibility and responsive layout`, async ({
     page,
@@ -22,7 +28,7 @@ for (const theme of ["dark", "light"]) {
     );
     for (const width of [390, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const route of routes) {
+      for (const route of allRoutes) {
         const response = await page.goto(route);
         expect(
           response?.ok() ||
@@ -30,7 +36,10 @@ for (const theme of ["dark", "light"]) {
           route,
         ).toBeTruthy();
         await expect(page.locator("h1")).toHaveCount(1);
-        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        await expect(page.locator("html")).toHaveAttribute(
+          "lang",
+          route.startsWith("/pt/") ? "pt-BR" : "en",
+        );
         expect(
           await page.evaluate(
             () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -112,4 +121,25 @@ test("small-screen navigation remains usable at 320px", async ({ page }) => {
     .getByRole("link", { name: "About", exact: true })
     .click();
   await expect(page.locator("h1")).toContainText("Curiosity");
+});
+
+test("language switch preserves case-study route and resume language", async ({
+  page,
+}) => {
+  await page.goto("/projects/econolyze/");
+  await page.getByRole("link", { name: "Português", exact: true }).click();
+  await expect(page).toHaveURL(/\/pt\/projects\/econolyze\/$/);
+  await expect(
+    page.getByRole("heading", { name: "Decisões técnicas", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "English", exact: true }).click();
+  await expect(page).toHaveURL(/\/projects\/econolyze\/$/);
+  await page.goto("/pt/");
+  await expect(
+    page.getByRole("link", { name: "Baixar currículo", exact: false }),
+  ).toHaveAttribute("href", "/resume/erick-murakami-curriculo-pt.pdf");
+  await page.getByRole("link", { name: "English", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: "Download resume", exact: false }),
+  ).toHaveAttribute("href", "/resume/erick-murakami-resume-en.pdf");
 });

@@ -39,6 +39,29 @@ for (const [file, nodes] of documents) {
     nodes.some((n) => n.tagName === "meta" && attrs(n).property === "og:image"),
     `Open Graph: ${file}`,
   );
+  assert.equal(
+    attrs(nodes.find((n) => n.tagName === "html")).lang,
+    path.startsWith("/pt/") ? "pt-BR" : "en",
+  );
+  for (const language of ["en", "pt-BR"]) {
+    const alternate = nodes.find(
+      (n) =>
+        n.tagName === "link" &&
+        attrs(n).rel === "alternate" &&
+        attrs(n).hreflang === language,
+    );
+    assert.ok(alternate, `Missing language alternate in ${file}`);
+    const alternateUrl = new URL(attrs(alternate).href);
+    const alternatePath = join(
+      root,
+      alternateUrl.pathname,
+      alternateUrl.pathname.endsWith("/") ? "index.html" : "",
+    );
+    assert.ok(
+      documents.has(alternatePath),
+      `Missing translated route ${alternateUrl.pathname}`,
+    );
+  }
   for (const node of nodes) {
     const a = attrs(node);
     const value =
@@ -70,7 +93,9 @@ for (const [file, nodes] of documents) {
 const sitemap = await readFile("dist/sitemap.xml", "utf8");
 assert.ok(!sitemap.includes("404.html"));
 assert.ok(sitemap.includes(origin + "/projects/econolyze/"));
-for (const file of files.filter((p) => !p.endsWith("404.html")))
+for (const file of files.filter(
+  (p) => !p.endsWith("404.html") && !p.endsWith("pt/404/index.html"),
+))
   assert.ok(
     sitemap.includes(
       origin + file.slice(root.length).replace(/index.html$/, ""),

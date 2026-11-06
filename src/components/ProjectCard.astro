@@ -2,35 +2,41 @@
 import type { CollectionEntry } from "astro:content";
 import Icon from "./Icon.astro";
 interface Props {
-  project: CollectionEntry<"projects">;
+  project: CollectionEntry<"projects"> | CollectionEntry<"projectsPt">;
+  locale?: "en" | "pt";
 }
 const {
   project: { id, data: p },
 } = Astro.props;
+const pt = Astro.props.locale === "pt";
+const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
 ---
 
 <article class="project-card">
   <div class="card-top">
-    <span class="project-number">0{p.order} / CASE STUDY</span>
+    <span class="project-number">
+      0{p.order} / {pt ? "ESTUDO DE CASO" : "CASE STUDY"}
+    </span>
     <Icon name="layers" />
   </div>
   <p class="eyebrow">{p.focus}</p>
   <h3>
-    <a href={`/projects/${id}/`}>{p.title}</a>
+    <a href={projectPath}>{p.title}</a>
   </h3>
   <p class="card-description">{p.description}</p>
-  <ul class="tags" aria-label="Technologies">
+  <ul class="tags" aria-label={pt ? "Tecnologias" : "Technologies"}>
     {p.stack.map((t) => (
       <li>{t}</li>
     ))}
   </ul>
   <div class="card-links">
-    <a href={`/projects/${id}/`}>
-      Explore case study <span aria-hidden="true">→</span>
+    <a href={projectPath}>
+      {pt ? "Explorar estudo de caso" : "Explore case study"}{" "}
+      <span aria-hidden="true">→</span>
     </a>
     <a
       href={`https://github.com/ErickMurakami/${p.repo}`}
-      aria-label={`${p.title} source on GitHub`}
+      aria-label={`${p.title}: ${pt ? "código no GitHub" : "source on GitHub"}`}
     >
       <Icon name="code" />
     </a>

@@ -1,0 +1,77 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ProjectCard from "../../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+import { githubProjects } from "../../../lib/projects";
+const projects = (await getCollection("projectsPt")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const additional = githubProjects.filter(
+  (repo) => !projects.some((p) => p.data.repo === repo.name),
+);
+---
+
+<Layout title="Projetos">
+  <section class="shell section">
+    <div class="page-intro">
+      <p class="eyebrow">ÍNDICE DE PROJETOS</p>
+      <h1>
+        Engenharia backend,
+        <br />
+        <span class="blue">na prática.</span>
+      </h1>
+      <p>
+        Quatro estudos sobre regras de domínio, persistência reativa, limitação
+        de requisições e isolamento entre tenants. Cada um conecta os detalhes
+        da implementação às evidências no código.
+      </p>
+    </div>
+    <div class="project-grid">
+      {projects.map((p) => (
+        <ProjectCard project={p} locale="pt" />
+      ))}
+    </div>
+    {additional.length > 0 && (
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">DO GITHUB</p>
+            <h2>Mais projetos públicos.</h2>
+            <p>
+              Apenas metadados do repositório. Os estudos técnicos ainda não
+              foram preparados.
+            </p>
+          </div>
+        </div>
+        <div class="project-grid">
+          {additional.map((repo) => (
+            <article class="project-card">
+              <p class="eyebrow">REPOSITÓRIO PÚBLICO</p>
+              <h3>{repo.name}</h3>
+              <p class="card-description">
+                {repo.description ?? "Explore o repositório de código."}
+              </p>
+              <ul class="tags">
+                {repo.language && <li>{repo.language}</li>}
+                {repo.topics
+                  .filter((topic) => topic !== "portfolio")
+                  .map((topic) => (
+                    <li>{topic}</li>
+                  ))}
+              </ul>
+              <p class="hero-caption">
+                Atualizado em{" "}
+                <time datetime={repo.updatedAt}>
+                  {repo.updatedAt.slice(0, 10)}
+                </time>
+              </p>
+              <a class="text-link" href={repo.url}>
+                Ver código no GitHub ↗
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+  </section>
+</Layout>
