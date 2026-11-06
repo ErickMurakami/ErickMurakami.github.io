@@ -1,0 +1,31 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout title="Projects">
+  <section class="shell section">
+    <div class="page-intro">
+      <p class="eyebrow">PROJECT INDEX</p>
+      <h1>
+        Backend engineering,
+        <br />
+        <span class="blue">in practice.</span>
+      </h1>
+      <p>
+        Four focused studies in domain logic, reactive persistence, rate
+        limiting, and tenant isolation. Each connects implementation details to
+        source evidence.
+      </p>
+    </div>
+    <div class="project-grid">
+      {projects.map((p) => (
+        <ProjectCard project={p} />
+      ))}
+    </div>
+  </section>
+</Layout>

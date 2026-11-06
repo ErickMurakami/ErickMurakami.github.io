@@ -1,0 +1,117 @@
+---
+import "../styles/global.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
+import Icon from "../components/Icon.astro";
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = "Java, Quarkus and Spring Boot. Explore Erick Murakami’s backend projects, architecture decisions and engineering trade-offs.",
+} = Astro.props;
+const links = [
+  ["/projects/", "Projects"],
+  ["/notes/", "Engineering notes"],
+  ["/about/", "About"],
+];
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    <title>{title} · Erick Murakami</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <script is:inline>
+      try {
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.getItem("theme") !== "light",
+        );
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <header class="header">
+      <div class="shell nav-shell">
+        <a class="brand" href="/" aria-label="Erick Murakami home">
+          <span class="brand-symbol">
+            em<span>.</span>
+          </span>
+          <span>Erick Murakami</span>
+        </a>
+        <nav aria-label="Main navigation">
+          {links.map(([href, label]) => (
+            <a
+              href={href}
+              aria-current={
+                Astro.url.pathname.startsWith(href) ? "page" : undefined
+              }
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <button
+          class="theme"
+          type="button"
+          aria-label="Switch to light theme"
+          aria-pressed="false"
+        >
+          <Icon name="sun" />
+        </button>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="shell footer">
+      <div>
+        <a class="brand-symbol" href="/" aria-label="Home">
+          em<span>.</span>
+        </a>
+        <p>Thoughtful systems. Deliberate decisions.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ErickMurakami">GitHub ↗</a>
+        <a href="/contact/">Contact</a>
+        <span>© {new Date().getFullYear()} Erick Murakami</span>
+      </div>
+    </footer>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>(".theme");
+      function updateTheme() {
+        const light = !document.documentElement.classList.contains("dark");
+        button?.setAttribute("aria-pressed", String(light));
+        button?.setAttribute(
+          "aria-label",
+          light ? "Switch to dark theme" : "Switch to light theme",
+        );
+      }
+      updateTheme();
+      button?.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        try {
+          localStorage.setItem(
+            "theme",
+            document.documentElement.classList.contains("dark")
+              ? "dark"
+              : "light",
+          );
+        } catch {}
+        updateTheme();
+      });
+    </script>
+  </body>
+</html>
