@@ -423,11 +423,11 @@ test("expertise cards replace one another in place and reverse with native scrol
   }
 });
 
-test("expertise has static mobile, reduced-motion and no-JavaScript fallbacks", async ({
+test("expertise has static short-screen, reduced-motion and no-JavaScript fallbacks", async ({
   browser,
 }) => {
   for (const options of [
-    { viewport: { width: 390, height: 844 } },
+    { viewport: { width: 390, height: 400 } },
     {
       viewport: { width: 1440, height: 900 },
       reducedMotion: "reduce" as const,

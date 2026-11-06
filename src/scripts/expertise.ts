@@ -15,9 +15,7 @@ function initializeShowcase() {
     const sticky = section.querySelector<HTMLElement>(".showcase-sticky")!;
     const cards = [...section.querySelectorAll<HTMLElement>(".expertise-card")];
     const marks = [...section.querySelectorAll<HTMLElement>(".expertise-mark")];
-    const media = matchMedia(
-      "(min-width: 1001px) and (prefers-reduced-motion: no-preference)",
-    );
+    const media = matchMedia("(prefers-reduced-motion: no-preference)");
     let frame = 0;
     let visible = true;
     let active = -1;
@@ -61,7 +59,9 @@ function initializeShowcase() {
         "#projects .section-heading",
       )!;
       const essentialHeight =
-        introduction.offsetHeight + strip.offsetHeight + heading.offsetHeight;
+        introduction.offsetHeight +
+        strip.offsetHeight +
+        (innerWidth > 1000 ? heading.offsetHeight : 0);
       if (media.matches && essentialHeight > innerHeight - top - 12)
         section!.classList.remove("is-scroll-showcase");
       section!.style.setProperty(

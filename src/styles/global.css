@@ -1259,7 +1259,7 @@ nav a {
 .expertise-progress {
   display: none;
 }
-@media (min-width: 1001px) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .is-scroll-showcase {
     height: calc(var(--showcase-height) + var(--showcase-travel));
   }
@@ -1382,5 +1382,116 @@ nav a {
 @media (max-width: 360px) {
   .project-card {
     min-height: 440px;
+  }
+}
+
+/* A compact, single-column showcase keeps the same scroll interaction on phones. */
+@media (max-width: 1000px) {
+  .is-scroll-showcase .hero {
+    gap: 20px;
+    padding-block: 20px;
+  }
+  .is-scroll-showcase .expertise-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .is-scroll-showcase .expertise-card {
+    min-height: 210px;
+    padding: 20px;
+  }
+  .is-scroll-showcase .expertise-progress {
+    margin-top: 12px;
+  }
+  .is-scroll-showcase .hero .intro {
+    margin-top: 14px;
+    line-height: 1.65;
+  }
+  .is-scroll-showcase .hero .role {
+    margin-top: 10px;
+  }
+  .is-scroll-showcase .hero .actions {
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .is-scroll-showcase .hero-resume {
+    margin-top: 12px;
+  }
+  .is-scroll-showcase .specialty-strip > .shell {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px 10px;
+    padding-block: 16px;
+  }
+  .is-scroll-showcase .specialty-strip .tech-label {
+    min-width: 0;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .is-scroll-showcase .specialty-strip .tech-label img {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media (max-width: 650px) {
+  .is-scroll-showcase .hero {
+    gap: 12px;
+    padding-block: 12px;
+  }
+  .is-scroll-showcase .hero h1 {
+    font-size: clamp(32px, 9vw, 38px);
+  }
+  .is-scroll-showcase .hero .role {
+    font-size: 22px;
+  }
+  .is-scroll-showcase .hero .intro {
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  .is-scroll-showcase .expertise-card {
+    padding: 16px;
+  }
+  .is-scroll-showcase .specialty-strip > .shell {
+    gap: 10px 8px;
+    padding-block: 8px;
+  }
+  .is-scroll-showcase .specialty-strip > .shell > span {
+    grid-column: 1 / -1;
+  }
+  html[lang="pt-BR"] .is-scroll-showcase .hero .role {
+    font-size: 22px;
+  }
+  .is-scroll-showcase .expertise-card p:not(.expertise-label) {
+    line-height: 1.65;
+  }
+  .nav-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px 44px;
+    column-gap: 12px;
+    row-gap: 0;
+    padding-block: 6px;
+    min-height: 0;
+  }
+  .nav-shell .brand {
+    min-height: 44px;
+    justify-self: start;
+  }
+  .nav-shell .language-toggle {
+    margin-left: 0;
+  }
+  .nav-shell .theme {
+    width: 44px;
+    height: 44px;
+  }
+  .nav-shell > nav.primary-nav {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    font-size: 12px;
+  }
+  .primary-nav a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding-block: 8px;
   }
 }
