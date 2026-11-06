@@ -1223,3 +1223,114 @@ nav a {
     font-size: 14px;
   }
 }
+
+/* Native scrolling drives a fixed-size card stack; static content is the default. */
+.expertise-showcase .hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 64px;
+  padding-block: 42px;
+}
+.expertise-showcase .hero-copy {
+  min-width: 0;
+}
+.expertise-showcase .hero .intro {
+  margin-top: 24px;
+}
+.expertise-showcase .expertise {
+  padding: 0;
+  min-width: 0;
+}
+.expertise-showcase .expertise-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+.expertise-showcase .expertise-card {
+  padding: 32px;
+}
+.expertise-showcase .expertise-card h2 {
+  font-size: 30px;
+  margin-block: 20px;
+}
+.expertise-showcase .expertise-card p:not(.expertise-label) {
+  font-size: 16px;
+  line-height: 1.85;
+}
+.expertise-progress {
+  display: none;
+}
+@media (min-width: 1001px) and (prefers-reduced-motion: no-preference) {
+  .is-scroll-showcase {
+    height: calc(var(--showcase-height) + var(--showcase-travel));
+  }
+  .is-scroll-showcase .hero {
+    min-height: min(620px, calc(100svh - var(--showcase-top) - 12px));
+    position: sticky;
+    top: var(--showcase-top);
+  }
+  .is-scroll-showcase .expertise-grid {
+    display: grid;
+  }
+  .is-scroll-showcase .expertise-card {
+    grid-area: 1 / 1;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s ease;
+  }
+  .is-scroll-showcase .expertise-card.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .is-scroll-showcase .expertise-progress {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .expertise-mark {
+    height: 3px;
+    width: 24px;
+    border-radius: 3px;
+    background: var(--border);
+  }
+  .expertise-mark.is-active {
+    background: var(--link);
+  }
+}
+@media (max-width: 1000px) {
+  .expertise-showcase .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .expertise-showcase .hero-copy {
+    max-width: 650px;
+  }
+  .expertise-showcase .expertise-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .expertise-showcase .expertise-card {
+    padding: 24px;
+  }
+  .expertise-showcase .expertise-card h2 {
+    font-size: 24px;
+    margin-block: 12px;
+  }
+  .expertise-showcase .expertise-card p:not(.expertise-label) {
+    font-size: 14px;
+  }
+}
+@media (max-width: 650px) {
+  .expertise-showcase .hero {
+    padding-block: 32px;
+  }
+  .expertise-showcase .expertise-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

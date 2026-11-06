@@ -14,44 +14,45 @@ const posts = await getPublishedPosts("pt");
 ---
 
 <Layout title="Engenheiro de Software Back-end">
-  <section class="shell hero">
-    <div class="hero-copy">
-      <h1>
-        Erick Murakami
-        <span class="role">
-          Engenheiro de Software{" "}
-          <span class="nowrap">
-            Back-end<span class="blue">.</span>
+  <section class="expertise-showcase" data-expertise-showcase>
+    <div class="shell hero">
+      <div class="hero-copy">
+        <h1>
+          Erick Murakami
+          <span class="role">
+            Engenheiro de Software{" "}
+            <span class="nowrap">
+              Back-end<span class="blue">.</span>
+            </span>
           </span>
-        </span>
-      </h1>
-    </div>
-    <div class="hero-details">
-      <p class="intro">
-        Desenvolvo sistemas backend em Java com foco em confiabilidade,
-        arquitetura, desempenho e manutenção.
-      </p>
-      <div class="actions">
-        <a class="button primary" href="/pt/#projects">
-          Ver projetos <span aria-hidden="true">→</span>
-        </a>
-        <a class="button" href="https://github.com/ErickMurakami">
-          GitHub <Icon />
-        </a>
-        <a class="button" href="https://www.linkedin.com/in/erick-murakami">
-          LinkedIn <Icon />
+        </h1>
+
+        <p class="intro">
+          Desenvolvo sistemas backend em Java com foco em confiabilidade,
+          arquitetura, desempenho e manutenção.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="/pt/#projects">
+            Ver projetos <span aria-hidden="true">→</span>
+          </a>
+          <a class="button" href="https://github.com/ErickMurakami">
+            GitHub <Icon />
+          </a>
+          <a class="button" href="https://www.linkedin.com/in/erick-murakami">
+            LinkedIn <Icon />
+          </a>
+        </div>
+        <a
+          class="text-link hero-resume"
+          href="/resume/erick-murakami-curriculo-pt.pdf"
+          download
+        >
+          Baixar currículo ↓
         </a>
       </div>
-      <a
-        class="text-link hero-resume"
-        href="/resume/erick-murakami-curriculo-pt.pdf"
-        download
-      >
-        Baixar currículo ↓
-      </a>
+      <ExpertiseGrid locale="pt" />
     </div>
   </section>
-  <ExpertiseGrid locale="pt" />
   <div class="specialty-strip">
     <div class="shell">
       <span>TECNOLOGIAS</span>
