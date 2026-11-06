@@ -96,7 +96,23 @@ const EntryHeading = embedded
                   <span class="small-label">
                     {pt ? "FOCO ACADÊMICO" : "ACADEMIC FOCUS"}
                   </span>
-                  {entry.data.academicFocus.map((paragraph) => (
+                  {(compact && entry.data.summary
+                    ? [entry.data.summary]
+                    : entry.data.academicFocus
+                  ).map((paragraph) => (
+                    <p class="education-project">{paragraph}</p>
+                  ))}
+                </div>
+              )}
+              {entry.data.academicFoundation && (
+                <div class="education-background education-foundation">
+                  <span class="small-label">
+                    {pt ? "Formação Técnica" : "Academic Foundation"}
+                  </span>
+                  {(compact && entry.data.summary
+                    ? [entry.data.summary]
+                    : entry.data.academicFoundation
+                  ).map((paragraph) => (
                     <p class="education-project">{paragraph}</p>
                   ))}
                 </div>

@@ -1,6 +1,6 @@
 # Formação e cursos
 
-Na home, cada formação aparece resumida e uma seta abre seus detalhes com teclado ou clique, inclusive sem JavaScript. A página Sobre exibe o conteúdo completo.
+Na home, cada formação aparece resumida e uma seta abre seus detalhes com teclado ou clique, inclusive sem JavaScript. Os detalhes da home usam um resumo editorial de um parágrafo (`summary`), sem cortar automaticamente o primeiro parágrafo. A página Sobre exibe o conteúdo completo.
 
 Os dados ficam em `src/content/learning/*.md`. About reúne experiência, formação, certificações e, somente quando houver conteúdo aprovado, Cursos e Capacitação. As páginas legadas `/courses/` e `/pt/courses/` e a âncora `#courses` continuam funcionando.
 
@@ -13,7 +13,7 @@ A formação está ordenada do mais recente para o mais antigo pelo campo `order
 
 A ETEC inclui a base acadêmica informada: Java, C#, C++, JavaScript, PHP, HTML/CSS, MySQL e Android Studio. Não se trata de uma lista de especializações profissionais atuais. O projeto de conclusão foi uma aplicação para compra e venda de livros usados, com C# e MySQL; não foram acrescentadas funcionalidades, métricas, arquitetura ou implantação.
 
-Para adicionar formação, use `kind: education`, `title`, `institution`, `period`, `locale` e `order` (mais recente primeiro). `location`, `background`, `academicFocus` (lista de parágrafos) e `finalProject` são opcionais. O foco acadêmico da FATEC não é apresentado como projeto de conclusão. Faça uma versão por idioma com informações equivalentes.
+Para adicionar formação, use `kind: education`, `title`, `institution`, `period`, `locale` e `order` (mais recente primeiro). `summary`, `location`, `background`, `academicFocus` (lista de parágrafos) e `finalProject` são opcionais. O foco acadêmico da FATEC não é apresentado como projeto de conclusão. Faça uma versão por idioma com informações equivalentes.
 
 ## Cursos e Capacitação
 

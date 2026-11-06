@@ -1,6 +1,6 @@
 # About: conteúdo e evidências
 
-O menu About / Sobre sempre abre o perfil completo, incluindo apresentação, experiência profissional, formação e certificações. A home conserva `#about`, `#experience`, `#courses` e, quando há conteúdo publicado, `#certifications`. A apresentação da home usa um único parágrafo com link “Mais detalhes” para o perfil completo. Na home, responsabilidades e tecnologias de cada emprego ficam em um `<details>` fechado; Uma seta no canto do cargo abre os detalhes com teclado e sem JavaScript; o controle mantém um nome acessível e gira ao abrir. O perfil completo exibe as responsabilidades diretamente.
+O menu About / Sobre sempre abre o perfil completo, incluindo apresentação, experiência profissional, formação e certificações. A home conserva `#about`, `#experience`, `#courses` e, quando há conteúdo publicado, `#certifications`. A apresentação da home usa uma síntese editorial do conteúdo completo em um único parágrafo com link “Mais detalhes” para o perfil completo. Na home, responsabilidades e tecnologias de cada emprego ficam em um `<details>` fechado; Uma seta no canto do cargo abre os detalhes com teclado e sem JavaScript; o controle mantém um nome acessível e gira ao abrir. O perfil completo exibe as responsabilidades diretamente.
 
 ## Experiência profissional
 

@@ -16,6 +16,10 @@ for (const prefix of ["", "/pt"]) {
     await fatecPreview.locator("summary").focus();
     await page.keyboard.press("Enter");
     await expect(fatecPreview.locator(".education-focus")).toBeVisible();
+    await expect(fatecPreview.locator(".education-focus p")).toHaveCount(1);
+    await expect(fatecPreview.locator(".education-focus")).toContainText(
+      prefix ? "necessidades organizacionais" : "business needs",
+    );
     await page.keyboard.press("Enter");
     await expect(fatecPreview.locator(".education-focus")).not.toBeVisible();
     const educationPreview = about.locator("#courses .education-more").last();
@@ -24,7 +28,15 @@ for (const prefix of ["", "/pt"]) {
     ).not.toBeVisible();
     await educationPreview.locator("summary").focus();
     await page.keyboard.press("Enter");
-    await expect(educationPreview.locator(".education-project")).toBeVisible();
+    await expect(
+      educationPreview.locator(".education-project").first(),
+    ).toBeVisible();
+    await expect(
+      educationPreview.locator(".education-foundation p"),
+    ).toHaveCount(1);
+    await expect(
+      educationPreview.locator(".education-foundation"),
+    ).toContainText(prefix ? "livros usados" : "second-hand book");
     const first = about.locator("#experience article").first();
     await expect(first).toContainText("Genesys Software");
     await expect(first.locator(".experience-details")).not.toBeVisible();
@@ -32,10 +44,18 @@ for (const prefix of ["", "/pt"]) {
     await page.keyboard.press("Enter");
     await expect(first.locator(".experience-details")).toBeVisible();
     await expect(first.locator(".experience-more")).toHaveAttribute("open", "");
+    const homeIntroduction = await about
+      .locator(".about-copy > p:not(.post-meta)")
+      .textContent();
     await about
       .locator(`.about-introduction a[href="${prefix}/about/"]`)
       .click();
     await expect(page).toHaveURL(`${prefix}/about/`);
+    const fullIntroduction = page.locator(".about-copy > p:not(.post-meta)");
+    await expect(fullIntroduction).toHaveCount(3);
+    expect(await fullIntroduction.first().textContent()).not.toBe(
+      homeIntroduction,
+    );
     await expect(page.locator("#experience")).toContainText("Brasil Rural");
     await expect(
       page.locator("#experience .experience-details").first(),
@@ -88,6 +108,24 @@ for (const prefix of ["", "/pt"]) {
       prefix ? "livros usados" : "second-hand book",
     );
     await expect(education.last()).not.toContainText("Bachelor");
+    await expect(
+      education.last().locator(".education-foundation p"),
+    ).toHaveText(
+      prefix
+        ? [
+            "Formação técnica com foco em fundamentos de programação, desenvolvimento de software e bancos de dados relacionais.",
+            "Durante o curso, tive contato com tecnologias como Java, C#, C++, JavaScript, PHP, HTML, CSS e MySQL, além de desenvolvimento de aplicações utilizando Android Studio.",
+            "Como projeto de conclusão, desenvolvi uma aplicação para compra e venda de livros usados, utilizando C# e MySQL, aplicando conceitos de lógica de programação, desenvolvimento de aplicações e persistência de dados.",
+          ]
+        : [
+            "Technical education focused on programming fundamentals, software development, and relational databases.",
+            "During the program, I gained hands-on experience with technologies including Java, C#, C++, JavaScript, PHP, HTML, CSS, and MySQL, as well as application development using Android Studio.",
+            "For my final academic project, I developed a second-hand book marketplace application using C# and MySQL, applying programming fundamentals, application development concepts, and relational data persistence.",
+          ],
+    );
+    await expect(education.last().locator(".small-label")).toHaveText(
+      prefix ? "Formação Técnica" : "Academic Foundation",
+    );
     await expect(page.locator("#training")).toHaveCount(0);
     await page.locator(".language-toggle").click();
     await expect(page).toHaveURL(prefix ? "/about/" : "/pt/about/");
