@@ -17,19 +17,30 @@ const noteSchema = z.object({
   draft: z.boolean().default(false),
   localOnly: z.boolean().default(false),
 });
-const certificationSchema = z.object({
-  title: z.string().min(1),
-  issuer: z.string().min(1),
-  date: z.coerce.date(),
-  credentialUrl: z
-    .url()
-    .refine(
-      (value) => new URL(value).protocol === "https:",
-      "Use an HTTPS credential verification URL",
-    ),
-  draft: z.boolean().default(true),
-  localOnly: z.boolean().default(false),
-});
+const certificationSchema = z
+  .object({
+    status: z.enum(["earned", "in-progress"]).default("earned"),
+    title: z.string().min(1),
+    issuer: z.string().min(1),
+    date: z.coerce.date(),
+    credentialUrl: z
+      .url()
+      .refine(
+        (value) => new URL(value).protocol === "https:",
+        "Use an HTTPS credential verification URL",
+      )
+      .optional(),
+    draft: z.boolean().default(true),
+    localOnly: z.boolean().default(false),
+  })
+  .superRefine((entry, context) => {
+    if (entry.status === "earned" && !entry.credentialUrl)
+      context.addIssue({
+        code: "custom",
+        path: ["credentialUrl"],
+        message: "Earned certifications require a credential verification URL",
+      });
+  });
 export const collections = {
   learning: defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/learning" }),

@@ -1511,3 +1511,109 @@ nav a {
     row-gap: 0;
   }
 }
+
+.professional-about {
+  border-top: 1px solid var(--border);
+}
+.about-introduction {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 64px;
+}
+.about-introduction .text-link {
+  margin-top: 20px;
+}
+.about-copy p + p {
+  margin-top: 18px;
+}
+.about-subsection {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.about-subsection > :is(h2, h3),
+.about-subsection .section-heading :is(h2, h3) {
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+}
+.experience-list {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+}
+.experience-list > li {
+  padding: 0 0 32px 24px;
+  border-left: 1px solid var(--border);
+}
+.experience-list > li:last-child {
+  padding-bottom: 0;
+}
+.experience-list :is(h3, h4) {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-block: 8px;
+}
+.experience-company {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.experience-details {
+  padding-left: 20px;
+  margin-block: 18px;
+  max-width: 78ch;
+  list-style: disc;
+}
+.experience-details li + li {
+  margin-top: 10px;
+}
+.learning-group .post-item :is(h3, h4, h5),
+.certification-entry-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+@media (max-width: 750px) {
+  .about-introduction {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .about-subsection {
+    margin-top: 32px;
+    padding-top: 24px;
+  }
+  .experience-list > li {
+    padding-left: 16px;
+  }
+}
+.experience-list article {
+  position: relative;
+}
+.experience-list article:has(details) :is(h3, h4) {
+  padding-right: 52px;
+}
+.experience-more summary {
+  position: absolute;
+  inset-block-start: 24px;
+  inset-inline-end: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  list-style: none;
+  color: var(--link);
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+}
+.experience-more summary::-webkit-details-marker {
+  display: none;
+}
+.experience-more summary:hover {
+  background: var(--secondary);
+}
+.experience-more summary svg {
+  transition: transform 180ms ease;
+}
+.experience-more[open] summary svg {
+  transform: rotate(180deg);
+}

@@ -1,51 +1,118 @@
 ---
+import { experience } from "../data/experience";
+import { getPublishedCertifications } from "../lib/certifications";
+import LearningSection from "./LearningSection.astro";
+import Certifications from "./Certifications.astro";
 interface Props {
   locale: "en" | "pt";
   standalone?: boolean;
 }
 const { locale, standalone = false } = Astro.props;
+const pt = locale === "pt";
 const Heading = standalone ? "h1" : "h2";
+const Subheading = standalone ? "h2" : "h3";
+const EntryHeading = standalone ? "h3" : "h4";
+const Details = standalone ? "div" : "details";
+const certifications = await getPublishedCertifications(locale);
+const summary = pt
+  ? "Sou engenheiro backend com foco em Java, APIs REST e sistemas que possam evoluir sem complexidade desnecessária. No trabalho e nos projetos pessoais, procuro entender os compromissos de cada decisão — da arquitetura às integrações com IA."
+  : "I’m a Backend Engineer focused on Java, REST APIs and systems that can evolve without unnecessary complexity. At work and in personal projects, I explore the trade-offs behind engineering decisions, from architecture to AI integrations.";
+const paragraphs = pt
+  ? [
+      "Sou engenheiro backend com foco em Java. Desenvolvo sistemas e APIs REST com atenção à arquitetura, ao desempenho e à manutenção do código.",
+      "No trabalho, uso Java e Spring Boot em aplicações empresariais com multitenancy, bancos relacionais e integrações com serviços externos. Java é meu principal ecossistema, com Spring Boot e Quarkus, mas também exploro ferramentas fora da JVM quando elas se ajustam melhor ao problema.",
+      "Em projetos pessoais e acadêmicos, exploro integrações com LLMs, agentes e MCP usando Spring AI, LangChain4j, Quarkus e Python. Me interessam as decisões por trás desses sistemas: entender os compromissos de cada abordagem e manter a arquitetura simples o suficiente para o software evoluir.",
+    ]
+  : [
+      "I’m a Backend Engineer focused on Java. I build backend systems and REST APIs with attention to architecture, performance and maintainability.",
+      "In my professional work, I use Java and Spring Boot for enterprise applications with multi-tenant systems, relational databases and external integrations. Spring Boot and Quarkus are my main backend tools, and I explore options outside the JVM when they fit the problem better.",
+      "Personal and academic projects give me room to explore LLM integrations, agents and MCP with Spring AI, LangChain4j, Quarkus and Python. I’m interested in the decisions behind these systems: understanding trade-offs and keeping architecture simple enough for software to evolve.",
+    ];
 ---
 
-{locale === "pt" ? (
-  <section id="about" class="shell section about-summary">
+<section id="about" class="shell section professional-about">
+  <div class="about-introduction">
     <div>
-      <Heading>Sobre mim</Heading>
+      <Heading>{pt ? "Sobre mim" : "About me"}</Heading>
+      {!standalone && (
+        <a class="text-link" href={`${pt ? "/pt" : ""}/about/`}>
+          {pt ? "Mais detalhes →" : "More details →"}
+        </a>
+      )}
     </div>
-    <div>
-      <p>
-        No trabalho, desenvolvo aplicações empresariais com Java e Spring Boot.
-        Procuro entender os compromissos de cada decisão e manter a arquitetura
-        simples o suficiente para que o software possa evoluir.
-      </p>
-      <p>
-        Nos projetos pessoais e acadêmicos, exploro novas ferramentas e
-        abordagens. Uso esses projetos para investigar problemas além das
-        demandas do dia a dia. Tenho inglês C1.
-      </p>
-      <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
-        LinkedIn ↗
-      </a>
-    </div>
-  </section>
-) : (
-  <section id="about" class="shell section about-summary">
-    <div>
-      <Heading>About me</Heading>
-    </div>
-    <div>
-      <p>
-        In my professional work, I develop enterprise applications with Java and
-        Spring Boot. I care about understanding trade-offs and keeping
-        architecture simple enough for the software to evolve.
-      </p>
-      <p>
-        Personal and academic projects give me room to explore new tools and
-        approaches beyond day-to-day requirements. My English proficiency is C1.
+    <div class="about-copy">
+      {(standalone ? paragraphs : [summary]).map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+      <p class="post-meta">
+        {pt ? "Inglês C1 · Português nativo" : "English C1 · Native Portuguese"}
       </p>
       <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
         LinkedIn ↗
       </a>
     </div>
+  </div>
+  <section
+    id="experience"
+    class="about-subsection"
+    aria-labelledby="experience-heading"
+  >
+    <Subheading id="experience-heading">
+      {pt ? "Experiência profissional" : "Professional experience"}
+    </Subheading>
+    <ol class="experience-list">
+      {experience.map((position) => (
+        <li>
+          <article>
+            <p class="post-meta">{position.period[locale]}</p>
+            <EntryHeading>{position.role[locale]}</EntryHeading>
+            <p class="experience-company">{position.company}</p>
+            <p class="post-meta">
+              {position.location[locale]}
+              {position.workArrangement && ` · ${position.workArrangement}`}
+            </p>
+            <Details class="experience-more">
+              {!standalone && (
+                <summary
+                  aria-label={`${pt ? "Detalhes do cargo" : "Position details"}: ${position.role[locale]}`}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+              )}
+              <ul class="experience-details">
+                {position.responsibilities[locale].map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+              <ul
+                class="tags"
+                aria-label={pt ? "Tecnologias utilizadas" : "Technologies used"}
+              >
+                {position.technologies.map((technology) => (
+                  <li>{technology}</li>
+                ))}
+              </ul>
+            </Details>
+          </article>
+        </li>
+      ))}
+    </ol>
   </section>
-)}
+  <LearningSection locale={locale} embedded headingLevel={standalone ? 2 : 3} />
+  <Certifications
+    entries={certifications}
+    locale={locale}
+    embedded
+    headingLevel={standalone ? 2 : 3}
+  />
+</section>

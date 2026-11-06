@@ -65,6 +65,7 @@ try {
   );
   const ptPage = await read("dist/pt/certifications/index.html");
   assert.ok(ptPage.includes("Temporary QA credential"));
+  assert.ok(ptPage.includes("Obtidas"));
   assert.ok(!/rel="alternate"\s+hreflang="en"/.test(ptPage));
   assert.match(await read("dist/sitemap.xml"), /\/pt\/certifications\//);
   await writeFile(paths[0], fixture(false));
@@ -80,6 +81,17 @@ try {
     await read("dist/pt/certifications/index.html"),
     /hreflang="en"/,
   );
+  await writeFile(
+    paths[1],
+    fixture(false).replace(
+      'credentialUrl: "https://example.org/credential"',
+      "status: in-progress",
+    ),
+  );
+  build();
+  const progress = await read("dist/pt/certifications/index.html");
+  assert.ok(progress.includes("Em andamento"));
+  assert.ok(!progress.includes("Verificar credencial"));
   console.log(
     "Certifications passed: drafts/local-only excluded, conditional routes/menu/sitemap, independent languages, verified credential links.",
   );

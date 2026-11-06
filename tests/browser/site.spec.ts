@@ -130,7 +130,7 @@ test("small-screen navigation remains usable at 320px", async ({ page }) => {
     .getByRole("navigation")
     .getByRole("link", { name: "About", exact: true })
     .click();
-  await expect(page).toHaveURL(/#about$/);
+  await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.locator("#about")).toBeInViewport();
 });
 
@@ -252,12 +252,10 @@ test("blog stays hidden unless that language has published articles", async ({
     await page.goto(home);
     await expect(page.locator("#blog")).toHaveCount(published ? 1 : 0);
     await expect(
-      page
-        .locator(".primary-nav")
-        .getByRole("link", {
-          name: home === "/pt/" ? "Artigos" : "Writing",
-          exact: true,
-        }),
+      page.locator(".primary-nav").getByRole("link", {
+        name: home === "/pt/" ? "Artigos" : "Writing",
+        exact: true,
+      }),
     ).toHaveCount(published ? 1 : 0);
     if (published) {
       await page

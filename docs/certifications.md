@@ -1,6 +1,6 @@
 # Certificações
 
-O menu, a seção na home e a página de certificações só aparecem quando houver uma credencial publicada no idioma correspondente. Nenhuma certificação foi adicionada como obtida.
+Certificações é uma subseção de About e só aparece quando houver conteúdo publicado no idioma correspondente. A página legada de certificações também é preservada nessas condições. Não há item próprio no menu principal. Nenhuma certificação foi adicionada como obtida.
 
 Crie um arquivo Markdown em `src/content/certifications/` (inglês) ou `src/content/certifications-pt/` (português). Use o mesmo nome nos dois idiomas para organizar as traduções.
 
@@ -12,6 +12,7 @@ title: "AWS Certified Cloud Practitioner"
 issuer: "Amazon Web Services"
 date: AAAA-MM-DD
 credentialUrl: "URL_HTTPS_DA_CREDENCIAL_VERIFICAVEL"
+status: earned
 draft: true
 localOnly: false
 ---
@@ -21,7 +22,7 @@ Substitua a data e a URL pelos dados reais. A URL deve usar HTTPS e apontar para
 
 Defina `draft: false` para publicar. O padrão é rascunho. `localOnly: true` permite visualizar apenas no servidor de desenvolvimento, sem incluir no build de produção. Publicações e traduções são independentes.
 
-A home apresenta as três certificações mais recentes, com link para a lista completa em `/certifications/` ou `/pt/certifications/`. Não é necessário serviço externo ou backend.
+About apresenta todas as certificações publicadas, separando `status: earned` (obtidas) de `status: in-progress` (em andamento). Certificações obtidas exigem URL de verificação. Para uma certificação em andamento, a URL é opcional; o campo `date` indica o início da preparação e não é exibido como data de obtenção. Os exemplos `localOnly` aparecem em um grupo explicitamente identificado como prévia, sem alegar obtenção. As URLs legadas `/certifications/` e `/pt/certifications/` continuam disponíveis. Não é necessário serviço externo ou backend.
 
 ## Prévia local
 

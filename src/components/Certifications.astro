@@ -6,51 +6,111 @@ interface Props {
   )[];
   locale: "en" | "pt";
   standalone?: boolean;
+  embedded?: boolean;
+  headingLevel?: 2 | 3;
 }
-const { entries, locale, standalone = false } = Astro.props;
+const {
+  entries,
+  locale,
+  standalone = false,
+  embedded = false,
+  headingLevel = 2,
+} = Astro.props;
 const pt = locale === "pt";
-const Heading = standalone ? "h1" : "h2";
-const EntryHeading = standalone ? "h2" : "h3";
-const title = pt ? "Certificações" : "Certifications";
+const Heading = embedded
+  ? headingLevel === 2
+    ? "h2"
+    : "h3"
+  : standalone
+    ? "h1"
+    : "h2";
+const GroupHeading = embedded
+  ? headingLevel === 2
+    ? "h3"
+    : "h4"
+  : standalone
+    ? "h2"
+    : "h3";
+const EntryHeading = embedded
+  ? headingLevel === 2
+    ? "h4"
+    : "h5"
+  : standalone
+    ? "h3"
+    : "h4";
+const groups = [
+  { kind: "earned", title: pt ? "Obtidas" : "Earned" },
+  { kind: "in-progress", title: pt ? "Em andamento" : "In progress" },
+  {
+    kind: "preview",
+    title: pt
+      ? "Exemplo local — não é uma certificação obtida"
+      : "Local preview — not an earned certification",
+  },
+];
 ---
 
 {entries.length > 0 && (
-  <section id="certifications" class="shell section">
+  <section
+    id="certifications"
+    class={embedded ? "about-subsection" : "shell section"}
+  >
     <div class="section-heading">
-      <Heading>{title}</Heading>
-      {!standalone && (
-        <a class="text-link" href={`${pt ? "/pt" : ""}/certifications/`}>
-          {pt ? "Ver todas →" : "View all →"}
-        </a>
-      )}
+      <Heading>{pt ? "Certificações" : "Certifications"}</Heading>
     </div>
     <div class="post-list">
-      {(standalone ? entries : entries.slice(0, 3)).map((entry) => (
-        <article class="post-item">
-          <p class="post-meta">
-            {entry.data.issuer} ·{" "}
-            <time datetime={entry.data.date.toISOString()}>
-              {entry.data.date.toLocaleDateString(pt ? "pt-BR" : "en-GB", {
-                timeZone: "UTC",
-              })}
-            </time>
-          </p>
-          <EntryHeading>{entry.data.title}</EntryHeading>
-          <a
-            class="text-link"
-            href={entry.data.credentialUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={
-              pt
-                ? "Verificar credencial (abre em nova aba)"
-                : "Verify credential (opens in a new tab)"
-            }
-          >
-            {pt ? "Verificar credencial ↗" : "Verify credential ↗"}
-          </a>
-        </article>
-      ))}
+      {groups.map((group) => {
+        const items = entries.filter(
+          (entry) =>
+            (entry.data.localOnly ? "preview" : entry.data.status) ===
+            group.kind,
+        );
+        return (
+          items.length > 0 && (
+            <div class="learning-group">
+              <GroupHeading>{group.title}</GroupHeading>
+              {items.map((entry) => (
+                <article class="post-item">
+                  <p class="post-meta">
+                    {entry.data.issuer}
+                    {entry.data.status === "earned" &&
+                      !entry.data.localOnly && (
+                        <>
+                          {" "}
+                          ·{" "}
+                          <time datetime={entry.data.date.toISOString()}>
+                            {entry.data.date.toLocaleDateString(
+                              pt ? "pt-BR" : "en-GB",
+                              { timeZone: "UTC" },
+                            )}
+                          </time>
+                        </>
+                      )}
+                  </p>
+                  <EntryHeading class="certification-entry-title">
+                    {entry.data.title}
+                  </EntryHeading>
+                  {entry.data.credentialUrl && (
+                    <a
+                      class="text-link"
+                      href={entry.data.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={
+                        pt
+                          ? "Verificar credencial (abre em nova aba)"
+                          : "Verify credential (opens in a new tab)"
+                      }
+                    >
+                      {pt ? "Verificar credencial ↗" : "Verify credential ↗"}
+                    </a>
+                  )}
+                </article>
+              ))}
+            </div>
+          )
+        );
+      })}
     </div>
   </section>
 )}

@@ -1,0 +1,63 @@
+import { test, expect } from "@playwright/test";
+
+for (const prefix of ["", "/pt"]) {
+  test(`About aggregates verified experience and education ${prefix || "en"}`, async ({
+    page,
+  }) => {
+    await page.goto(`${prefix}/`);
+    const about = page.locator("#about");
+    await expect(about.locator(".about-copy > p:not(.post-meta)")).toHaveCount(
+      1,
+    );
+    await expect(about.locator("#courses")).toContainText("FATEC Rio Preto");
+    await expect(about.locator("#experience article")).toHaveCount(2);
+    const first = about.locator("#experience article").first();
+    await expect(first).toContainText("Genesys Software");
+    await expect(first.locator(".experience-details")).not.toBeVisible();
+    await first.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(first.locator(".experience-details")).toBeVisible();
+    await expect(first.locator(".experience-more")).toHaveAttribute("open", "");
+    await about
+      .locator(`.about-introduction a[href="${prefix}/about/"]`)
+      .click();
+    await expect(page).toHaveURL(`${prefix}/about/`);
+    await expect(page.locator("#experience")).toContainText("Brasil Rural");
+    await expect(
+      page.locator("#experience .experience-details").first(),
+    ).toBeVisible();
+    await expect(page.locator("#about")).toContainText(
+      prefix ? "Inglês C1" : "English C1",
+    );
+    await expect(page.locator("#courses")).toContainText(
+      prefix
+        ? "Tecnólogo em Informática para Negócios"
+        : "Technology Degree in Business Informatics",
+    );
+    await expect(page.locator("#experience")).not.toContainText("Econolyze");
+    await page.locator(".language-toggle").click();
+    await expect(page).toHaveURL(prefix ? "/about/" : "/pt/about/");
+    await expect(page.locator("#experience article")).toHaveCount(2);
+  });
+}
+
+test("legacy education URLs and homepage anchors remain accessible without JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+  for (const prefix of ["", "/pt"]) {
+    await page.goto(`${prefix}/courses/`);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("#courses")).toContainText("FATEC Rio Preto");
+    await page.goto(`${prefix}/#courses`);
+    await expect(page.locator("#about #courses")).toBeInViewport();
+    const details = page.locator("#experience details").first();
+    await details.locator("summary").click();
+    await expect(details.locator(".experience-details")).toBeVisible();
+  }
+  await context.close();
+});

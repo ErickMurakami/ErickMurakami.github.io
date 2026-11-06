@@ -76,3 +76,5 @@ Navigation and home listing limits: [navigation guide](docs/navigation.md).
 To add a verified certification: [certifications guide](docs/certifications.md). The section stays hidden until a credential is published.
 
 Education and courses from the supplied resumes: [content guide](docs/education.md).
+
+About now brings together resume-backed professional experience, education and certifications. See [content evidence and remaining gaps](docs/about.md). The header About link always opens the full profile; the home keeps backward-compatible anchors and expandable position details.

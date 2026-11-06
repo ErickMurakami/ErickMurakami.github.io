@@ -1,9 +1,6 @@
 ---
 import AboutSection from "../components/AboutSection.astro";
 import ContactSection from "../components/ContactSection.astro";
-import Certifications from "../components/Certifications.astro";
-import { getPublishedCertifications } from "../lib/certifications";
-import LearningSection from "../components/LearningSection.astro";
 import Layout from "../layouts/Layout.astro";
 import ProjectGallery from "../components/ProjectGallery.astro";
 import TechLabel from "../components/TechLabel.astro";
@@ -15,7 +12,6 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order,
 );
-const certifications = await getPublishedCertifications("en");
 const posts = await getPublishedPosts("en");
 ---
 
@@ -97,8 +93,6 @@ const posts = await getPublishedPosts("en");
     <ProjectGallery projects={projects} locale="en" portion="continuation" />
   </div>
   <BlogPreview posts={posts} locale="en" />
-  <Certifications entries={certifications} locale="en" />
-  <LearningSection locale="en" />
   <AboutSection locale="en" />
   <ContactSection locale="en" />
 </Layout>

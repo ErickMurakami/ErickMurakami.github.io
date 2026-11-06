@@ -1,6 +1,6 @@
 # Formação e cursos
 
-Os dados ficam em `src/content/learning/*.md`. A seção aparece na home e nas páginas `/courses/` e `/pt/courses/`. O menu usa âncoras na home e abre a página correspondente nas outras rotas.
+Os dados ficam em `src/content/learning/*.md`. A seção aparece dentro de About na home e na página de perfil. Permanecem disponíveis as páginas legadas `/courses/` e `/pt/courses/`. O menu Sobre abre o perfil agregado em `/about/` ou `/pt/about/`; a âncora `#courses` continua válida.
 
 A formação inicial foi transcrita dos currículos locais fornecidos pelo proprietário:
 
