@@ -511,7 +511,7 @@ test("Projects is visible and unobscured at scroll zero, directly below technolo
       ).toBeInViewport();
       await expect(page.locator(".project-card")).toHaveCount(4);
       const parrot = page.locator(
-        '.specialty-strip img[src="/technologies/langchain4j.ico"]',
+        '.specialty-strip img[src="/technologies/langchain4j.svg"]',
       );
       await expect(parrot).toHaveCount(1);
       await expect
