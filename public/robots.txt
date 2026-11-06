@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://erickmurakami.github.io/sitemap.xml

@@ -1,0 +1,115 @@
+import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+const routes = [
+  "/",
+  "/projects/",
+  "/projects/econolyze/",
+  "/projects/logistic/",
+  "/projects/quarkus-rate-limiter/",
+  "/projects/quarkus-schema-per-tenant/",
+  "/notes/",
+  "/about/",
+  "/contact/",
+  "/404.html",
+];
+for (const theme of ["dark", "light"]) {
+  test(`${theme} theme: routes, accessibility and responsive layout`, async ({
+    page,
+  }) => {
+    await page.addInitScript(
+      (value) => localStorage.setItem("theme", value),
+      theme,
+    );
+    for (const width of [390, 768, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of routes) {
+        const response = await page.goto(route);
+        expect(
+          response?.ok() ||
+            (route === "/404.html" && response?.status() === 404),
+          route,
+        ).toBeTruthy();
+        await expect(page.locator("h1")).toHaveCount(1);
+        await expect(page.locator("html")).toHaveAttribute("lang", "en");
+        expect(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= window.innerWidth,
+          ),
+          `${route} at ${width}px overflows`,
+        ).toBeTruthy();
+        const result = await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze();
+        expect(
+          result.violations,
+          `${theme} ${route} ${width}: ${JSON.stringify(result.violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) })))}`,
+        ).toEqual([]);
+      }
+    }
+  });
+}
+test("keyboard skip link, focus, theme persistence and active navigation", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByText("Skip to content", { exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main")).toBeFocused();
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  await page.reload();
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+  await page
+    .getByRole("navigation")
+    .getByRole("link", { name: "Projects", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("navigation")
+      .getByRole("link", { name: "Projects", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(
+    page.getByRole("button", { name: "Switch to dark theme" }),
+  ).toHaveAttribute("aria-pressed", "true");
+});
+test("content works without JavaScript and reduced motion is honored", async ({
+  browser,
+  page,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const staticPage = await context.newPage();
+  await staticPage.goto("/projects/");
+  await expect(
+    staticPage.getByRole("link", { name: "Explore case study" }),
+  ).toHaveCount(4);
+  await staticPage
+    .getByRole("link", { name: "Econolyze", exact: true })
+    .click();
+  await expect(
+    staticPage.getByRole("heading", { name: "Architecture", exact: true }),
+  ).toBeVisible();
+  await context.close();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  expect(
+    await page
+      .locator("html")
+      .evaluate((el) => getComputedStyle(el).scrollBehavior),
+  ).toBe("auto");
+});
+test("small-screen navigation remains usable at 320px", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("/");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBeTruthy();
+  await page
+    .getByRole("navigation")
+    .getByRole("link", { name: "About", exact: true })
+    .click();
+  await expect(page.locator("h1")).toContainText("Curiosity");
+});
