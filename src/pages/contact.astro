@@ -13,13 +13,38 @@ import Layout from "../layouts/Layout.astro";
       </h1>
       <p>
         Interested in my work or an engineering conversation? You can find my
-        public projects and professional profile on GitHub.
+        public projects on GitHub and connect with me on LinkedIn.
       </p>
-      <a class="button primary" href="https://github.com/ErickMurakami">
-        Connect on GitHub ↗
-      </a>
+      <div class="actions">
+        <a
+          class="button primary"
+          href="https://www.linkedin.com/in/erick-murakami"
+        >
+          Connect on LinkedIn ↗
+        </a>
+        <a class="button" href="https://github.com/ErickMurakami">
+          GitHub ↗
+        </a>
+      </div>
     </div>
-    <div class="empty-state">
+    <section class="empty-state">
+      <p class="eyebrow">RESUME</p>
+      <h2>My engineering background.</h2>
+      <p>Download my resume in English or Portuguese.</p>
+      <div class="actions">
+        <a class="button" href="/resume/erick-murakami-resume-en.pdf" download>
+          Resume · English ↓
+        </a>
+        <a
+          class="button"
+          href="/resume/erick-murakami-curriculo-pt.pdf"
+          download
+        >
+          Currículo · Português ↓
+        </a>
+      </div>
+    </section>
+    <div class="empty-state" style="margin-top:24px">
       <h2>Start with the code.</h2>
       <p>
         Explore the case studies for context on how I approach architecture,

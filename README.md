@@ -32,7 +32,7 @@ Linux CI installs browser system dependencies with `npx playwright install --wit
 
 The four curated projects are Econolyze (reactive financial workflows), Logistic (domain transitions and after-commit events), Quarkus Rate Limiter (Redis/Lua window algorithms) and Schema per Tenant (JWT-selected PostgreSQL schemas). Claims link to inspected source revisions. Code-level diagrams deliberately show only implemented boundaries. Backend test files were reviewed, not executed here; no benchmarks or production deployment claims are made.
 
-No verified LinkedIn, email address or resume was available. Contact links lead to the verified GitHub profile. Education, employment dates, certifications and achievements have not been invented.
+LinkedIn and both original resume PDFs were supplied by the owner on 2026-11-06. The files are served from `public/resume/`, with English and Portuguese downloads. No additional employment or performance claims have been added to the site.
 
 ## Add a repository
 
