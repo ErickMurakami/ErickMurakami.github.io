@@ -1,0 +1,11 @@
+---
+import SectionPage from "../../components/SectionPage.astro";
+export function getStaticPaths() {
+  return (["projects", "about", "contact"] as const).map((section) => ({
+    params: { section },
+    props: { section },
+  }));
+}
+---
+
+<SectionPage section={Astro.props.section} locale="pt" />

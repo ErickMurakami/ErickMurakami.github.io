@@ -71,3 +71,5 @@ Canonical URLs, Open Graph PNG, robots.txt, sitemap.xml and `.nojekyll` are incl
 
 Custom domain preparation: see [the manual migration guide](docs/domain-migration.md).
 The default origin remains GitHub Pages. No domain cutover is automatic.
+
+Navigation and home listing limits: [navigation guide](docs/navigation.md).

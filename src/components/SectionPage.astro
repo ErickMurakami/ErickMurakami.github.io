@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ProjectGallery from "./ProjectGallery.astro";
+import AboutSection from "./AboutSection.astro";
+import ContactSection from "./ContactSection.astro";
+interface Props {
+  section: "projects" | "about" | "contact";
+  locale: "en" | "pt";
+}
+const { section, locale } = Astro.props;
+const pt = locale === "pt";
+const titles = pt
+  ? { projects: "Projetos", about: "Sobre mim", contact: "Entre em contato" }
+  : { projects: "Projects", about: "About me", contact: "Get in touch" };
+const projects =
+  section === "projects"
+    ? (await getCollection(pt ? "projectsPt" : "projects")).sort(
+        (a, b) => a.data.order - b.data.order,
+      )
+    : [];
+---
+
+<Layout title={titles[section]}>
+  {section === "projects" ? (
+    <section class="shell section">
+      <div class="page-intro">
+        <h1>{titles.projects}</h1>
+      </div>
+      <ProjectGallery projects={projects} locale={locale} />
+    </section>
+  ) : section === "about" ? (
+    <AboutSection locale={locale} standalone />
+  ) : (
+    <div class="section">
+      <ContactSection locale={locale} standalone />
+    </div>
+  )}
+</Layout>

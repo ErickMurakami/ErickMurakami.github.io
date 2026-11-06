@@ -75,7 +75,11 @@ function initializeHeader() {
       // Keep native anchors/history; correct the final position after Astro's hash jump.
       cancelAnimationFrame(projectFrame);
       projectFrame = requestAnimationFrame(() => {
-        revealProjects();
+        revealProjects(
+          matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        );
         updateSectionNavigation();
       });
     },
@@ -149,7 +153,7 @@ function releasedDocumentY(target: HTMLElement) {
     sticky.getBoundingClientRect().top
   );
 }
-function revealProjects() {
+function revealProjects(behavior: ScrollBehavior = "instant") {
   const projects = document.getElementById("projects");
   if (!projects) return;
   const headerOffset =
@@ -162,7 +166,7 @@ function revealProjects() {
       24;
   scrollTo({
     top: releasedDocumentY(projects) - headerOffset,
-    behavior: "instant",
+    behavior,
   });
   synchronizeShowcase();
 }

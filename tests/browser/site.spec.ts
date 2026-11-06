@@ -3,6 +3,9 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 const routes = [
   "/",
+  "/projects/",
+  "/about/",
+  "/contact/",
   "/projects/econolyze/",
   "/projects/logistic/",
   "/projects/quarkus-rate-limiter/",
@@ -190,8 +193,8 @@ for (const locale of ["en", "pt"]) {
       const back = page.locator(".case-back");
       await expect(back).toBeInViewport();
       await back.click();
-      await expect(page).toHaveURL(new RegExp(`${prefix}/#projects$`));
-      await expect(page.locator("#projects")).toBeInViewport();
+      await expect(page).toHaveURL(new RegExp(`${prefix}/projects/$`));
+      await expect(page.locator("h1")).toBeInViewport();
     });
   }
 }

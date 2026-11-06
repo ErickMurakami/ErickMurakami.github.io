@@ -13,7 +13,7 @@ const visibleProjects =
   portion === "lead"
     ? projects.slice(0, 2)
     : portion === "continuation"
-      ? projects.slice(2)
+      ? projects.slice(2, 4)
       : projects;
 const pt = locale === "pt";
 const additional = githubProjects.filter(
@@ -26,7 +26,7 @@ const additional = githubProjects.filter(
     <ProjectCard project={project} locale={locale} />
   ))}
 </div>
-{portion !== "lead" && additional.length > 0 && (
+{!portion && additional.length > 0 && (
   <div class="additional-projects">
     <h3>{pt ? "Mais projetos públicos" : "More projects"}</h3>
     <p>

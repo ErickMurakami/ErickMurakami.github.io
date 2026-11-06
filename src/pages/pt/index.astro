@@ -1,4 +1,6 @@
 ---
+import AboutSection from "../../components/AboutSection.astro";
+import ContactSection from "../../components/ContactSection.astro";
 import Layout from "../../layouts/Layout.astro";
 import ProjectGallery from "../../components/ProjectGallery.astro";
 import TechLabel from "../../components/TechLabel.astro";
@@ -92,44 +94,13 @@ const posts = await getPublishedPosts("pt");
   </section>
   <div class="shell project-continuation">
     <ProjectGallery projects={projects} locale="pt" portion="continuation" />
+    <div class="actions">
+      <a class="text-link" href="/pt/projects/">
+        Ver todos os projetos →
+      </a>
+    </div>
   </div>
   <BlogPreview posts={posts} locale="pt" />
-  <section id="about" class="shell section about-summary">
-    <div>
-      <h2>Sobre mim</h2>
-    </div>
-    <div>
-      <p>
-        No trabalho, desenvolvo aplicações empresariais com Java e Spring Boot.
-        Procuro entender os compromissos de cada decisão e manter a arquitetura
-        simples o suficiente para que o software possa evoluir.
-      </p>
-      <p>
-        Nos projetos pessoais e acadêmicos, exploro novas ferramentas e
-        abordagens. Uso esses projetos para investigar problemas além das
-        demandas do dia a dia. Tenho inglês C1.
-      </p>
-      <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
-        LinkedIn ↗
-      </a>
-    </div>
-  </section>
-  <section id="contact" class="shell contact-banner">
-    <h2>Entre em contato</h2>
-    <a class="button primary" href="https://www.linkedin.com/in/erick-murakami">
-      LinkedIn <Icon />
-    </a>
-    <div class="resume-links">
-      <a class="text-link" href="/resume/erick-murakami-resume-en.pdf" download>
-        Resume · English ↓
-      </a>
-      <a
-        class="text-link"
-        href="/resume/erick-murakami-curriculo-pt.pdf"
-        download
-      >
-        Currículo · Português ↓
-      </a>
-    </div>
-  </section>
+  <AboutSection locale="pt" />
+  <ContactSection locale="pt" />
 </Layout>

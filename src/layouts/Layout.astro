@@ -20,9 +20,9 @@ const blogSlug = onBlog
 const otherPosts = onBlog ? await getPublishedPosts(pt ? "en" : "pt") : [];
 const translatedPageExists =
   !onBlog ||
-  (blogSlug
-    ? otherPosts.some((post) => post.id === blogSlug)
-    : otherPosts.length > 0);
+    (blogSlug
+      ? otherPosts.some((post) => post.id === blogSlug)
+      : otherPosts.length > 0);
 const languageTarget = translatedPageExists
   ? pt
     ? paths.en
@@ -51,12 +51,15 @@ const canonical = new URL(
   isNotFound ? "/404.html" : Astro.url.pathname,
   Astro.site,
 );
+const onHome = Astro.url.pathname === home;
+const sectionLink = (section: string) =>
+  onHome ? `${home}#${section}` : `${home}${section}/`;
 const links = [
-  [`${home}#projects`, localized("Projects", "Projetos")],
-  [`${home}#about`, localized("About", "Sobre")],
-  [`${home}#contact`, localized("Contact", "Contato")],
+  [sectionLink("projects"), localized("Projects", "Projetos")],
+  [sectionLink("about"), localized("About", "Sobre")],
+  [sectionLink("contact"), localized("Contact", "Contato")],
 ];
-if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
+if (posts.length) links.splice(1, 0, [sectionLink("blog"), "Blog"]);
 ---
 
 <!doctype html>
@@ -158,9 +161,11 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
             <a
               href={href}
               aria-current={
-                href.endsWith("#projects") &&
+                href === `${home}projects/` &&
                 Astro.url.pathname.includes("/projects/")
-                  ? "true"
+                  ? Astro.url.pathname === href
+                    ? "page"
+                    : "true"
                   : href === Astro.url.pathname
                     ? "page"
                     : undefined
@@ -202,7 +207,7 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
         <div class="shell case-bar" data-case-bar>
           <a
             class="case-back"
-            href={articleTitle ? `${home}blog/` : `${home}#projects`}
+            href={articleTitle ? `${home}blog/` : `${home}projects/`}
           >
             {articleTitle
               ? localized("← All articles", "← Todos os artigos")
@@ -233,7 +238,7 @@ if (posts.length) links.splice(1, 0, [`${home}blog/`, "Blog"]);
       <div class="footer-links">
         <a href="https://github.com/ErickMurakami">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/erick-murakami">LinkedIn ↗</a>
-        <a href={`${home}#contact`}>{localized("Contact", "Contato")}</a>
+        <a href={sectionLink("contact")}>{localized("Contact", "Contato")}</a>
         <span>© {new Date().getFullYear()} Erick Murakami</span>
       </div>
     </footer>

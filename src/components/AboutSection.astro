@@ -1,0 +1,51 @@
+---
+interface Props {
+  locale: "en" | "pt";
+  standalone?: boolean;
+}
+const { locale, standalone = false } = Astro.props;
+const Heading = standalone ? "h1" : "h2";
+---
+
+{locale === "pt" ? (
+  <section id="about" class="shell section about-summary">
+    <div>
+      <Heading>Sobre mim</Heading>
+    </div>
+    <div>
+      <p>
+        No trabalho, desenvolvo aplicações empresariais com Java e Spring Boot.
+        Procuro entender os compromissos de cada decisão e manter a arquitetura
+        simples o suficiente para que o software possa evoluir.
+      </p>
+      <p>
+        Nos projetos pessoais e acadêmicos, exploro novas ferramentas e
+        abordagens. Uso esses projetos para investigar problemas além das
+        demandas do dia a dia. Tenho inglês C1.
+      </p>
+      <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
+        LinkedIn ↗
+      </a>
+    </div>
+  </section>
+) : (
+  <section id="about" class="shell section about-summary">
+    <div>
+      <Heading>About me</Heading>
+    </div>
+    <div>
+      <p>
+        In my professional work, I develop enterprise applications with Java and
+        Spring Boot. I care about understanding trade-offs and keeping
+        architecture simple enough for the software to evolve.
+      </p>
+      <p>
+        Personal and academic projects give me room to explore new tools and
+        approaches beyond day-to-day requirements. My English proficiency is C1.
+      </p>
+      <a class="text-link" href="https://www.linkedin.com/in/erick-murakami">
+        LinkedIn ↗
+      </a>
+    </div>
+  </section>
+)}

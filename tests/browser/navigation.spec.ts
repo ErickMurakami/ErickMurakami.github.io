@@ -287,8 +287,8 @@ test("Projects header links skip the sticky sequence and language swaps keep the
   await page.locator("#projects .project-card h3 a").first().click();
   await expect(page).toHaveURL(/\/pt\/projects\/econolyze\/$/);
   await page.locator(".case-back").click();
-  await expect(page).toHaveURL(/\/pt\/#projects$/);
-  await assertHeading();
+  await expect(page).toHaveURL(/\/pt\/projects\/$/);
+  await expect(page.locator("h1")).toHaveText("Projetos");
 });
 
 test("a failed client fetch falls back to an ordinary document navigation", async ({

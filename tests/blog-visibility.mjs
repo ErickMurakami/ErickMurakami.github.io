@@ -78,6 +78,7 @@ try {
   assert.ok(
     ptHome.includes('id="blog"') && ptHome.includes('href="/pt/blog/"'),
   );
+  assert.ok(ptHome.includes('href="/pt/#blog"'));
   assert.equal(await exists("dist/blog/index.html"), baseline.en);
   const article = await read(`dist/pt/blog/${slug}/index.html`);
   assert.ok(article.includes("<table>") && article.includes("<pre"));
