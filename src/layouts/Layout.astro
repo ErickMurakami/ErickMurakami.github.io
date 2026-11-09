@@ -67,7 +67,7 @@ if (posts.length)
 ---
 
 <!doctype html>
-<html lang={pt ? "pt-BR" : "en"} class="dark" transition:animate="none">
+<html lang={pt ? "pt-BR" : "en-GB"} class="dark" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <ClientRouter fallback="swap" />
@@ -103,7 +103,7 @@ if (posts.length)
     {(!pt || translatedPageExists) && (
       <link
         rel="alternate"
-        hreflang="en"
+        hreflang="en-GB"
         href={new URL(paths.en, Astro.site)}
       />
     )}
@@ -124,7 +124,7 @@ if (posts.length)
         )
       }
     />
-    <meta property="og:locale" content={pt ? "pt_BR" : "en_US"} />
+    <meta property="og:locale" content={pt ? "pt_BR" : "en_GB"} />
     <script is:inline>
       try {
         document.documentElement.classList.toggle(
@@ -182,7 +182,7 @@ if (posts.length)
         <a
           class="language-toggle"
           href={languageTarget}
-          hreflang={pt ? "en" : "pt-BR"}
+          hreflang={pt ? "en-GB" : "pt-BR"}
           aria-label={localized(
             "Language: English. Switch to Portuguese",
             "Idioma: português. Mudar para inglês",

@@ -57,9 +57,9 @@ for (const [file, nodes] of documents) {
   );
   assert.equal(
     attrs(nodes.find((n) => n.tagName === "html")).lang,
-    path.startsWith("/pt/") ? "pt-BR" : "en",
+    path.startsWith("/pt/") ? "pt-BR" : "en-GB",
   );
-  for (const language of ["en", "pt-BR"]) {
+  for (const language of ["en-GB", "pt-BR"]) {
     const alternate = nodes.find(
       (n) =>
         n.tagName === "link" &&
@@ -69,7 +69,7 @@ for (const [file, nodes] of documents) {
     if (
       !alternate &&
       (path.includes("/blog/") || path.includes("/certifications/")) &&
-      language !== (path.startsWith("/pt/") ? "pt-BR" : "en")
+      language !== (path.startsWith("/pt/") ? "pt-BR" : "en-GB")
     )
       continue;
     assert.ok(alternate, `Missing language alternate in ${file}`);

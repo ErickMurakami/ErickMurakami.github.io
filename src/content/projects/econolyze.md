@@ -37,13 +37,13 @@ Inside the financial service, application services and DTO mapping sit alongside
 `AccountService` scopes account update, delete and lookup queries by the authenticated user. Transaction updates reject ownership mismatches and prevent changing the amount of a paid transaction. The reactive return type is `Uni`, including error propagation through the pipeline.
 
 ## Trade-offs
-Reactive composition requires careful session and transaction management. Separate services create more deployment and failure boundaries than a single application. No throughput or latency claim is made here. Ownership checks observed in some methods do not prove complete authorization coverage: direct transaction lookup and account balance mutation deserve further audit.
+Reactive composition requires careful session and transaction management. Separate services create more deployment and failure boundaries than a single application. No throughput or latency claim is made here. Ownership checks observed in some methods do not prove complete authorisation coverage: direct transaction lookup and account balance mutation deserve further audit.
 
 ## Testing and quality
 The inspected financial service has a starter greeting test, rather than evidence of comprehensive financial invariant tests. Its deployment workflow packages with tests skipped. Source inspection does not establish a successful production deployment.
 
 ## Improvements
-Add tests for payment rollback, concurrent balance changes and resource ownership on every path. Document service-to-service failure behavior. Validate the need for each deployment boundary before expanding the system.
+Add tests for payment rollback, concurrent balance changes and resource ownership on every path. Document service-to-service failure behaviour. Validate the need for each deployment boundary before expanding the system.
 
 ## Source evidence
 

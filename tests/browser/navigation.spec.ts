@@ -80,12 +80,12 @@ test("language navigation keeps the document, theme, showcase progress and histo
     "href",
     "https://erickmurakami.github.io/pt/",
   );
-  await expect(page.locator('link[hreflang="en"]')).toHaveAttribute(
+  await expect(page.locator('link[hreflang="en-GB"]')).toHaveAttribute(
     "href",
     "https://erickmurakami.github.io/",
   );
   await page.goBack();
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-GB");
   await expectSameDocument(page);
   await expect(page.locator("[data-expertise-showcase]")).toHaveAttribute(
     "data-active-card",
@@ -95,7 +95,7 @@ test("language navigation keeps the document, theme, showcase progress and histo
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expectSameDocument(page);
   await clickLanguage(page);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-GB");
   await expectSameDocument(page);
   await page.locator(".theme").click();
   await expect(page.locator("html")).toHaveClass(/dark/);
@@ -219,7 +219,7 @@ test("repeated language swaps do not accumulate observers or window listeners", 
     await clickLanguage(page);
     await expect(page.locator("html")).toHaveAttribute(
       "lang",
-      i % 2 === 0 ? "pt-BR" : "en",
+      i % 2 === 0 ? "pt-BR" : "en-GB",
     );
     await expect(page.locator("[data-expertise-showcase]")).toHaveClass(
       /is-scroll-showcase/,

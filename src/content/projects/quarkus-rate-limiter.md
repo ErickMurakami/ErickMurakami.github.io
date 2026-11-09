@@ -15,7 +15,7 @@ The goal is to make the difference between counting strategies concrete: what st
 
 ## Problem
 
-An API needs to decide whether a client can make another request in a time window. With multiple application instances, local counters do not provide a shared view. Reading and updating a counter in separate operations also introduces races. The implementation explores shared counters and timestamp logs while documenting the burst behavior of fixed windows.
+An API needs to decide whether a client can make another request in a time window. With multiple application instances, local counters do not provide a shared view. Reading and updating a counter in separate operations also introduces races. The implementation explores shared counters and timestamp logs while documenting the burst behaviour of fixed windows.
 
 ## Architecture
 A JAX-RS request filter builds an IP key and calls `RateLimiterService`. Configuration selects one of two Redis stores. Each store executes its decision as one Lua script.
@@ -33,13 +33,13 @@ The fixed-window key includes the current window number. Its script increments t
 The filter stores the decision on the request context so the response filter does not query Redis again. Rejected requests receive HTTP 429 and rate-limit headers. The service records an OpenTelemetry span with the algorithm and decision.
 
 ## Trade-offs
-Fixed windows use less state but permit bursts around window boundaries. Sliding logs retain more request entries. The current filter trusts forwarded IP headers and falls back to a shared `unknown` key; deployment behind a trusted proxy needs an explicit policy. Redis failure behavior and application-clock skew remain operational concerns.
+Fixed windows use less state but permit bursts around window boundaries. Sliding logs retain more request entries. The current filter trusts forwarded IP headers and falls back to a shared `unknown` key; deployment behind a trusted proxy needs an explicit policy. Redis failure behaviour and application-clock skew remain operational concerns.
 
 ## Testing and quality
 Unit tests cover rate-limit keys, and integration profiles exercise each window algorithm. The Maven configuration defaults to skipping integration tests; their existence is not evidence that every build runs them. No load-test result or benchmark is claimed.
 
 ## Improvements
-Test concurrent callers and clock-boundary behavior, configure trusted proxy handling, define fail-open versus fail-closed behavior and avoid high-cardinality trace attributes for sensitive client identifiers.
+Test concurrent callers and clock-boundary behaviour, configure trusted proxy handling, define fail-open versus fail-closed behaviour and avoid high-cardinality trace attributes for sensitive client identifiers.
 
 ## Source evidence
 

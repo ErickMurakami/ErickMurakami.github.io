@@ -45,7 +45,7 @@ for (const theme of ["dark", "light"]) {
           );
         await expect(page.locator("html")).toHaveAttribute(
           "lang",
-          route.startsWith("/pt/") ? "pt-BR" : "en",
+          route.startsWith("/pt/") ? "pt-BR" : "en-GB",
         );
         expect(
           await page.evaluate(
@@ -166,7 +166,7 @@ test("language switch preserves case-study route and resume language", async ({
     })
     .click();
   await expect(
-    page.getByRole("link", { name: "View resume", exact: false }),
+    page.getByRole("link", { name: "View CV", exact: false }),
   ).toHaveAttribute("href", "/resume/erick-murakami-resume-en.pdf");
 });
 
@@ -234,7 +234,7 @@ test("current language flag swaps between UK and Brazil while preserving section
   );
   await page.locator(".language-toggle").click();
   await expect(page).toHaveURL(/\/#projects$/);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-GB");
   await expect(page.locator(".language-toggle img")).toHaveAttribute(
     "src",
     "/flags/united-kingdom.svg",

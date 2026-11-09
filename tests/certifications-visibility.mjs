@@ -66,7 +66,7 @@ try {
   const ptPage = await read("dist/pt/certifications/index.html");
   assert.ok(ptPage.includes("Temporary QA credential"));
   assert.ok(ptPage.includes("Obtidas"));
-  assert.ok(!/rel="alternate"\s+hreflang="en"/.test(ptPage));
+  assert.ok(!/rel="alternate"\s+hreflang="en-GB"/.test(ptPage));
   assert.match(await read("dist/sitemap.xml"), /\/pt\/certifications\//);
   await writeFile(paths[0], fixture(false));
   build();
@@ -79,7 +79,7 @@ try {
   );
   assert.match(
     await read("dist/pt/certifications/index.html"),
-    /hreflang="en"/,
+    /hreflang="en-GB"/,
   );
   await writeFile(
     paths[1],

@@ -83,7 +83,7 @@ for (const prefix of ["", "/pt"]) {
       2,
     );
     await expect(education.first()).toContainText(
-      prefix ? "Graduação tecnológica" : "Undergraduate technology program",
+      prefix ? "Graduação tecnológica" : "Undergraduate technology programme",
     );
     await expect(education.first()).not.toContainText("Bachelor");
     await expect(education.first().locator(".education-project")).toHaveCount(
@@ -119,7 +119,7 @@ for (const prefix of ["", "/pt"]) {
           ]
         : [
             "Technical education focused on programming fundamentals, software development, and relational databases.",
-            "During the program, I gained hands-on experience with technologies including Java, C#, C++, JavaScript, PHP, HTML, CSS, and MySQL, as well as application development using Android Studio.",
+            "During the programme, I gained hands-on experience with technologies including Java, C#, C++, JavaScript, PHP, HTML, CSS, and MySQL, as well as application development using Android Studio.",
             "For my final academic project, I developed a second-hand book marketplace application using C# and MySQL, applying programming fundamentals, application development concepts, and relational data persistence.",
           ],
     );

@@ -40,7 +40,7 @@ Schemas provide logical namespace isolation on one shared database, not separate
 `TenantIsolationIT` checks that each user reads only their tenant's seed data and that a customer created in tenant A is invisible to tenant B. It also checks unauthenticated access returns 401. The repository supplies Testcontainers support and CI with PostgreSQL. These backend tests were inspected, not run for this portfolio.
 
 ## Improvements
-Add tenant provisioning and migration lifecycle management before scaling tenant count. Replace demo authentication before deployment. Explicitly propagate tenant context into asynchronous work; that flow is outside the current implementation.
+Add tenant provisioning and migration lifecycle management before increasing the number of tenants. Replace demo authentication before deployment. Explicitly propagate tenant context into asynchronous work; that flow is outside the current implementation.
 
 ## Source evidence
 

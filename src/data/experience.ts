@@ -22,8 +22,8 @@ export const experience: Experience[] = [
     responsibilities: {
       en: [
         "Develop and maintain backend integrations for an enterprise platform, working on REST API contracts with frontend engineers.",
-        "Implement multi-tenant authorization and granular access control across organizations.",
-        "Lead the migration from a shared database schema to schema-per-tenant isolation.",
+        "Implement multi-tenant authorisation and granular access control across organisations.",
+        "Led the migration from a shared database schema to schema-per-tenant isolation.",
         "Use Spring Application Events to advance sales orders when production orders are completed.",
       ],
       pt: [
@@ -56,7 +56,7 @@ export const experience: Experience[] = [
       en: [
         "Acted as the main IT point of contact, translating requirements from company directors into software, integrations and automation.",
         "Migrated legacy PHP API integrations to automated n8n workflows.",
-        "Modernized a legacy desktop monolith into a Java and Angular web application, from requirements and architecture to implementation and delivery.",
+        "Modernised a legacy desktop monolith into a Java and Angular web application, from requirements and architecture to implementation and delivery.",
       ],
       pt: [
         "Atuação como principal ponto de contato de TI, traduzindo requisitos da diretoria em software, integrações e automações.",

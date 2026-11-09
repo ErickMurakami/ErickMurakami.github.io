@@ -89,7 +89,7 @@ try {
   assert.match(article, /class="case-back"\s+href="\/pt\/blog\/"/);
   assert.equal((article.match(/<h1[ >]/g) ?? []).length, 1);
   assert.match(article, /<a\s+class="language-toggle"\s+href="\/"/);
-  assert.ok(!/rel="alternate"\s+hreflang="en"/.test(article));
+  assert.ok(!/rel="alternate"\s+hreflang="en-GB"/.test(article));
   assert.ok((await read("dist/sitemap.xml")).includes(`/pt/blog/${slug}/`));
 
   await writeFile(files.en, fixture(false));
@@ -98,7 +98,7 @@ try {
   assert.ok((await read("dist/index.html")).includes('id="blog"'));
   const translated = await read(`dist/pt/blog/${slug}/index.html`);
   assert.ok(translated.includes(`href="/blog/${slug}/"`));
-  assert.ok(/rel="alternate"\s+hreflang="en"/.test(translated));
+  assert.ok(/rel="alternate"\s+hreflang="en-GB"/.test(translated));
   console.log(
     "Blog visibility passed: drafts and local-only articles hidden, published routes listed, independent languages, translated links and Markdown rendering.",
   );
