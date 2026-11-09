@@ -61,7 +61,7 @@ for (const prefix of ["", "/pt"]) {
       page.locator("#experience .experience-details").first(),
     ).toBeVisible();
     await expect(page.locator("#about")).toContainText(
-      prefix ? "Inglês C1" : "English C1",
+      prefix ? "Inglês C2" : "English C2",
     );
     await expect(page.locator("#courses")).toContainText(
       prefix
