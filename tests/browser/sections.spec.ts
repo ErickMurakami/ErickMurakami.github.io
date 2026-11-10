@@ -54,7 +54,7 @@ test("Projects navigation scrolls progressively instead of jumping", async ({
     requestAnimationFrame(sample);
   });
   await page.locator('.primary-nav a[href="/#projects"]').click();
-  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(1000);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
   await page.waitForTimeout(300);
   const samples = await page.evaluate(
     () => (window as typeof window & { scrollSamples: number[] }).scrollSamples,

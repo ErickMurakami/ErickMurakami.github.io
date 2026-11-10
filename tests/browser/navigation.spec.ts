@@ -33,7 +33,7 @@ async function clickLanguage(page: import("@playwright/test").Page) {
   );
 }
 
-test("language navigation keeps the document, theme, showcase progress and history", async ({
+test("language navigation keeps the document, theme, reading position and history", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -43,33 +43,13 @@ test("language navigation keeps the document, theme, showcase progress and histo
   await markDocument(page);
   await page.locator(".theme").click();
   await expect(page.locator("html")).not.toHaveClass(/dark/);
-  await page.locator("[data-expertise-showcase]").evaluate((el) => {
-    const section = el as HTMLElement;
-    const travel =
-      section.offsetHeight -
-      (section.querySelector(".showcase-sticky") as HTMLElement).offsetHeight;
-    scrollTo({
-      top:
-        section.offsetTop -
-        parseFloat(section.style.getPropertyValue("--showcase-top")) +
-        travel * 0.65,
-      behavior: "instant",
-    });
-  });
-  await expect(page.locator("[data-expertise-showcase]")).toHaveAttribute(
-    "data-active-card",
-    "2",
-  );
+  await page.evaluate(() => scrollTo({ top: 160, behavior: "instant" }));
   const scroll = await page.evaluate(() => scrollY);
   await clickLanguage(page);
   await expect(page).toHaveURL(/\/pt\/$/);
   await expectSameDocument(page);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.locator("html")).not.toHaveClass(/dark/);
-  await expect(page.locator("[data-expertise-showcase]")).toHaveAttribute(
-    "data-active-card",
-    "2",
-  );
   await expect.poll(() => page.evaluate(() => scrollY)).toBeCloseTo(scroll, 0);
   await expect(page).toHaveTitle(/Engenheiro de Software/);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
@@ -87,10 +67,6 @@ test("language navigation keeps the document, theme, showcase progress and histo
   await page.goBack();
   await expect(page.locator("html")).toHaveAttribute("lang", "en-GB");
   await expectSameDocument(page);
-  await expect(page.locator("[data-expertise-showcase]")).toHaveAttribute(
-    "data-active-card",
-    "2",
-  );
   await page.goForward();
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expectSameDocument(page);
@@ -141,10 +117,10 @@ test("translated project navigation keeps reading position and replaces SEO meta
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(readingY);
   await page.locator(".brand").click();
   await expect(page).toHaveURL(/127\.0\.0\.1:4321\/$/);
-  await expect(page.locator("[data-expertise-showcase]")).toHaveClass(
+  await expect(page.locator("[data-expertise-showcase]")).not.toHaveClass(
     /is-scroll-showcase/,
   );
-  await expect(page.locator("#projects h2")).toBeInViewport();
+  await expect(page.locator(".hero h1")).toBeInViewport();
   await expectSameDocument(page);
   expect(errors).toEqual([]);
 });
@@ -159,7 +135,7 @@ test("repeated language swaps do not accumulate observers or window listeners", 
     const NativeResize = window.ResizeObserver;
     window.IntersectionObserver = class extends NativeIntersection {
       observe(target: Element) {
-        if (target.matches("[data-expertise-showcase]"))
+        if (target.matches(".circuit-field"))
           intersections.add(this);
         super.observe(target);
       }
@@ -204,7 +180,7 @@ test("repeated language swaps do not accumulate observers or window listeners", 
     });
   });
   await page.goto("/");
-  await expect(page.locator("[data-expertise-showcase]")).toHaveClass(
+  await expect(page.locator("[data-expertise-showcase]")).not.toHaveClass(
     /is-scroll-showcase/,
   );
   const snapshot = () =>
@@ -221,7 +197,7 @@ test("repeated language swaps do not accumulate observers or window listeners", 
       "lang",
       i % 2 === 0 ? "pt-BR" : "en-GB",
     );
-    await expect(page.locator("[data-expertise-showcase]")).toHaveClass(
+    await expect(page.locator("[data-expertise-showcase]")).not.toHaveClass(
       /is-scroll-showcase/,
     );
     await expect.poll(snapshot).toEqual(baseline);
