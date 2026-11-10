@@ -87,6 +87,7 @@ const posts = await getPublishedPosts("en");
           </strong>
         </div>
       </div>
+      <div class="shell expertise-section"><ExpertiseGrid locale="en" /></div>
       <section id="projects" class="shell section">
         <div class="section-heading">
           <div>
@@ -97,14 +98,10 @@ const posts = await getPublishedPosts("en");
             View all projects →
           </a>
         </div>
-        <ProjectGallery projects={projects} locale="en" portion="lead" />
+        <ProjectGallery projects={projects} locale="en" includeAdditional={false} />
       </section>
     </div>
   </section>
-  <div class="shell project-continuation">
-    <ProjectGallery projects={projects} locale="en" portion="continuation" />
-  </div>
-  <div class="shell expertise-section"><ExpertiseGrid locale="en" /></div>
   <BlogPreview posts={posts} locale="en" />
   <AboutSection locale="en" />
   <ContactSection locale="en" />

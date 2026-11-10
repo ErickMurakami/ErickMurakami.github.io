@@ -6,15 +6,9 @@ import { githubProjects } from "../lib/projects";
 interface Props {
   projects: (CollectionEntry<"projects"> | CollectionEntry<"projectsPt">)[];
   locale?: "en" | "pt";
-  portion?: "lead" | "continuation";
+  includeAdditional?: boolean;
 }
-const { projects, locale = "en", portion } = Astro.props;
-const visibleProjects =
-  portion === "lead"
-    ? projects.slice(0, 2)
-    : portion === "continuation"
-      ? projects.slice(2, 4)
-      : projects;
+const { projects, locale = "en", includeAdditional = true } = Astro.props;
 const pt = locale === "pt";
 const additional = githubProjects.filter(
   (repo) => !projects.some((project) => project.data.repo === repo.name),
@@ -22,11 +16,11 @@ const additional = githubProjects.filter(
 ---
 
 <div class="project-grid">
-  {visibleProjects.map((project) => (
+  {projects.map((project) => (
     <ProjectCard project={project} locale={locale} />
   ))}
 </div>
-{!portion && additional.length > 0 && (
+{includeAdditional && additional.length > 0 && (
   <div class="additional-projects">
     <h3>{pt ? "Mais projetos públicos" : "More projects"}</h3>
     <p>
