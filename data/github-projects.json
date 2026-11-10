@@ -19,6 +19,25 @@
       "updatedAt": "2026-11-10T20:24:31Z"
     },
     {
+      "name": "Logistic",
+      "description": "Logistics management system built with Java, Spring Boot, PostgreSQL, Redis, and RabbitMQ, featuring asynchronous messaging, optimistic locking, and JWT security.",
+      "url": "https://github.com/ErickMurakami/Logistic",
+      "language": "Java",
+      "topics": [
+        "distributed-systems",
+        "java",
+        "jwt",
+        "optimistic-locking",
+        "portfolio",
+        "postgresql",
+        "rabbitmq",
+        "redis",
+        "spring-boot",
+        "testcontainers"
+      ],
+      "updatedAt": "2026-11-10T20:36:51Z"
+    },
+    {
       "name": "quarkus-rate-limiter",
       "description": "Distributed rate limiter built with Java, Quarkus, and Redis, featuring Fixed/Sliding Window algorithms, atomic Lua scripts, and OpenTelemetry.",
       "url": "https://github.com/ErickMurakami/quarkus-rate-limiter",
