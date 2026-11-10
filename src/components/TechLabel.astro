@@ -15,6 +15,11 @@ const logos: Record<string, string> = {
   rabbitmq: "rabbitmq",
   lua: "lua",
   hibernate: "hibernate",
+  flyway: "flyway",
+  opentelemetry: "opentelemetry",
+  angular: "angular",
+  php: "php",
+  n8n: "n8n",
 };
 const key = Object.keys(logos).find((key) => normalized.startsWith(key));
 ---
@@ -22,7 +27,7 @@ const key = Object.keys(logos).find((key) => normalized.startsWith(key));
 <span class="tech-label">
   {key && (
     <img
-      src={`/technologies/${logos[key]}.svg`}
+      src={`/technologies/${logos[key]}.${key === "langchain4j" ? "png" : "svg"}`}
       alt=""
       width="22"
       height="22"

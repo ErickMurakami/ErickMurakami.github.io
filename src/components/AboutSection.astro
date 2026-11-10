@@ -1,4 +1,5 @@
 ---
+import TechLabel from "./TechLabel.astro";
 import { experience } from "../data/experience";
 import { getPublishedCertifications } from "../lib/certifications";
 import TrainingSection from "./TrainingSection.astro";
@@ -105,7 +106,7 @@ const paragraphs = pt
                 aria-label={pt ? "Tecnologias utilizadas" : "Technologies used"}
               >
                 {position.technologies.map((technology) => (
-                  <li>{technology}</li>
+                  <li><TechLabel name={technology} /></li>
                 ))}
               </ul>
             </Details>
