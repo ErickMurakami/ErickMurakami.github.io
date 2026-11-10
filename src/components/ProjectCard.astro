@@ -14,6 +14,7 @@ const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
 ---
 
 <article class="project-card" data-project={p.repo}>
+  <span class="project-index" aria-hidden="true">{String(p.order).padStart(2, "0")}</span>
   <p class="eyebrow">{p.focus}</p>
   <h3>
     <a href={projectPath}>{p.title}</a>

@@ -5,6 +5,7 @@ import Layout from "../../layouts/Layout.astro";
 import ProjectGallery from "../../components/ProjectGallery.astro";
 import TechLabel from "../../components/TechLabel.astro";
 import Icon from "../../components/Icon.astro";
+import CircuitField from "../../components/CircuitField.astro";
 import ExpertiseGrid from "../../components/ExpertiseGrid.astro";
 import BlogPreview from "../../components/BlogPreview.astro";
 import { getPublishedPosts } from "../../lib/blog";
@@ -64,7 +65,7 @@ const posts = await getPublishedPosts("pt");
             Ver currículo ↗
           </a>
         </div>
-        <ExpertiseGrid locale="pt" />
+        <CircuitField />
       </div>
       <div class="specialty-strip">
         <div class="shell">
@@ -109,6 +110,7 @@ const posts = await getPublishedPosts("pt");
   <div class="shell project-continuation">
     <ProjectGallery projects={projects} locale="pt" portion="continuation" />
   </div>
+  <div class="shell expertise-section"><ExpertiseGrid locale="pt" /></div>
   <BlogPreview posts={posts} locale="pt" />
   <AboutSection locale="pt" />
   <ContactSection locale="pt" />

@@ -165,7 +165,7 @@ function revealProjects(behavior: ScrollBehavior = "instant") {
     (document.querySelector(".header")?.getBoundingClientRect().height ?? 0) +
       24;
   scrollTo({
-    top: releasedDocumentY(projects) - headerOffset,
+    top: releasedDocumentY(projects) + parseFloat(getComputedStyle(projects).paddingTop) - headerOffset,
     behavior,
   });
   synchronizeShowcase();
