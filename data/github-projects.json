@@ -1,4 +1,55 @@
 {
   "version": 1,
-  "projects": []
+  "projects": [
+    {
+      "name": "Econolyze",
+      "description": "Personal finance platform built with Java, Quarkus, PostgreSQL, and Next.js, featuring microservices, reactive APIs, and AI-powered insights.",
+      "url": "https://github.com/ErickMurakami/Econolyze",
+      "language": "Java",
+      "topics": [
+        "fintech",
+        "java",
+        "langchain4j",
+        "microservices",
+        "nextjs",
+        "portfolio",
+        "postgresql",
+        "quarkus"
+      ],
+      "updatedAt": "2026-11-10T20:24:31Z"
+    },
+    {
+      "name": "quarkus-rate-limiter",
+      "description": "Distributed rate limiter built with Java, Quarkus, and Redis, featuring Fixed/Sliding Window algorithms, atomic Lua scripts, and OpenTelemetry.",
+      "url": "https://github.com/ErickMurakami/quarkus-rate-limiter",
+      "language": "Java",
+      "topics": [
+        "distributed-systems",
+        "java",
+        "opentelemetry",
+        "portfolio",
+        "quarkus",
+        "rate-limiting",
+        "redis"
+      ],
+      "updatedAt": "2026-11-10T20:25:35Z"
+    },
+    {
+      "name": "quarkus-schema-per-tenant",
+      "description": "Schema-per-tenant multitenancy with Java, Quarkus, PostgreSQL, JWT-based tenant resolution, Flyway migrations, and tenant isolation tests.",
+      "url": "https://github.com/ErickMurakami/quarkus-schema-per-tenant",
+      "language": "Java",
+      "topics": [
+        "flyway",
+        "hibernate-orm",
+        "java",
+        "jwt",
+        "multitenancy",
+        "portfolio",
+        "postgresql",
+        "quarkus"
+      ],
+      "updatedAt": "2026-11-10T20:26:36Z"
+    }
+  ]
 }
