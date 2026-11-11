@@ -16,7 +16,7 @@
         "postgresql",
         "quarkus"
       ],
-      "updatedAt": "2026-11-10T20:24:31Z"
+      "updatedAt": "2026-11-10T21:52:03Z"
     },
     {
       "name": "Logistic",
@@ -69,6 +69,25 @@
         "quarkus"
       ],
       "updatedAt": "2026-11-10T20:26:36Z"
+    },
+    {
+      "name": "RoastMyTaste",
+      "description": "AI-powered music taste analyzer built with Java, Spring Boot, Spring AI, and Spotify OAuth2, generating personalized roasts from listening habits.",
+      "url": "https://github.com/ErickMurakami/RoastMyTaste",
+      "language": "Java",
+      "topics": [
+        "clean-architecture",
+        "genai",
+        "generative-ai",
+        "java",
+        "oauth2",
+        "portfolio",
+        "rest-api",
+        "spotify",
+        "spring-ai",
+        "spring-boot"
+      ],
+      "updatedAt": "2026-11-10T20:35:27Z"
     }
   ]
 }
