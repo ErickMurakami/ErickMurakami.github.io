@@ -7,6 +7,7 @@ import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
 import "@fontsource/inter/latin-700.css";
 import Icon from "../components/Icon.astro";
+import DriftCursor from "../components/DriftCursor.astro";
 import { getPublishedCertifications } from "../lib/certifications";
 import { getPublishedPosts } from "../lib/blog";
 import { languagePaths } from "../lib/i18n";
@@ -263,9 +264,11 @@ if (posts.length)
         <span>© {new Date().getFullYear()} Erick Murakami</span>
       </div>
     </footer>
+    <DriftCursor />
     <script>
       import "../scripts/navigation";
       import "../scripts/environment";
+      import "../scripts/cursor";
     </script>
   </body>
 </html>

@@ -60,7 +60,7 @@ for (const route of ['/', '/projects/', '/pt/projects/']) {
     }, point);
     await page.mouse.move(point.x, point.y);
     await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
-    await expect(page.locator('body')).toHaveCSS('cursor', /arrow-dark\.svg/);
+    await expect(page.locator('[data-drift-cursor]')).toBeHidden();
     for (const distance of [25, 30, 25]) {
       const beforeScroll = await page.evaluate(() => scrollY);
       await page.mouse.wheel(0, distance);
@@ -111,4 +111,56 @@ test("scroll reveals finish with readable content and respect a changed motion p
   await expect(card).toHaveCSS('opacity', '1');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const entry of await page.locator('.reveal').all()) await expect(entry).toHaveCSS('opacity', '1');
+});
+
+for (const theme of ['dark', 'light']) {
+  for (const route of ['/', '/projects/roast-my-taste/']) {
+    test(`scroll cursor follows page movement and resets ${theme} ${route}`, async ({ page }) => {
+      await page.addInitScript(value => localStorage.setItem('theme', value), theme);
+      await page.goto(route);
+      await page.mouse.move(20, 400);
+      const root = page.locator('html');
+      const body = page.locator('body');
+      const cursor = page.locator('[data-drift-cursor]');
+      const turnFrom = (target: number) => cursor.evaluate((el, target) => {
+        const angle = parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle')) || 0;
+        return Math.abs(((angle - target) % 360 + 540) % 360 - 180);
+      }, target);
+      for (const [distance, direction] of [[120, 'down'], [-80, 'up']] as const) {
+        await page.mouse.wheel(0, distance);
+        await expect(root).toHaveAttribute('data-scroll-direction', direction);
+        await expect(cursor).toBeVisible();
+        await expect.poll(() => turnFrom(direction === 'down' ? 225 : 45), { intervals: [16, 32, 50] }).toBeLessThan(20);
+        await expect(root).not.toHaveAttribute('data-scroll-direction', /.+/);
+        await expect.poll(() => turnFrom(0)).toBeLessThan(3);
+      }
+      await page.keyboard.press('PageDown');
+      await expect(root).toHaveAttribute('data-scroll-direction', 'down');
+      await expect.poll(() => turnFrom(225), { intervals: [16, 32, 50] }).toBeLessThan(20);
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await expect(root).not.toHaveAttribute('data-scroll-direction', /.+/);
+      await expect(cursor).toBeHidden();
+      await page.mouse.wheel(0, 40);
+      await expect(body).not.toHaveCSS('cursor', /scroll-.*\.svg/);
+    });
+  }
+}
+
+test('arrow drifts with mouse direction, settles and gives way to the native project eye', async ({ page }) => {
+  await page.goto('/');
+  const cursor = page.locator('[data-drift-cursor]');
+  await page.mouse.move(80, 300);
+  await page.mouse.move(240, 300, { steps: 8 });
+  await expect(cursor).toBeVisible();
+  await expect.poll(() => cursor.evaluate(el => parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle'))), { intervals: [16, 32, 50] }).toBeGreaterThan(90);
+  await expect.poll(() => cursor.evaluate(el => Math.abs(parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle'))))).toBeLessThan(3);
+  const box = (await cursor.boundingBox())!;
+  expect(Math.abs(box.x - 237) + Math.abs(box.y - 297)).toBeLessThan(2);
+  const card = page.locator('[data-project="RoastMyTaste"]');
+  await card.hover();
+  await expect(cursor).toBeHidden();
+  await expect(card).toHaveCSS('cursor', /view-dark\.svg/);
+  await page.mouse.wheel(0, 30);
+  await expect(cursor).toBeHidden();
+  await expect(card).toHaveCSS('cursor', /view-dark\.svg/);
 });

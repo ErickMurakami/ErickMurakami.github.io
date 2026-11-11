@@ -139,11 +139,23 @@ h2 { font-size: clamp(30px,3.4vw,44px); font-weight: 500; }
 .project-card[data-project] .project-title-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
 .project-card[data-project] .card-links { position: relative; z-index: 2; pointer-events: none; }
 .project-card[data-project] .card-links a { pointer-events: auto; }
+.drift-cursor { display: none; position: fixed; top: 0; left: 0; z-index: 60; width: 24px; height: 24px; pointer-events: none; }
+.drift-cursor svg { display: block; overflow: visible; transform: rotate(var(--cursor-angle, 0deg)); transform-origin: 3px 3px; fill: #5f6877; stroke: #fffdf7; }
+.dark .drift-cursor svg { fill: #a3a9b4; stroke: #0d0f14; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   html, body { cursor: url('/cursors/arrow-light.svg?v=slate-1') 3 3, auto; }
   .dark, .dark body { cursor: url('/cursors/arrow-dark.svg?v=slate-1') 3 3, auto; }
   a, button, summary { cursor: url('/cursors/hand-light.svg?v=slate-1') 9 3, pointer; }
   .dark a, .dark button, .dark summary { cursor: url('/cursors/hand-dark.svg?v=slate-1') 9 3, pointer; }
+  html[data-scroll-direction='up'] { --scroll-cursor: url('/cursors/scroll-up-light.svg?v=slate-1') 12 2, auto; }
+  html[data-scroll-direction='down'] { --scroll-cursor: url('/cursors/scroll-down-light.svg?v=slate-1') 12 22, auto; }
+  html.dark[data-scroll-direction='up'] { --scroll-cursor: url('/cursors/scroll-up-dark.svg?v=slate-1') 12 2, auto; }
+  html.dark[data-scroll-direction='down'] { --scroll-cursor: url('/cursors/scroll-down-dark.svg?v=slate-1') 12 22, auto; }
+  html[data-scroll-direction], html[data-scroll-direction] body, html[data-scroll-direction] :is(a, button, summary) { cursor: var(--scroll-cursor); }
+  html.has-drift-cursor, html.has-drift-cursor body { cursor: none; }
+  .has-drift-cursor .drift-cursor { display: block; }
+  /* Native card/hand cursors keep priority, including under a stationary mouse during scrolling. */
+  html:has(a:hover, button:hover, summary:hover, .project-card[data-project]:hover) .drift-cursor { display: none; }
   .project-card[data-project], .project-card[data-project] * { cursor: url('/cursors/view-light.svg?v=slate-1') 12 12, pointer; }
   .dark .project-card[data-project], .dark .project-card[data-project] * { cursor: url('/cursors/view-dark.svg?v=slate-1') 12 12, pointer; }
   .project-card[data-project] a[target='_blank'], .project-card[data-project] a[target='_blank'] * { cursor: url('/cursors/hand-light.svg?v=slate-1') 9 3, pointer; }
