@@ -11,6 +11,7 @@ const routes = [
   "/projects/logistic/",
   "/projects/quarkus-rate-limiter/",
   "/projects/quarkus-schema-per-tenant/",
+  "/projects/roast-my-taste/",
   "/404.html",
 ];
 const allRoutes = [
@@ -108,7 +109,7 @@ test("content works without JavaScript and reduced motion is honored", async ({
     staticPage
       .locator(".project-card")
       .getByRole("link", { name: "Read case study" }),
-  ).toHaveCount(4);
+  ).toHaveCount(5);
   await staticPage
     .getByRole("link", { name: "Econolyze", exact: true })
     .first()

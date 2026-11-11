@@ -503,6 +503,22 @@ nav a {
 .prose h3 {
   margin-block: 30px 15px;
 }
+.prose .project-screenshot {
+  margin-block: 28px;
+}
+.prose .project-screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.prose .project-screenshot figcaption {
+  margin-top: 12px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.7;
+}
 .prose p {
   margin-block: 16px;
 }

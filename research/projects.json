@@ -42,5 +42,27 @@
     "branch": "main",
     "revision": "773e75e",
     "public": true
+  },
+  {
+    "name": "RoastMyTaste",
+    "url": "https://github.com/ErickMurakami/RoastMyTaste",
+    "description": "AI-powered music taste analyzer built with Java, Spring Boot, Spring AI, and Spotify OAuth2, generating personalized roasts from listening habits.",
+    "language": "Java",
+    "topics": [
+      "clean-architecture",
+      "genai",
+      "generative-ai",
+      "java",
+      "oauth2",
+      "portfolio",
+      "rest-api",
+      "spotify",
+      "spring-ai",
+      "spring-boot"
+    ],
+    "updatedAt": "2026-11-11T15:15:52Z",
+    "branch": "main",
+    "revision": "917bcfc",
+    "public": true
   }
 ]

@@ -31,10 +31,10 @@ for (const prefix of ["", "/pt"]) {
     ).toHaveCount(0);
     await expect(page.locator('.primary-nav a[href*="blog"]')).toHaveCount(0);
     await page.goto(`${prefix}/projects/`);
-    await expect(page.locator(".project-card")).toHaveCount(4);
+    await expect(page.locator(".project-card")).toHaveCount(5);
     await page.locator(".language-toggle").click();
     await expect(page).toHaveURL(prefix ? "/projects/" : "/pt/projects/");
-    await expect(page.locator(".project-card")).toHaveCount(4);
+    await expect(page.locator(".project-card")).toHaveCount(5);
   });
 }
 

@@ -23,7 +23,7 @@ Linux CI installs browser system dependencies with `npx playwright install --wit
 
 ## Navigation and reading
 
-Each language has one main page with Projects, About and Contact sections. Case studies keep dedicated URLs; there are 12 generated HTML pages, including two localized error pages. The Blog menu, listing and article routes appear only when there are published articles in that language. A project title and return link stay in the sticky header, with a smaller title after scrolling. Reduced-motion preferences disable the size transition. Technology logos are served locally from Devicon v2.17.0; the upstream license is included in `public/technologies/LICENSE.txt`.
+Each language has one main page with Projects, About and Contact sections. Case studies keep dedicated URLs alongside two localized error pages. The Blog menu, listing and article routes appear only when there are published articles in that language. A project title and return link stay in the sticky header, with a smaller title after scrolling. Reduced-motion preferences disable the size transition. Technology logos are served locally from Devicon v2.17.0; the upstream license is included in `public/technologies/LICENSE.txt`.
 
 Case studies start with the project's README and business context, then explain verified implementation details and limits. If a future project has no README, use its actual source and technical context and state the documentation gap.
 
@@ -42,13 +42,15 @@ The Home primary resume download follows the current language. The Contact secti
 - `research/design-system.md`: audit of the original Econolyze implementation.
 - `data/github-projects.json`: validated, generated repository metadata only.
 
-The four curated projects are Econolyze (reactive financial workflows), Logistic (domain transitions and after-commit events), Quarkus Rate Limiter (Redis/Lua window algorithms) and Schema per Tenant (JWT-selected PostgreSQL schemas). Claims link to inspected source revisions. Code-level diagrams deliberately show only implemented boundaries. Backend test files were reviewed, not executed here; no benchmarks or production deployment claims are made.
+The five curated projects are Econolyze (reactive financial workflows), Logistic (domain transitions and after-commit events), Quarkus Rate Limiter (Redis/Lua window algorithms), Schema per Tenant (JWT-selected PostgreSQL schemas) and RoastMyTaste (Spotify OAuth2 and structured multilingual AI). Claims link to inspected source revisions. Code-level diagrams deliberately show only implemented boundaries. Backend test files were reviewed, not executed here; no benchmarks or production deployment claims are made.
+
+RoastMyTaste is available at `/projects/roast-my-taste/` and `/pt/projects/roast-my-taste/`. Both case studies share three original repository screenshots stored in `public/projects/roast-my-taste/`, copied unchanged from revision `917bcfc` and checked against their Git blob hashes. Images have localized alternative text and captions, explicit dimensions and lazy loading, and link to the original-size local files. Its publication approval and GitHub `portfolio` topic were already present when the case study was added.
 
 LinkedIn and both original resume PDFs were supplied by the owner on 2026-11-06. The files are served from `public/resume/`, with English and Portuguese downloads. No additional employment or performance claims have been added to the site.
 
 ## Add a repository
 
-For an automatic basic listing, make the repository public, owned, non-fork and non-archived; approve its name in `data/publication.json`; add GitHub topic `portfolio`; run `npm run sync`. The weekly/manual workflow can persist the snapshot. No eligible topics were present at initial review, so the automated snapshot starts empty and the four curated studies remain separately available.
+For an automatic basic listing, make the repository public, owned, non-fork and non-archived; approve its name in `data/publication.json`; add GitHub topic `portfolio`; run `npm run sync`. The weekly/manual workflow can persist the snapshot. Curated studies remain available independently of the metadata snapshot; matching repositories are excluded from the additional-project listing to avoid duplicate cards.
 
 For a substantial case study, review the actual code, write Markdown in `src/content/projects`, add pinned evidence and public research metadata, then run validation. Automation never writes technical explanations or overwrites curated content. See [synchronization details](docs/synchronization.md), including failure and removal behavior.
 

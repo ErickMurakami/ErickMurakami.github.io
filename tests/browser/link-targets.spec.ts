@@ -10,6 +10,8 @@ test("external and document links use new tabs while internal navigation stays i
     "/pt/about/",
     "/projects/econolyze/",
     "/pt/projects/econolyze/",
+    "/projects/roast-my-taste/",
+    "/pt/projects/roast-my-taste/",
   ]) {
     await page.goto(route);
     const links = await page.locator("a[href]").evaluateAll((anchors) =>

@@ -12,7 +12,7 @@ test('engineering layouts preserve content, accessibility and native scrolling',
       const violations = (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations;
       expect(violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) }))).toEqual([]);
       if (route === '/' || route === '/pt/') {
-        await expect(page.locator('.project-card')).toHaveCount(4);
+        await expect(page.locator('.project-card')).toHaveCount(5);
         await expect(page.locator('.showcase-sticky')).not.toHaveCSS('position', 'sticky');
         expect(await page.locator('.expertise-section').evaluate(el => !!el.previousElementSibling?.classList.contains('specialty-strip'))).toBe(true);
         await expect(page.locator('.specialty-strip img').first()).toHaveCSS('filter', 'none');
@@ -57,7 +57,7 @@ test('project continuity, translated button sizes and brand colors stay consiste
     await page.evaluate(() => document.fonts.ready);
     expect(await dimensions()).toEqual(english);
     await expect(page.locator('#projects .project-grid')).toHaveCount(1);
-    await expect(page.locator('#projects .project-grid > .project-card')).toHaveCount(4);
+    await expect(page.locator('#projects .project-grid > .project-card')).toHaveCount(5);
     await expect(page.locator('.project-continuation')).toHaveCount(0);
     await expect(page.locator('.specialty-strip img[src="/technologies/langchain4j.png"]')).toHaveCount(1);
     await expect(page.locator('#projects [data-project="quarkus-schema-per-tenant"] img[src="/technologies/flyway.svg"]')).toHaveCount(1);
