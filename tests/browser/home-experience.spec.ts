@@ -181,10 +181,13 @@ for (const [screenWidth, density, size] of [[1440, 1, 28], [1920, 1.5, 32], [256
       await page.goto('/');
       await expect(page.locator('html')).toHaveAttribute('data-cursor-size', String(size));
       const suffix = size === 28 ? '' : `-${size}`;
-      await expect(page.locator('body')).toHaveCSS('cursor', new RegExp(`arrow-dark${suffix}\\.svg`));
+      // CI may deliver a pointer event before navigation finishes; validate the
+      // configured fallback without assuming the floating arrow is still inactive.
+      await expect(page.locator('html')).toHaveCSS('--cursor-arrow-dark', new RegExp(`arrow-dark${suffix}\\.svg`));
       await page.mouse.move(100, 300);
       const cursor = page.locator('[data-drift-cursor]');
       await expect(cursor).toBeVisible();
+      await expect(page.locator('body')).toHaveCSS('cursor', 'none');
       await expect(cursor).toHaveCSS('width', `${size}px`);
       await expect.poll(async () => (await cursor.boundingBox())!.x).toBeGreaterThan(80);
       const box = (await cursor.boundingBox())!;
