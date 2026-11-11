@@ -19,7 +19,7 @@ npx playwright install chromium
 npm run test:browser           # responsive, axe, keyboard, theme, no-JS checks
 ```
 
-Linux CI installs browser system dependencies with `npx playwright install --with-deps chromium`. Dependency versions are locked; fonts are self-hosted. Runtime JavaScript is limited to theme behavior, section navigation and the compact sticky project heading; there is no React hydration, backend, external font request or analytics.
+Linux CI installs browser system dependencies with `npx playwright install --with-deps chromium`. Dependency versions are locked; fonts are self-hosted. Runtime JavaScript handles theme behavior, section navigation, scroll reveals, a project hover cursor and the compact sticky project heading; there is no React hydration, backend, external font request or analytics.
 
 ## Navigation and reading
 
@@ -27,7 +27,11 @@ Each language has one main page with Projects, About and Contact sections. Case 
 
 Case studies start with the project's README and business context, then explain verified implementation details and limits. If a future project has no README, use its actual source and technical context and state the documentation gap.
 
-The homepage separates engineering focus, projects, professional background and contact into numbered sections. Full-width surfaces and divider lines use the existing background, card, secondary and border colors in both themes. Section introductions share the existing scroll-reveal observer; native scrolling, reduced-motion support and no-JavaScript content remain available. Groq and Spotify technology labels use local SVGs, with sources and licensing recorded in `public/technologies/SOURCES.md`.
+The homepage separates engineering focus, projects, professional background and contact into numbered sections. Near-black, muted cobalt and grey surfaces blend between chapters, with light-theme equivalents and checked text contrast. A small scroll-driven tilt and fade adds depth without changing native scrolling. The circuit hero combines moving network signals and an equalizer waveform, paused offscreen and static with reduced motion. Groq and Spotify technology labels use local SVGs, with sources and licensing recorded in `public/technologies/SOURCES.md`.
+
+Normal homepage section clicks scroll without adding a fragment to the URL. Native anchor links remain available without JavaScript. Desktop uses a small editor-style arrow and a compact eye over project cards; the cards link to their case studies and GitHub controls remain separate. Touch devices keep the native pointer; reduced-motion preferences use static content and the native pointer. The light/dark toggle keeps its selected state across navigation and refresh, with distinct sun and moon icons.
+
+To preview every homepage section locally, run `npm run preview:content`, then `npm run dev`. This creates clearly labelled mock articles, certifications and courses in both languages. The generated Markdown files are ignored by Git and marked `localOnly: true`, so production builds omit them. `npm run preview:content:clear` removes only unchanged generated fixtures.
 
 ## Languages
 
