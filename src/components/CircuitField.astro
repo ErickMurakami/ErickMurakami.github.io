@@ -11,7 +11,7 @@ const connections = ["M620 250h24l20-20h36", "M900 250h24l20 20h36", "M1040 250h
 const nodes = [[620, 250], [700, 230], [900, 250], [980, 270], [1040, 250], [1100, 234]];
 ---
 
-<div class="circuit-field" aria-hidden="true">
+<div class="circuit-field" aria-hidden="true" transition:persist="home-music-field" transition:animate="none">
   <svg viewBox="0 0 1200 500" preserveAspectRatio="xMaxYMid slice" fill="none">
     <defs>
       <pattern id="circuit-grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="currentColor" opacity=".1" /></pattern>
@@ -23,7 +23,9 @@ const nodes = [[620, 250], [700, 230], [900, 250], [980, 270], [1040, 250], [110
         {connections.map((d) => <path d={d} />)}
       </g>
       <g class="circuit-wave" stroke="currentColor" stroke-width="5" stroke-linecap="round">
-        {bars.map(({ x, height }, index) => <path d={`M${x} ${250 - height / 2}v${height}`} style={`--channel: ${index}`} />)}
+        <g class="wave-scroll-response">
+          {bars.map(({ x, height }, index) => <path d={`M${x} ${250 - height / 2}v${height}`} style={`--channel: ${index}`} />)}
+        </g>
       </g>
       <g class="circuit-signals" stroke="currentColor" stroke-width="1">
         {connections.map((d) => <path d={d} pathLength="100" />)}

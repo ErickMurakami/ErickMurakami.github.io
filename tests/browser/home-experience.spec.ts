@@ -79,7 +79,7 @@ for (const route of ['/', '/projects/', '/pt/projects/']) {
     await expect.poll(cursorAtPointer).not.toBe('eye');
     await card.scrollIntoViewIfNeeded();
     const returned = (await card.boundingBox())!;
-    await page.mouse.click(returned.x + returned.width * .75, returned.y + 60);
+    await card.click({ position: { x: returned.width * .75, y: 60 } });
     await expect(page).toHaveURL(`${route.startsWith('/pt/') ? '/pt' : ''}/projects/roast-my-taste/`);
     await page.goto(route);
     await page.emulateMedia({ reducedMotion: 'reduce' });

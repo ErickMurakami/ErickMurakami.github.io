@@ -172,8 +172,15 @@ interface ReadingPosition {
 function releasedDocumentY(target: HTMLElement) {
   const showcase = target.closest<HTMLElement>(".is-scroll-showcase");
   const sticky = showcase?.querySelector<HTMLElement>(".showcase-sticky");
-  if (!showcase || !sticky || !sticky.contains(target))
+  if (!showcase || !sticky || !sticky.contains(target)) {
+    // Read layout coordinates so scroll-driven visual scaling cannot move a target.
+    if (target.closest('.portfolio-home')) {
+      let top = 0;
+      for (let node: HTMLElement | null = target; node; node = node.offsetParent as HTMLElement | null) top += node.offsetTop;
+      return top;
+    }
     return target.getBoundingClientRect().top + scrollY;
+  }
   return (
     showcase.getBoundingClientRect().top +
     scrollY +
@@ -251,7 +258,7 @@ document.addEventListener("astro:before-swap", (event) => {
     : null;
   if (anchor && newDocument.getElementById(anchor.id)) {
     readingPosition.anchor = anchor.id;
-    readingPosition.offset = -anchor.getBoundingClientRect().top;
+    readingPosition.offset = scrollY - releasedDocumentY(anchor);
   }
 }, lifecycleOptions);
 
