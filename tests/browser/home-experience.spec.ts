@@ -42,7 +42,7 @@ test("light mode stays selected after refresh, language switches and project nav
 });
 
 for (const route of ['/', '/projects/', '/pt/projects/']) {
-  test(`native eye cursor persists while scrolling and leaves clickable controls independent ${route}`, async ({ page }) => {
+  test(`eye cursor persists while scrolling and leaves clickable controls independent ${route}`, async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(route);
     const card = page.locator('[data-project="RoastMyTaste"]');
@@ -54,30 +54,29 @@ for (const route of ['/', '/projects/', '/pt/projects/']) {
     }));
     const box = (await card.boundingBox())!;
     const point = { x: box.x + box.width * .75, y: box.y + 60 };
-    const cursorAtPointer = () => page.evaluate(({ x, y }) => {
-      const target = document.elementFromPoint(x, y);
-      return target ? getComputedStyle(target).cursor : '';
-    }, point);
+    const cursor = page.locator('[data-drift-cursor]');
+    const cursorAtPointer = () => cursor.getAttribute('data-cursor-mode');
     await page.mouse.move(point.x, point.y);
-    await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
-    await expect(page.locator('[data-drift-cursor]')).toBeHidden();
+    await expect.poll(cursorAtPointer).toBe('eye');
+    await expect(cursor.locator('.cursor-eye')).toHaveCSS('opacity', '1');
     for (const distance of [25, 30, 25]) {
       const beforeScroll = await page.evaluate(() => scrollY);
       await page.mouse.wheel(0, distance);
       await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(beforeScroll);
-      await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
+      await expect.poll(cursorAtPointer).toBe('eye');
     }
     await page.evaluate(({ x, y }) => {
       document.elementFromPoint(x, y)?.dispatchEvent(new PointerEvent('pointerout', {
         bubbles: true, relatedTarget: null, clientX: x, clientY: y,
       }));
     }, point);
-    await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
+    await expect.poll(cursorAtPointer).toBe('eye');
     await card.locator('a[target="_blank"]').hover();
-    await expect(card.locator('a[target="_blank"]')).toHaveCSS('cursor', /hand-dark\.svg/);
+    await expect(cursor).toHaveAttribute('data-cursor-mode', 'hand');
+    await expect(cursor.locator('.cursor-hand')).toHaveCSS('opacity', '1');
     await page.mouse.move(point.x, point.y);
     await page.mouse.wheel(0, 1200);
-    await expect.poll(cursorAtPointer).not.toMatch(/view-dark\.svg/);
+    await expect.poll(cursorAtPointer).not.toBe('eye');
     await card.scrollIntoViewIfNeeded();
     const returned = (await card.boundingBox())!;
     await page.mouse.click(returned.x + returned.width * .75, returned.y + 60);
@@ -147,7 +146,7 @@ for (const theme of ['dark', 'light']) {
   }
 }
 
-test('arrow drifts with mouse direction, settles and gives way to the native project eye', async ({ page }) => {
+test('arrow drifts with mouse direction, settles and softly changes to the project eye', async ({ page }) => {
   await page.goto('/');
   const cursor = page.locator('[data-drift-cursor]');
   await page.mouse.move(80, 300);
@@ -166,11 +165,13 @@ test('arrow drifts with mouse direction, settles and gives way to the native pro
   expect(Math.hypot(tip.x - 240, tip.y - 300)).toBeLessThan(1);
   const card = page.locator('[data-project="RoastMyTaste"]');
   await card.hover();
-  await expect(cursor).toBeHidden();
-  await expect(card).toHaveCSS('cursor', /view-dark\.svg/);
+  await expect(cursor).toHaveAttribute('data-cursor-mode', 'eye');
+  await expect(cursor.locator('.cursor-eye')).toHaveCSS('opacity', '1');
+  await expect(cursor.locator('.cursor-eye')).toHaveCSS('transition-duration', '0.12s');
   await page.mouse.wheel(0, 30);
-  await expect(cursor).toBeHidden();
-  await expect(card).toHaveCSS('cursor', /view-dark\.svg/);
+  await expect(cursor).toHaveAttribute('data-cursor-mode', 'eye');
+  await expect(cursor.locator('.cursor-eye')).toHaveCSS('opacity', '1');
+  await expect(cursor.locator('.cursor-eye')).toHaveCSS('transition-duration', '0.12s');
 });
 
 for (const [screenWidth, density, size] of [[1440, 1, 28], [1920, 1.5, 32], [2560, 2, 40]]) {
@@ -189,13 +190,13 @@ for (const [screenWidth, density, size] of [[1440, 1, 28], [1920, 1.5, 32], [256
       await expect(cursor).toBeVisible();
       await expect(page.locator('body')).toHaveCSS('cursor', 'none');
       await expect(cursor).toHaveCSS('width', `${size}px`);
-      await expect.poll(async () => (await cursor.boundingBox())!.x).toBeGreaterThan(80);
+      await expect.poll(async () => (await cursor.boundingBox())!.x).toBeCloseTo(100 - size / 2, 1);
       const box = (await cursor.boundingBox())!;
       expect(Math.abs(box.x * density - Math.round(box.x * density))).toBeLessThan(.01);
       const card = page.locator('[data-project="RoastMyTaste"]');
       await card.hover();
-      await expect(card).toHaveCSS('cursor', new RegExp(`view-dark${suffix}\\.svg`));
-      await expect(cursor).toBeHidden();
+      await expect(cursor).toHaveAttribute('data-cursor-mode', 'eye');
+      await expect(cursor.locator('.cursor-eye')).toHaveCSS('opacity', '1');
       const response = await page.request.get(`/cursors/view-dark${suffix}.svg`);
       expect(response.ok()).toBe(true);
       expect(await response.text()).toContain(`width="${size}" height="${size}"`);
@@ -204,7 +205,8 @@ for (const [screenWidth, density, size] of [[1440, 1, 28], [1920, 1.5, 32], [256
         window.dispatchEvent(new Event('resize'));
       });
       await expect(page.locator('html')).toHaveAttribute('data-cursor-size', '40');
-      await expect(card).toHaveCSS('cursor', /view-dark-40\.svg/);
+      await expect(cursor).toHaveCSS('width', '40px');
+      await expect(cursor).toHaveAttribute('data-cursor-mode', 'eye');
     } finally { await context.close(); }
   });
 }

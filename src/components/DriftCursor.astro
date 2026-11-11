@@ -2,8 +2,20 @@
 import shapes from '../data/cursor-shapes.json';
 ---
 
-<span class="drift-cursor" data-drift-cursor aria-hidden="true">
+<span class="drift-cursor" data-drift-cursor data-cursor-mode="arrow" aria-hidden="true">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-    <path d={shapes.arrow} stroke-width="1" stroke-linejoin="miter" vector-effect="non-scaling-stroke" />
+    <g class="cursor-glyph cursor-arrow" transform="translate(9 9)">
+      <path data-cursor-steering d={shapes.arrow} stroke-width="1" stroke-linejoin="miter" vector-effect="non-scaling-stroke" />
+    </g>
+    <g class="cursor-glyph cursor-hand" transform={`translate(${2 * shapes.handScale} ${9 * shapes.handScale})`}>
+      <g transform={`translate(12 12) scale(${shapes.handScale}) translate(-12 -12)`}>
+        <path d={shapes.hand} stroke-width="1" stroke-linejoin="miter" vector-effect="non-scaling-stroke" />
+        <path d={shapes.fingerLines} class="cursor-fingers" fill="none" stroke-width="1" vector-effect="non-scaling-stroke" />
+      </g>
+    </g>
+    <g class="cursor-glyph cursor-eye">
+      <path class="cursor-eye-outline" d={shapes.eye} fill="none" stroke-width="1.4" stroke-linejoin="miter" vector-effect="non-scaling-stroke" />
+      <path class="cursor-pupil" d={shapes.pupil} stroke="none" />
+    </g>
   </svg>
 </span>

@@ -6,14 +6,14 @@ const themes = {
   light: { fill: '#5f6877', outline: '#fffdf7' },
 };
 const sizes = [28, 32, 40];
-const hotspots = { arrow: [3, 3], view: [12, 12], hand: [10, 3], 'scroll-up': [12, 2], 'scroll-down': [12, 22] };
+const hotspots = { arrow: [3, 3], view: [12, 12], hand: [12 - 2 * shapes.handScale, 12 - 9 * shapes.handScale], 'scroll-up': [12, 2], 'scroll-down': [12, 22] };
 const properties = new Map(sizes.map(size => [size, [`--cursor-size: ${size}px;`]]));
 for (const [theme, { fill, outline }] of Object.entries(themes)) {
   const path = (d, extra = '') => `<path d="${d}" fill="${fill}" stroke="${outline}" stroke-width="1" stroke-linejoin="miter" vector-effect="non-scaling-stroke"${extra}/>`;
   const glyphs = {
     arrow: path(shapes.arrow),
-    view: path(shapes.eye, ' fill-rule="evenodd"') + `<path d="${shapes.pupil}" fill="${fill}"/>`,
-    hand: path(shapes.hand) + `<path d="${shapes.fingerLines}" fill="none" stroke="${outline}" stroke-width="1"/>`,
+    view: `<path d="${shapes.eye}" fill="none" stroke="${fill}" stroke-width="1.4" stroke-linejoin="miter" vector-effect="non-scaling-stroke"/><path d="${shapes.pupil}" fill="${fill}"/>`,
+    hand: `<g transform="translate(12 12) scale(${shapes.handScale}) translate(-12 -12)">${path(shapes.hand)}<path d="${shapes.fingerLines}" fill="none" stroke="${outline}" stroke-width="1" vector-effect="non-scaling-stroke"/></g>`,
     'scroll-up': path(shapes.arrow, ' transform="translate(12 12) rotate(45) scale(.8) translate(-12 -12)"'),
     'scroll-down': path(shapes.arrow, ' transform="translate(12 12) rotate(225) scale(.8) translate(-12 -12)"'),
   };
@@ -22,7 +22,7 @@ for (const [theme, { fill, outline }] of Object.entries(themes)) {
       const file = `${name}-${theme}${size === 28 ? '' : `-${size}`}.svg`;
       await writeFile(new URL(`../public/cursors/${file}`, import.meta.url), `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24">${content}</svg>\n`);
       const [x, y] = hotspots[name].map(value => Math.round(value * size / 24));
-      properties.get(size).push(`--cursor-${name}-${theme}: url('/cursors/${file}?v=display-1') ${x} ${y}, ${name === 'hand' || name === 'view' ? 'pointer' : 'auto'};`);
+      properties.get(size).push(`--cursor-${name}-${theme}: url('/cursors/${file}?v=display-2') ${x} ${y}, ${name === 'hand' || name === 'view' ? 'pointer' : 'auto'};`);
     }
   }
 }
