@@ -4,6 +4,7 @@
     "Econolyze",
     "Logistic",
     "quarkus-rate-limiter",
-    "quarkus-schema-per-tenant"
+    "quarkus-schema-per-tenant",
+    "RoastMyTase"
   ]
 }
