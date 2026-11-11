@@ -80,23 +80,17 @@ Add deterministic checks that generated music references match the supplied data
 Original captures from the inspected repository show the public landing page, authenticated roast room and generated result. Select an image to view it at full size.
 
 <figure class="project-screenshot">
-  <a href="/projects/roast-my-taste/landing.png">
-    <img src="/projects/roast-my-taste/landing.png" alt="RoastMyTaste landing page with Spotify sign-in and an explanation of the three-step roast flow" width="1428" height="1770" loading="lazy" decoding="async" />
-  </a>
+  <img draggable="false" src="/projects/roast-my-taste/landing.png" alt="RoastMyTaste landing page with Spotify sign-in and an explanation of the three-step roast flow" width="1428" height="1770" loading="lazy" decoding="async" />
   <figcaption>Public landing page: Spotify sign-in starts the server-managed OAuth2 flow.</figcaption>
 </figure>
 
 <figure class="project-screenshot">
-  <a href="/projects/roast-my-taste/roast-room.png">
-    <img src="/projects/roast-my-taste/roast-room.png" alt="Authenticated roast room with British English selected, a generation button and Spotify top-track and artist cards" width="1920" height="888" loading="lazy" decoding="async" />
-  </a>
+  <img draggable="false" src="/projects/roast-my-taste/roast-room.png" alt="Authenticated roast room with British English selected, a generation button and Spotify top-track and artist cards" width="1920" height="888" loading="lazy" decoding="async" />
   <figcaption>Authenticated roast room: choose a language and inspect Spotify's top tracks and artists before generation.</figcaption>
 </figure>
 
 <figure class="project-screenshot">
-  <a href="/projects/roast-my-taste/roast.png">
-    <img src="/projects/roast-my-taste/roast.png" alt="Generated roast showing a musical diagnosis, comedy text, chaos score, personality tags and musical advice alongside Spotify artwork" width="1920" height="936" loading="lazy" decoding="async" />
-  </a>
+  <img draggable="false" src="/projects/roast-my-taste/roast.png" alt="Generated roast showing a musical diagnosis, comedy text, chaos score, personality tags and musical advice alongside Spotify artwork" width="1920" height="936" loading="lazy" decoding="async" />
   <figcaption>Generated result: the structured response is rendered as a diagnosis, roast, score, personality tags and unsolicited advice.</figcaption>
 </figure>
 

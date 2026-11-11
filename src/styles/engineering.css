@@ -47,6 +47,18 @@
   --wave-rest: #68748b;
 }
 body { font-size: 16px; line-height: 1.8; }
+img { -webkit-user-drag: none; user-select: none; }
+.image-zoom { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; }
+.image-zoom:hover, .image-zoom:focus-visible { outline: 2px solid var(--link); outline-offset: 5px; }
+.image-viewer { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 56px 24px 24px; border: 0; background: transparent; color: var(--foreground); }
+.image-viewer[open] { display: grid; place-items: center; }
+.image-viewer::backdrop { background: rgb(5 7 12 / .84); backdrop-filter: blur(3px); }
+.image-viewer-panel { position: relative; max-width: min(1400px, 100%); padding: 12px; border: 1px solid #454c63; background: #11151e; }
+.image-viewer figure { margin: 0; }
+.image-viewer img { display: block; max-width: 100%; max-height: calc(100dvh - 150px); width: auto; height: auto; margin-inline: auto; object-fit: contain; border: 1px solid #77859f; }
+.image-viewer figcaption { margin-top: 12px; max-width: 90ch; color: #e5e8ef; font-size: 13px; line-height: 1.6; }
+.image-viewer-close { position: fixed; right: 24px; top: 12px; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #77859f; border-radius: 3px; color: #fff6e5; background: #191d30; }
+.image-viewer-close:hover { background: #30374f; }
 .shell { max-width: 1280px; padding-inline: 48px; }
 .header { backdrop-filter: none; background: var(--background); }
 .nav-shell { min-height: 80px; gap: 28px; }
@@ -204,6 +216,9 @@ h2 { font-size: clamp(30px,3.4vw,44px); font-weight: 500; }
   .project-card { column-gap: 32px; }
 }
 @media (max-width: 650px) {
+  .image-viewer { padding-inline: 8px; }
+  .image-viewer-panel { padding: 6px; }
+  .image-viewer-close { right: 8px; }
   .shell { padding-inline: 22px; }
   .nav-shell { display: grid; grid-template-columns: minmax(0,1fr) 44px 44px; gap: 0 10px; padding-block: 8px 0; }
   .brand { gap: 10px; min-height: 44px; }

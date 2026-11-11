@@ -1,0 +1,15 @@
+---
+const pt = Astro.url.pathname.startsWith('/pt/');
+---
+
+<dialog class="image-viewer" data-image-viewer aria-label={pt ? 'Visualização ampliada da imagem' : 'Enlarged image preview'}>
+  <div class="image-viewer-panel">
+    <button class="image-viewer-close" data-image-viewer-close type="button" aria-label={pt ? 'Fechar imagem' : 'Close image'} autofocus>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+    </button>
+    <figure>
+      <img data-image-viewer-image alt="" draggable="false" />
+      <figcaption data-image-viewer-caption />
+    </figure>
+  </div>
+</dialog>

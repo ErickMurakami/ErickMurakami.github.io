@@ -8,6 +8,7 @@ import "@fontsource/inter/latin-600.css";
 import "@fontsource/inter/latin-700.css";
 import Icon from "../components/Icon.astro";
 import DriftCursor from "../components/DriftCursor.astro";
+import ImageViewer from "../components/ImageViewer.astro";
 import { getPublishedCertifications } from "../lib/certifications";
 import { getPublishedPosts } from "../lib/blog";
 import { languagePaths } from "../lib/i18n";
@@ -194,6 +195,7 @@ if (posts.length)
         >
           <img
             class="language-flag"
+            draggable="false"
             src={pt ? "/flags/brazil.svg" : "/flags/united-kingdom.svg"}
             alt=""
             width="24"
@@ -265,10 +267,12 @@ if (posts.length)
       </div>
     </footer>
     <DriftCursor />
+    <ImageViewer />
     <script>
       import "../scripts/navigation";
       import "../scripts/environment";
       import "../scripts/cursor";
+      import "../scripts/images";
     </script>
   </body>
 </html>
