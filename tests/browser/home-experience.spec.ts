@@ -41,47 +41,53 @@ test("light mode stays selected after refresh, language switches and project nav
   await light();
 });
 
-test("native eye cursor persists while scrolling and leaves clickable controls independent", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/');
-  const card = page.locator('[data-project="RoastMyTaste"]');
-  await card.scrollIntoViewIfNeeded();
-  await expect(card).toHaveCSS('opacity', '1');
-  const box = (await card.boundingBox())!;
-  const point = { x: box.x + box.width * .75, y: box.y + 60 };
-  const cursorAtPointer = () => page.evaluate(({ x, y }) => {
-    const target = document.elementFromPoint(x, y);
-    return target ? getComputedStyle(target).cursor : '';
-  }, point);
-  await page.mouse.move(point.x, point.y);
-  await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
-  await expect(page.locator('body')).toHaveCSS('cursor', /arrow-dark\.svg/);
-  for (const distance of [25, 30, 25]) {
-    const beforeScroll = await page.evaluate(() => scrollY);
-    await page.mouse.wheel(0, distance);
-    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(beforeScroll);
-    await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
-  }
-  await page.evaluate(({ x, y }) => {
-    document.elementFromPoint(x, y)?.dispatchEvent(new PointerEvent('pointerout', {
-      bubbles: true, relatedTarget: null, clientX: x, clientY: y,
+for (const route of ['/', '/projects/', '/pt/projects/']) {
+  test(`native eye cursor persists while scrolling and leaves clickable controls independent ${route}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto(route);
+    const card = page.locator('[data-project="RoastMyTaste"]');
+    await card.scrollIntoViewIfNeeded();
+    await expect(card).toHaveCSS('opacity', '1');
+    // Leave room to scroll the last card on the shorter standalone listings.
+    await card.evaluate(el => window.scrollBy({
+      top: el.getBoundingClientRect().top - (innerHeight - 200), behavior: 'instant',
     }));
-  }, point);
-  await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
-  await card.locator('a[target="_blank"]').hover();
-  await expect(card.locator('a[target="_blank"]')).toHaveCSS('cursor', /hand-dark\.svg/);
-  await page.mouse.move(point.x, point.y);
-  await page.mouse.wheel(0, 1200);
-  await expect.poll(cursorAtPointer).not.toMatch(/view-dark\.svg/);
-  await card.scrollIntoViewIfNeeded();
-  const returned = (await card.boundingBox())!;
-  await page.mouse.click(returned.x + returned.width * .75, returned.y + 60);
-  await expect(page).toHaveURL('/projects/roast-my-taste/');
-  await page.goto('/');
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.locator('[data-project="RoastMyTaste"]').hover();
-  await expect(page.locator('[data-project="RoastMyTaste"]')).not.toHaveCSS('cursor', /view-dark\.svg/);
-});
+    const box = (await card.boundingBox())!;
+    const point = { x: box.x + box.width * .75, y: box.y + 60 };
+    const cursorAtPointer = () => page.evaluate(({ x, y }) => {
+      const target = document.elementFromPoint(x, y);
+      return target ? getComputedStyle(target).cursor : '';
+    }, point);
+    await page.mouse.move(point.x, point.y);
+    await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
+    await expect(page.locator('body')).toHaveCSS('cursor', /arrow-dark\.svg/);
+    for (const distance of [25, 30, 25]) {
+      const beforeScroll = await page.evaluate(() => scrollY);
+      await page.mouse.wheel(0, distance);
+      await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(beforeScroll);
+      await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
+    }
+    await page.evaluate(({ x, y }) => {
+      document.elementFromPoint(x, y)?.dispatchEvent(new PointerEvent('pointerout', {
+        bubbles: true, relatedTarget: null, clientX: x, clientY: y,
+      }));
+    }, point);
+    await expect.poll(cursorAtPointer).toMatch(/view-dark\.svg/);
+    await card.locator('a[target="_blank"]').hover();
+    await expect(card.locator('a[target="_blank"]')).toHaveCSS('cursor', /hand-dark\.svg/);
+    await page.mouse.move(point.x, point.y);
+    await page.mouse.wheel(0, 1200);
+    await expect.poll(cursorAtPointer).not.toMatch(/view-dark\.svg/);
+    await card.scrollIntoViewIfNeeded();
+    const returned = (await card.boundingBox())!;
+    await page.mouse.click(returned.x + returned.width * .75, returned.y + 60);
+    await expect(page).toHaveURL(`${route.startsWith('/pt/') ? '/pt' : ''}/projects/roast-my-taste/`);
+    await page.goto(route);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.locator('[data-project="RoastMyTaste"]').hover();
+    await expect(page.locator('[data-project="RoastMyTaste"]')).not.toHaveCSS('cursor', /view-dark\.svg/);
+  });
+}
 
 test("waveform slightly accentuates on scroll, settles, and respects reduced motion", async ({ page }) => {
   await page.goto('/');
