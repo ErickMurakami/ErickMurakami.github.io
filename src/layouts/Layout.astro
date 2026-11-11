@@ -56,6 +56,7 @@ const canonical = new URL(
   Astro.site,
 );
 const onHome = Astro.url.pathname === home;
+const pageSection = onHome ? undefined : Astro.url.pathname.slice(home.length).split("/")[0];
 const sectionLink = (section: string) =>
   onHome ? `${home}#${section}` : `${home}${section}/`;
 const links = [
@@ -225,7 +226,8 @@ if (posts.length)
     </header>
     <main
       id="main"
-      class:list={{ "portfolio-home": onHome }}
+      class:list={{ "portfolio-home": onHome, "portfolio-page": !onHome }}
+      data-page-section={pageSection}
       tabindex="-1"
       transition:name="page-content"
       transition:animate={fade({ duration: "180ms" })}
