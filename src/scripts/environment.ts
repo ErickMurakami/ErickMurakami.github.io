@@ -16,53 +16,41 @@ function initializeEnvironment() {
   const revealAll = () => targets.forEach(target => target.classList.add('is-revealed'));
   media.addEventListener('change', revealAll, { signal: controller.signal });
   const field = document.querySelector<HTMLElement>('.circuit-field');
+  let waveTimer: ReturnType<typeof setTimeout> | undefined;
+  let previousScrollY = scrollY;
+  let previousScrollTime = performance.now();
+  const resetWaveAccent = () => {
+    clearTimeout(waveTimer);
+    field?.style.removeProperty('--wave-boost');
+  };
   const fieldObserver = new IntersectionObserver(entries => {
     field?.classList.toggle('is-visible', entries[0].isIntersecting);
+    if (!entries[0].isIntersecting) resetWaveAccent();
   });
-  if (field) fieldObserver.observe(field);
-  const visibility = () => document.documentElement.classList.toggle('page-hidden', document.hidden);
-  document.addEventListener('visibilitychange', visibility, { signal: controller.signal });
-  visibility();
-  const cursor = document.querySelector<HTMLElement>('[data-project-cursor]');
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
-  let hoveredCard: HTMLElement | null = null;
-  let pointer: { x: number; y: number } | undefined;
-  let cursorFrame = 0;
-  const hideCursor = () => {
-    cursor?.classList.remove('is-visible');
-    hoveredCard?.classList.remove('has-view-cursor');
-    hoveredCard = null;
-  };
-  if (cursor) {
-    const updateCursor = () => {
-      cursorFrame = 0;
-      const target = pointer ? document.elementFromPoint(pointer.x, pointer.y) : null;
-      const card = target?.closest<HTMLElement>('.portfolio-home .project-card[data-project]') ?? null;
-      if (!pointer || !finePointer.matches || media.matches || !card || target?.closest('a[target="_blank"]')) {
-        hideCursor();
+  if (field) {
+    fieldObserver.observe(field);
+    window.addEventListener('scroll', () => {
+      const now = performance.now();
+      const speed = Math.abs(scrollY - previousScrollY) / Math.min(120, Math.max(16, now - previousScrollTime));
+      previousScrollY = scrollY;
+      previousScrollTime = now;
+      if (media.matches || document.hidden || !field.classList.contains('is-visible')) {
+        resetWaveAccent();
         return;
       }
-      if (hoveredCard !== card) {
-        hideCursor();
-        hoveredCard = card;
-        card.classList.add('has-view-cursor');
-      }
-      cursor.style.left = `${pointer.x}px`;
-      cursor.style.top = `${pointer.y}px`;
-      cursor.classList.add('is-visible');
-    };
-    const scheduleCursor = () => { if (!cursorFrame) cursorFrame = requestAnimationFrame(updateCursor); };
-    document.addEventListener('pointermove', (event) => {
-      pointer = { x: event.clientX, y: event.clientY };
-      scheduleCursor();
+      field.style.setProperty('--wave-boost', (1 + Math.min(speed / 3, 1) * .14).toFixed(3));
+      clearTimeout(waveTimer);
+      waveTimer = setTimeout(resetWaveAccent, 200);
     }, { signal: controller.signal, passive: true });
-    document.addEventListener('pointerout', (event) => { if (!event.relatedTarget) { pointer = undefined; hideCursor(); } }, { signal: controller.signal });
-    document.addEventListener('keydown', () => { pointer = undefined; hideCursor(); }, { signal: controller.signal });
-    window.addEventListener('scroll', scheduleCursor, { signal: controller.signal, passive: true });
-    media.addEventListener('change', hideCursor, { signal: controller.signal });
-    finePointer.addEventListener('change', hideCursor, { signal: controller.signal });
+    media.addEventListener('change', resetWaveAccent, { signal: controller.signal });
   }
-  cleanup = () => { controller.abort(); observer.disconnect(); fieldObserver.disconnect(); cancelAnimationFrame(cursorFrame); hideCursor(); };
+  const visibility = () => {
+    document.documentElement.classList.toggle('page-hidden', document.hidden);
+    if (document.hidden) resetWaveAccent();
+  };
+  document.addEventListener('visibilitychange', visibility, { signal: controller.signal });
+  visibility();
+  cleanup = () => { controller.abort(); observer.disconnect(); fieldObserver.disconnect(); resetWaveAccent(); };
 }
 document.addEventListener('astro:before-swap', () => cleanup(), { signal: lifecycle.signal });
 document.addEventListener('astro:page-load', initializeEnvironment, { signal: lifecycle.signal });

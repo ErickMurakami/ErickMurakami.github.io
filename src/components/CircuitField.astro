@@ -1,39 +1,35 @@
 ---
-const traces = [
-  "M0 250H130L155 225H180L205 250H250L275 290H295L325 190H345L375 315H395L425 155H445L475 320H495L525 200H545L575 270H615L645 230H685L715 285H745L775 165H795L825 325H845L875 185H895L925 295H945L975 220H1000L1025 250H1200",
-  "M0 130H160L220 190H270L300 160H340L370 215H400L430 120H460L490 205H520L550 150H610L650 190H710L750 135H780L810 210H850L890 140H920L950 180H1060L1110 120H1200",
-  "M0 390H100L170 320H230L260 360H290L320 290H350L380 395H410L440 300H470L500 370H530L560 325H590L620 360H720L750 310H790L820 390H840L870 300H900L930 365H970L1000 330H1050L1120 400H1200",
-];
-const branches = [
-  "M155 225V100L205 50H380", "M325 190V80L385 20H600",
-  "M475 320V410L545 480H780", "M775 165V90L835 30H1030",
-  "M925 295V420L985 480H1200", "M1060 180V80L1100 40H1200",
-  "M170 320V450L140 480H0",
-];
-const nodes = [[155, 225], [325, 190], [475, 320], [775, 165], [925, 295], [1060, 180], [170, 320]];
+const bars = Array.from({ length: 61 }, (_, index) => {
+  const x = index * 20;
+  const envelope = Math.exp(-Math.pow((x - 850) / 310, 2));
+  const rhythm = .45 + .55 * Math.pow(Math.sin(index * .67 + .4), 2);
+  const height = 16 + 190 * envelope * rhythm;
+  return { x, height };
+});
+// Short connections attach to bar centres, which stay fixed as the waveform pulses.
+const connections = ["M620 250h24l20-20h36", "M900 250h24l20 20h36", "M1040 250h20l16-16h24"];
+const nodes = [[620, 250], [700, 230], [900, 250], [980, 270], [1040, 250], [1100, 234]];
 ---
 
 <div class="circuit-field" aria-hidden="true">
   <svg viewBox="0 0 1200 500" preserveAspectRatio="xMaxYMid slice" fill="none">
     <defs>
-      <pattern id="circuit-grid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".22" /></pattern>
+      <pattern id="circuit-grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="currentColor" opacity=".1" /></pattern>
     </defs>
     <rect width="1200" height="500" fill="url(#circuit-grid)" />
     <g class="circuit-weave">
       <g class="circuit-traces" stroke="currentColor">
-        {traces.map((d) => <path d={d} />)}
-        {branches.map((d) => <path d={d} opacity=".55" />)}
+        <path d="M0 250h1200" opacity=".35" />
+        {connections.map((d) => <path d={d} />)}
       </g>
-      <g class="circuit-wave" stroke="currentColor" stroke-width="2">
-        {traces.map((d, index) => <path d={d} pathLength="100" style={`--channel: ${index}`} />)}
+      <g class="circuit-wave" stroke="currentColor" stroke-width="5" stroke-linecap="round">
+        {bars.map(({ x, height }, index) => <path d={`M${x} ${250 - height / 2}v${height}`} style={`--channel: ${index}`} />)}
       </g>
-      <g class="circuit-signals" stroke="currentColor" stroke-width="2">
-        {traces.map((d) => <path d={d} pathLength="100" />)}
+      <g class="circuit-signals" stroke="currentColor" stroke-width="1">
+        {connections.map((d) => <path d={d} pathLength="100" />)}
       </g>
       <g class="circuit-nodes" fill="var(--background)" stroke="currentColor">
-        {nodes.map(([cx, cy]) => <circle cx={cx} cy={cy} r="4" />)}
-        <rect x="581" y="256" width="28" height="28" rx="2" />
-        <path d="M589 264h12v12h-12Z" />
+        {nodes.map(([cx, cy]) => <circle cx={cx} cy={cy} r="2.5" />)}
       </g>
     </g>
   </svg>
