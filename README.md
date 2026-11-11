@@ -19,7 +19,7 @@ npx playwright install chromium
 npm run test:browser           # responsive, axe, keyboard, theme, no-JS checks
 ```
 
-Linux CI installs browser system dependencies with `npx playwright install --with-deps chromium`. Dependency versions are locked; fonts are self-hosted. Runtime JavaScript handles theme behavior, section navigation, scroll reveals, a project hover cursor and the compact sticky project heading; there is no React hydration, backend, external font request or analytics.
+Linux CI uses Ubuntu 24.04's preinstalled Chromium system libraries and downloads the locked browser with `npx playwright install chromium`. This avoids fetching optional font packages from Ubuntu mirrors during validation. Dependency versions are locked; Inter fonts are self-hosted. Runtime JavaScript handles theme behavior, section navigation, scroll reveals, a project hover cursor and the compact sticky project heading; there is no React hydration, backend, external font request or analytics.
 
 ## Navigation and reading
 

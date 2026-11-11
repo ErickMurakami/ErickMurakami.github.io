@@ -20,7 +20,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run verify
-      - run: npx playwright install --with-deps chromium
+      # The pinned hosted runner already supplies Chromium's system libraries.
+      - run: npx playwright install chromium
       - run: npm run test:browser
       - uses: actions/upload-pages-artifact@v3
         with:
