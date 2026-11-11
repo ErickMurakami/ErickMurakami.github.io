@@ -12,8 +12,8 @@ function initializeCursor() {
   const media = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
   const controller = new AbortController();
   const { signal } = controller;
-  let frame = 0, lastFrame = 0, lastMove = 0;
-  let active = false, pointerX = 0, pointerY = 0, mouseAngle = 0;
+  let frame = 0, lastFrame = 0;
+  let active = false, pointerX = 0, pointerY = 0;
   let size = 28;
   let mode: 'arrow' | 'hand' | 'eye' = 'arrow';
   let motion = createCursorMotion();
@@ -21,7 +21,7 @@ function initializeCursor() {
   const paint = () => {
     const pixels = window.devicePixelRatio || 1;
     const anchor = size / 2;
-    cursor.style.transform = `translate3d(${Math.round((motion.x - anchor) * pixels) / pixels}px, ${Math.round((motion.y - anchor) * pixels) / pixels}px, 0)`;
+    cursor.style.transform = `translate3d(${Math.round((pointerX - anchor) * pixels) / pixels}px, ${Math.round((pointerY - anchor) * pixels) / pixels}px, 0)`;
     shape.setAttribute('transform', `rotate(${motion.angle} 3 3)`);
   };
   const updateMode = () => {
@@ -44,11 +44,11 @@ function initializeCursor() {
     lastFrame = now;
     updateMode();
     const direction = root.dataset.scrollDirection;
-    const steering = mode !== 'arrow' ? 0 : direction === 'down' ? 225 : direction === 'up' ? 45 : now - lastMove < 220 ? mouseAngle : 0;
-    advanceCursorMotion(motion, pointerX, pointerY, steering, elapsed, size * .36, mode === 'arrow');
+    const steering = mode !== 'arrow' ? 0 : direction === 'down' ? 225 : direction === 'up' ? 45 : 0;
+    advanceCursorMotion(motion, steering, elapsed);
     paint();
     const turn = ((steering - motion.angle) % 360 + 540) % 360 - 180;
-    if (direction || now - lastMove < 220 || Math.abs(turn) > .1 || Math.abs(motion.turnRate) > .1 || Math.hypot(pointerX - motion.x, pointerY - motion.y) > .1 || Math.hypot(motion.vx, motion.vy) > .005)
+    if (direction || Math.abs(turn) > .1 || Math.abs(motion.turnRate) > .1)
       frame = requestAnimationFrame(render);
   };
   const start = () => {
@@ -56,20 +56,14 @@ function initializeCursor() {
   };
   document.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || !media.matches || document.hidden || event.clientX < 0 || event.clientY < 0 || event.clientX >= innerWidth || event.clientY >= innerHeight) { hide(); return; }
-    const dx = event.clientX - pointerX, dy = event.clientY - pointerY;
     pointerX = event.clientX; pointerY = event.clientY;
     if (!active) {
-      motion = createCursorMotion(pointerX, pointerY);
-      mouseAngle = 0;
+      motion = createCursorMotion();
       active = true;
-      updateMode();
-      paint();
       root.classList.add('has-drift-cursor');
-    } else if (Math.hypot(dx, dy) > 2) {
-      mouseAngle = Math.atan2(dy, dx) * 180 / Math.PI + 135;
     }
-    lastMove = performance.now();
     updateMode();
+    paint();
     start();
   }, { signal, passive: true });
   window.addEventListener('scroll', () => { if (active) updateMode(); start(); }, { signal, passive: true });

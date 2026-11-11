@@ -146,18 +146,30 @@ for (const theme of ['dark', 'light']) {
   }
 }
 
-test('arrow drifts with mouse direction, settles and softly changes to the project eye', async ({ page }) => {
+test('arrow follows mouse movement immediately without turning and softly changes to the project eye', async ({ page }) => {
   await page.goto('/');
   const cursor = page.locator('[data-drift-cursor]');
+  await page.evaluate(() => {
+    const samples: { angle: number; gap: number }[] = [];
+    Object.assign(window, { pointerSamples: samples });
+    document.addEventListener('pointermove', event => {
+      const matrix = document.querySelector<SVGGraphicsElement>('[data-cursor-steering]')!.getScreenCTM()!;
+      samples.push({
+        angle: Math.atan2(matrix.b, matrix.a) * 180 / Math.PI,
+        gap: Math.hypot(matrix.a * 3 + matrix.c * 3 + matrix.e - event.clientX, matrix.b * 3 + matrix.d * 3 + matrix.f - event.clientY),
+      });
+    });
+  });
   await page.mouse.move(80, 300);
   await page.mouse.move(240, 300, { steps: 8 });
+  await page.mouse.move(240, 200, { steps: 8 });
+  await page.mouse.move(80, 200, { steps: 8 });
+  await page.mouse.move(240, 300, { steps: 8 });
   await expect(cursor).toBeVisible();
-  const heading = () => cursor.evaluate(el => {
-    const matrix = el.querySelector('path')!.getCTM()!;
-    return Math.atan2(matrix.b, matrix.a) * 180 / Math.PI;
-  });
-  await expect.poll(heading, { intervals: [16, 32, 50] }).toBeGreaterThan(90);
-  await expect.poll(async () => Math.abs(await heading())).toBeLessThan(3);
+  const samples = await page.evaluate(() => (window as unknown as { pointerSamples: { angle: number; gap: number }[] }).pointerSamples);
+  expect(samples.length).toBeGreaterThan(20);
+  expect(Math.max(...samples.map(sample => Math.abs(sample.angle)))).toBeLessThan(.1);
+  expect(Math.max(...samples.map(sample => sample.gap))).toBeLessThan(1);
   const tip = await cursor.evaluate(el => {
     const matrix = el.querySelector('path')!.getScreenCTM()!;
     return { x: matrix.a * 3 + matrix.c * 3 + matrix.e, y: matrix.b * 3 + matrix.d * 3 + matrix.f };
