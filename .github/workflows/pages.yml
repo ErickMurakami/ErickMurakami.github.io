@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build:
     if: ${{ vars.ENABLE_PAGES_DEPLOYMENT == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       PORTFOLIO_SITE_URL: ${{ vars.PORTFOLIO_SITE_URL }}
     steps:

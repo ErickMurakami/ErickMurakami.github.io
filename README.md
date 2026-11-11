@@ -58,7 +58,7 @@ For a substantial case study, review the actual code, write Markdown in `src/con
 
 ## GitHub Pages delivery
 
-The owner authorized the first public release and making only this repository public on 2026-11-06. The validation workflow builds and checks the site; it does not deploy. The Pages workflow has **only `workflow_dispatch`** and requires repository variable **`ENABLE_PAGES_DEPLOYMENT=true`**. Without that explicit opt-in, its jobs are skipped, even when manually triggered. The metadata workflow does not deploy.
+The owner authorized the first public release and making only this repository public on 2026-11-06. The validation workflow builds and checks the site; it does not deploy. Validation and Pages builds pin Ubuntu 24.04 to keep browser dependencies on a fixed runner release. The Pages workflow has **only `workflow_dispatch`** and requires repository variable **`ENABLE_PAGES_DEPLOYMENT=true`**. Without that explicit opt-in, its jobs are skipped, even when manually triggered. The metadata workflow does not deploy.
 
 For the authorized first release and future updates:
 
