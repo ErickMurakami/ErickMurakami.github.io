@@ -17,7 +17,7 @@ const projectPath = `${pt ? "/pt" : ""}/projects/${id}/`;
   <span class="project-index" aria-hidden="true">{String(p.order).padStart(2, "0")}</span>
   <p class="eyebrow">{p.focus}</p>
   <h3>
-    <a href={projectPath}>{p.title}</a>
+    <a class="project-title-link" href={projectPath}>{p.title}</a>
   </h3>
   <p class="card-description">{p.description}</p>
   <ul class="tags" aria-label={pt ? "Tecnologias" : "Technologies"}>

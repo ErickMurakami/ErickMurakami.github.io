@@ -2,10 +2,24 @@ import { synchronizeShowcase } from "./expertise";
 
 let cleanup = () => {};
 let readingPosition: ReadingPosition | undefined;
+let activeHomeSection: string | undefined;
+let homeScrollTarget: string | undefined;
+const lifecycle = new AbortController();
+const lifecycleOptions = { signal: lifecycle.signal };
+function applyTheme(dark: boolean, root = document.documentElement) {
+  root.classList.toggle("dark", dark);
+  root.dataset.theme = dark ? "dark" : "light";
+  root.style.colorScheme = dark ? "dark" : "light";
+}
 function initializeHeader() {
   cleanup();
   const controller = new AbortController();
   const { signal } = controller;
+  if (!document.querySelector(".portfolio-home")) {
+    activeHomeSection = undefined;
+    homeScrollTarget = undefined;
+  }
+  else if (location.hash) activeHomeSection = location.hash.slice(1);
   let resizeObserver: ResizeObserver | undefined;
   let projectFrame = 0;
   const header = document.querySelector<HTMLElement>(".header");
@@ -40,13 +54,15 @@ function initializeHeader() {
       document.getElementById(location.hash.slice(1))
     ) {
       languageToggle.hash = location.hash;
+    } else if (languageToggle && document.querySelector(".portfolio-home")) {
+      languageToggle.hash = "";
     }
 
     document
       .querySelectorAll<HTMLAnchorElement>(".primary-nav a")
       .forEach((link) => {
         if (link.pathname === location.pathname && link.hash) {
-          if (link.hash === location.hash)
+          if (link.hash === (activeHomeSection ? `#${activeHomeSection}` : location.hash))
             link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         }
@@ -69,13 +85,21 @@ function initializeHeader() {
         event.altKey ||
         link.origin !== location.origin ||
         link.pathname !== location.pathname ||
-        link.hash !== "#projects"
+        !link.hash ||
+        !document.querySelector(".portfolio-home") ||
+        !link.closest(".primary-nav, .hero, .footer")
       )
         return;
-      // Keep native anchors/history; correct the final position after Astro's hash jump.
+      const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+      if (!target) return;
+      event.preventDefault();
+      activeHomeSection = target.id;
+      // Keep native anchor URLs as a no-JavaScript fallback, with clean URLs on normal clicks.
+      if (location.hash) history.replaceState(history.state, "", location.pathname + location.search);
       cancelAnimationFrame(projectFrame);
       projectFrame = requestAnimationFrame(() => {
-        revealProjects(
+        homeScrollTarget = matchMedia("(prefers-reduced-motion: reduce)").matches ? undefined : target.id;
+        revealSection(target,
           matchMedia("(prefers-reduced-motion: reduce)").matches
             ? "instant"
             : "smooth",
@@ -86,8 +110,13 @@ function initializeHeader() {
     { signal, capture: true },
   );
   updateSectionNavigation();
-  window.addEventListener("hashchange", updateSectionNavigation, { signal });
+  window.addEventListener("scrollend", () => { homeScrollTarget = undefined; }, { signal });
+  window.addEventListener("hashchange", () => {
+    activeHomeSection = location.hash.slice(1) || undefined;
+    updateSectionNavigation();
+  }, { signal });
   const button = document.querySelector<HTMLButtonElement>(".theme");
+  applyTheme(document.documentElement.classList.contains("dark"));
   function updateTheme() {
     const light = !document.documentElement.classList.contains("dark");
     button?.setAttribute("aria-pressed", String(light));
@@ -106,7 +135,7 @@ function initializeHeader() {
   button?.addEventListener(
     "click",
     () => {
-      document.documentElement.classList.toggle("dark");
+      applyTheme(!document.documentElement.classList.contains("dark"));
       try {
         localStorage.setItem(
           "theme",
@@ -125,9 +154,9 @@ function initializeHeader() {
     cancelAnimationFrame(projectFrame);
   };
 }
-document.addEventListener("astro:before-swap", () => cleanup());
-document.addEventListener("astro:after-swap", initializeHeader);
-document.addEventListener("astro:page-load", initializeHeader);
+document.addEventListener("astro:before-swap", () => cleanup(), lifecycleOptions);
+document.addEventListener("astro:after-swap", initializeHeader, lifecycleOptions);
+document.addEventListener("astro:page-load", initializeHeader, lifecycleOptions);
 initializeHeader();
 
 // Restore only an explicitly requested equivalent-language navigation. Astro
@@ -138,6 +167,7 @@ interface ReadingPosition {
   anchor?: string;
   offset?: number;
   showcaseProgress?: number;
+  homeDestination?: string;
 }
 function releasedDocumentY(target: HTMLElement) {
   const showcase = target.closest<HTMLElement>(".is-scroll-showcase");
@@ -153,9 +183,7 @@ function releasedDocumentY(target: HTMLElement) {
     sticky.getBoundingClientRect().top
   );
 }
-function revealProjects(behavior: ScrollBehavior = "instant") {
-  const projects = document.getElementById("projects");
-  if (!projects) return;
+function revealSection(target: HTMLElement, behavior: ScrollBehavior = "instant") {
   const headerOffset =
     parseFloat(
       getComputedStyle(document.documentElement).getPropertyValue(
@@ -165,17 +193,21 @@ function revealProjects(behavior: ScrollBehavior = "instant") {
     (document.querySelector(".header")?.getBoundingClientRect().height ?? 0) +
       24;
   scrollTo({
-    top: releasedDocumentY(projects) + parseFloat(getComputedStyle(projects).paddingTop) - headerOffset,
+    top: releasedDocumentY(target) + parseFloat(getComputedStyle(target).paddingTop) - headerOffset,
     behavior,
   });
   synchronizeShowcase();
+}
+function revealProjects(behavior: ScrollBehavior = "instant") {
+  const projects = document.getElementById("projects");
+  if (projects) revealSection(projects, behavior);
 }
 let projectNavigation = false;
 let firstPageLoad = true;
 document.addEventListener("astro:page-load", () => {
   if (firstPageLoad && location.hash === "#projects") revealProjects();
   firstPageLoad = false;
-});
+}, lifecycleOptions);
 const englishPath = (path: string) =>
   path === "/pt/" ? "/" : path.replace(/^\/pt\//, "/");
 
@@ -186,10 +218,7 @@ document.addEventListener("astro:before-swap", (event) => {
     navigationType !== "traverse" &&
     !sourceElement?.closest(".language-toggle");
   // Apply the selected theme before the new root is swapped into the document.
-  newDocument.documentElement.classList.toggle(
-    "dark",
-    document.documentElement.classList.contains("dark"),
-  );
+  applyTheme(document.documentElement.classList.contains("dark"), newDocument.documentElement);
   readingPosition = undefined;
   if (
     !sourceElement?.closest(".language-toggle") ||
@@ -197,6 +226,11 @@ document.addEventListener("astro:before-swap", (event) => {
   )
     return;
   readingPosition = { x: scrollX, y: scrollY };
+  if (homeScrollTarget) {
+    readingPosition.homeDestination = homeScrollTarget;
+    homeScrollTarget = undefined;
+    window.scrollTo({ left: scrollX, top: scrollY, behavior: "instant" });
+  }
   if (newDocument.querySelector("[data-case-bar]"))
     newDocument
       .querySelector(".header")
@@ -211,14 +245,15 @@ document.addEventListener("astro:before-swap", (event) => {
     if (progress >= 0 && progress <= 1)
       readingPosition.showcaseProgress = progress;
   }
-  const anchor = from.hash
-    ? document.getElementById(decodeURIComponent(from.hash.slice(1)))
+  const anchorId = from.hash.slice(1) || (document.querySelector(".portfolio-home") ? activeHomeSection : undefined);
+  const anchor = anchorId
+    ? document.getElementById(decodeURIComponent(anchorId))
     : null;
   if (anchor && newDocument.getElementById(anchor.id)) {
     readingPosition.anchor = anchor.id;
     readingPosition.offset = -anchor.getBoundingClientRect().top;
   }
-});
+}, lifecycleOptions);
 
 document.addEventListener("astro:after-swap", () => {
   const position = readingPosition;
@@ -229,6 +264,13 @@ document.addEventListener("astro:after-swap", () => {
     return;
   }
   projectNavigation = false;
+  if (position.homeDestination) {
+    const target = document.getElementById(position.homeDestination);
+    if (target) {
+      revealSection(target);
+      return;
+    }
+  }
   // Both initializers run earlier in this event, before the transition snapshot.
   {
     let y = position.y;
@@ -252,4 +294,11 @@ document.addEventListener("astro:after-swap", () => {
     window.scrollTo({ left: position.x, top: y, behavior: "instant" });
     synchronizeShowcase();
   }
-});
+}, lifecycleOptions);
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    cleanup();
+    lifecycle.abort();
+  });
+}

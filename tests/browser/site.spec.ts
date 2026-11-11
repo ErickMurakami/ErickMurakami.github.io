@@ -24,6 +24,8 @@ for (const theme of ["dark", "light"]) {
   test(`${theme} theme: routes, accessibility and responsive layout`, async ({
     page,
   }) => {
+    // Audit stable content; scroll animation and reduced-motion behavior have separate checks.
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.addInitScript(
       (value) => localStorage.setItem("theme", value),
       theme,

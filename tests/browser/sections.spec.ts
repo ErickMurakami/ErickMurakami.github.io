@@ -42,6 +42,7 @@ test("Projects navigation scrolls progressively instead of jumping", async ({
   page,
 }) => {
   await page.goto("/");
+  const historyLength = await page.evaluate(() => history.length);
   await page.evaluate(() => {
     const samples: number[] = [];
     (window as typeof window & { scrollSamples: number[] }).scrollSamples =
@@ -67,8 +68,8 @@ test("Projects navigation scrolls progressively instead of jumping", async ({
     Math.max(...samples.slice(1).map((y, i) => Math.abs(y - samples[i]))),
   ).toBeLessThan(end * 0.5);
   await expect(page.locator("#projects h2")).toBeInViewport();
-  await page.goBack();
   await expect(page).toHaveURL("/");
+  expect(await page.evaluate(() => history.length)).toBe(historyLength);
 });
 
 test("header and footer use EM branding and a compact primary menu", async ({

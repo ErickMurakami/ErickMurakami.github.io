@@ -1,5 +1,9 @@
+---
+const waveHeights = [20, 36, 60, 88, 112, 74, 42, 96, 132, 110, 62, 32, 70, 48, 24];
+---
+
 <div class="circuit-field" aria-hidden="true">
-  <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" fill="none">
+  <svg viewBox="0 0 1200 500" preserveAspectRatio="xMaxYMid slice" fill="none">
     <defs>
       <pattern id="circuit-grid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".22" /></pattern>
     </defs>
@@ -21,6 +25,15 @@
       <circle cx="180" cy="100" r="5" /><circle cx="930" cy="120" r="5" />
       <circle cx="840" cy="390" r="5" /><circle cx="1000" cy="320" r="5" />
       <circle cx="270" cy="430" r="4" /><circle cx="1040" cy="180" r="4" />
+    </g>
+    <g class="circuit-wave-frame" stroke="currentColor">
+      <path d="M775 250h35M1150 250h50M810 190v-26h36M1114 164h36v26M810 310v26h36M1114 336h36v-26" />
+      <path d="M820 250h320" stroke-dasharray="2 8" opacity=".35" />
+    </g>
+    <g class="circuit-wave" fill="currentColor">
+      {waveHeights.map((height, index) => (
+        <rect x={828 + index * 21} y={250 - height / 2} width="5" height={height} rx="2.5" style={`--bar: ${index}`} />
+      ))}
     </g>
   </svg>
 </div>

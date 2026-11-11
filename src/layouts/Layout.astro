@@ -68,7 +68,7 @@ if (posts.length)
 ---
 
 <!doctype html>
-<html lang={pt ? "pt-BR" : "en-GB"} class="dark" transition:animate="none">
+<html lang={pt ? "pt-BR" : "en-GB"} class="dark" data-theme="dark" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <ClientRouter fallback="swap" />
@@ -128,10 +128,10 @@ if (posts.length)
     <meta property="og:locale" content={pt ? "pt_BR" : "en_GB"} />
     <script is:inline>
       try {
-        document.documentElement.classList.toggle(
-          "dark",
-          localStorage.getItem("theme") !== "light",
-        );
+        const dark = localStorage.getItem("theme") !== "light";
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
       } catch {}
     </script>
   </head>
@@ -205,7 +205,8 @@ if (posts.length)
           aria-label={localized("Switch to light theme", "Ativar tema claro")}
           aria-pressed="false"
         >
-          <Icon name="sun" />
+          <span class="theme-icon-sun"><Icon name="sun" /></span>
+          <span class="theme-icon-moon"><Icon name="moon" /></span>
         </button>
       </div>
       {(projectTitle || articleTitle) && (
@@ -260,6 +261,7 @@ if (posts.length)
         <span>© {new Date().getFullYear()} Erick Murakami</span>
       </div>
     </footer>
+    {onHome && <span class="project-cursor" data-project-cursor aria-hidden="true"><Icon name="eye" /></span>}
     <script>
       import "../scripts/navigation";
       import "../scripts/environment";

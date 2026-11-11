@@ -116,7 +116,7 @@ test("translated project navigation keeps reading position and replaces SEO meta
   await expectSameDocument(page);
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(readingY);
   await page.locator(".brand").click();
-  await expect(page).toHaveURL(/127\.0\.0\.1:4321\/$/);
+  await expect(page).toHaveURL("/");
   await expect(page.locator("[data-expertise-showcase]")).not.toHaveClass(
     /is-scroll-showcase/,
   );
@@ -242,7 +242,7 @@ test("Projects header links skip the sticky sequence and language swaps keep the
     .locator(".primary-nav")
     .getByRole("link", { name: "Projects", exact: true })
     .click();
-  await expect(page).toHaveURL(/\/#projects$/);
+  await expect(page).toHaveURL("/");
   const assertHeading = async () => {
     await expect
       .poll(async () => {
@@ -257,7 +257,7 @@ test("Projects header links skip the sticky sequence and language swaps keep the
   };
   await assertHeading();
   await clickLanguage(page);
-  await expect(page).toHaveURL(/\/pt\/#projects$/);
+  await expect(page).toHaveURL("/pt/");
   await assertHeading();
   await expectSameDocument(page);
   await page.locator("#projects .project-card h3 a").first().click();
