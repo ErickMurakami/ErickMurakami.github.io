@@ -87,22 +87,28 @@ const posts = await getPublishedPosts("en");
           </strong>
         </div>
       </div>
-      <div class="shell expertise-section"><ExpertiseGrid locale="en" /></div>
-      <section id="projects" class="shell section">
-        <div class="section-heading">
-          <div>
-            <h2>Projects</h2>
-            <p>What each project does, how it works, and what I’d change.</p>
+      <div class="shell expertise-section">
+        <p class="section-kicker home-section-intro"><span class="section-number" aria-hidden="true" />Engineering focus</p>
+        <ExpertiseGrid locale="en" />
+      </div>
+      <div class="home-band home-band-projects">
+        <section id="projects" class="shell section">
+          <div class="section-heading home-section-intro">
+            <div>
+              <p class="section-kicker"><span class="section-number" aria-hidden="true" />Selected work</p>
+              <h2>Projects</h2>
+              <p>What each project does, how it works, and what I’d change.</p>
+            </div>
+            <a class="text-link" href="/projects/">
+              View all projects →
+            </a>
           </div>
-          <a class="text-link" href="/projects/">
-            View all projects →
-          </a>
-        </div>
-        <ProjectGallery projects={projects} locale="en" includeAdditional={false} />
-      </section>
+          <ProjectGallery projects={projects} locale="en" includeAdditional={false} />
+        </section>
+      </div>
     </div>
   </section>
   <BlogPreview posts={posts} locale="en" />
-  <AboutSection locale="en" />
-  <ContactSection locale="en" />
+  <div class="home-band home-band-about"><AboutSection locale="en" /></div>
+  <div class="home-band home-band-contact"><ContactSection locale="en" /></div>
 </Layout>

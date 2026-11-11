@@ -10,6 +10,9 @@ const Heading = standalone ? "h1" : "h2";
 
 {locale === "pt" ? (
   <section id="contact" class="shell contact-banner">
+    {!standalone && (
+      <p class="section-kicker home-section-intro"><span class="section-number" aria-hidden="true" />Vamos conversar</p>
+    )}
     <Heading>Entre em contato</Heading>
     <a
       class="button primary"
@@ -40,6 +43,9 @@ const Heading = standalone ? "h1" : "h2";
   </section>
 ) : (
   <section id="contact" class="shell contact-banner">
+    {!standalone && (
+      <p class="section-kicker home-section-intro"><span class="section-number" aria-hidden="true" />Let's talk</p>
+    )}
     <Heading>Get in touch</Heading>
     <a
       class="button primary"

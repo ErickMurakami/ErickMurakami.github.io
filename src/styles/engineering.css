@@ -68,6 +68,20 @@ body { font-size: 16px; line-height: 1.8; }
 h2 { font-size: clamp(30px,3.4vw,44px); font-weight: 500; }
 .section-heading { margin-bottom: 40px; }
 .section-heading p:not(.eyebrow) { font-size: 15px; color: var(--muted-foreground); max-width: 52ch; }
+/* Home chapters reuse the existing palette in both themes. */
+.portfolio-home { counter-reset: home-section; }
+.portfolio-home .specialty-strip { background: var(--card); border-block: 1px solid var(--border); }
+.portfolio-home .expertise-section { padding-block: clamp(40px, 5vw, 64px); }
+.home-band { border-top: 1px solid var(--border); }
+.home-band-projects { background: var(--card); }
+.home-band-about { background: var(--background); }
+.home-band-contact { background: var(--secondary); }
+.portfolio-home .professional-about { border-top: 0; }
+.portfolio-home .contact-banner { margin-bottom: 0; padding-block: var(--space-section); border: 0; background: transparent; }
+.home-band-contact .resume-links .text-link { color: var(--foreground); text-decoration: underline; text-underline-offset: 4px; }
+.portfolio-home p.section-kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 16px; font: 11px/1.6 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); max-width: none; }
+.section-number::before { counter-increment: home-section; content: counter(home-section, decimal-leading-zero) " /"; color: var(--link); }
+.portfolio-home .section-kicker::after { content: ""; width: 48px; height: 1px; background: var(--border); flex-shrink: 0; }
 .project-grid { display: block; counter-reset: none; }
 .project-card { position: relative; display: grid; grid-template-columns: minmax(160px,.75fr) minmax(0,1.4fr); column-gap: 56px; min-height: 0; padding: 42px 24px 38px 72px; border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent; transition: background .25s; }
 .project-card:hover, .project-card:focus-within { background: color-mix(in srgb,var(--link) 4%,transparent); }

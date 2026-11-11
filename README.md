@@ -27,6 +27,8 @@ Each language has one main page with Projects, About and Contact sections. Case 
 
 Case studies start with the project's README and business context, then explain verified implementation details and limits. If a future project has no README, use its actual source and technical context and state the documentation gap.
 
+The homepage separates engineering focus, projects, professional background and contact into numbered sections. Full-width surfaces and divider lines use the existing background, card, secondary and border colors in both themes. Section introductions share the existing scroll-reveal observer; native scrolling, reduced-motion support and no-JavaScript content remain available. Groq and Spotify technology labels use local SVGs, with sources and licensing recorded in `public/technologies/SOURCES.md`.
+
 ## Languages
 
 English is served at `/`; Brazilian Portuguese is served at `/pt/`. The language control shows one destination flag: the United Kingdom on Portuguese pages, or Brazil on English pages. Clicking it changes language and swaps the flag, preserving the equivalent route, including project case studies and Home sections. Flags are local SVG assets from flag-icons v7.5.0 with their upstream license included. Each page declares its language, canonical URL and alternate-language links. The sitemap includes both language trees. Portuguese writing lives in `src/content/projects-pt/` and `src/content/notes-pt/`; schemas are shared and validation checks case-study parity and identical source evidence. Articles can be published independently in Portuguese or English. Use the same filename in both collections if you later add a translation.

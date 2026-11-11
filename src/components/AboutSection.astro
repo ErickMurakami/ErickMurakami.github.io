@@ -35,6 +35,9 @@ const paragraphs = pt
 <section id="about" class="shell section professional-about">
   <div class="about-introduction">
     <div>
+      {!standalone && (
+        <p class="section-kicker"><span class="section-number" aria-hidden="true" />{pt ? "Perfil profissional" : "Professional background"}</p>
+      )}
       <Heading>{pt ? "Sobre mim" : "About me"}</Heading>
       {!standalone && (
         <a class="text-link" href={`${pt ? "/pt" : ""}/about/`}>

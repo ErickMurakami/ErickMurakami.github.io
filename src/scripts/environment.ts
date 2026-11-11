@@ -3,7 +3,7 @@ function initializeEnvironment() {
   cleanup();
   const controller = new AbortController();
   const media = matchMedia('(prefers-reduced-motion: reduce)');
-  const targets = document.querySelectorAll<HTMLElement>('.project-card, .expertise-card, .about-introduction, .about-subsection, .education-entry');
+  const targets = document.querySelectorAll<HTMLElement>('.project-card, .expertise-card, .about-introduction, .about-subsection, .education-entry, .home-section-intro');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
