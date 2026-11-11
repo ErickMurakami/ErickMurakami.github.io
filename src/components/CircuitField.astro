@@ -1,5 +1,16 @@
 ---
-const waveHeights = [20, 36, 60, 88, 112, 74, 42, 96, 132, 110, 62, 32, 70, 48, 24];
+const traces = [
+  "M0 250H130L155 225H180L205 250H250L275 290H295L325 190H345L375 315H395L425 155H445L475 320H495L525 200H545L575 270H615L645 230H685L715 285H745L775 165H795L825 325H845L875 185H895L925 295H945L975 220H1000L1025 250H1200",
+  "M0 130H160L220 190H270L300 160H340L370 215H400L430 120H460L490 205H520L550 150H610L650 190H710L750 135H780L810 210H850L890 140H920L950 180H1060L1110 120H1200",
+  "M0 390H100L170 320H230L260 360H290L320 290H350L380 395H410L440 300H470L500 370H530L560 325H590L620 360H720L750 310H790L820 390H840L870 300H900L930 365H970L1000 330H1050L1120 400H1200",
+];
+const branches = [
+  "M155 225V100L205 50H380", "M325 190V80L385 20H600",
+  "M475 320V410L545 480H780", "M775 165V90L835 30H1030",
+  "M925 295V420L985 480H1200", "M1060 180V80L1100 40H1200",
+  "M170 320V450L140 480H0",
+];
+const nodes = [[155, 225], [325, 190], [475, 320], [775, 165], [925, 295], [1060, 180], [170, 320]];
 ---
 
 <div class="circuit-field" aria-hidden="true">
@@ -8,32 +19,22 @@ const waveHeights = [20, 36, 60, 88, 112, 74, 42, 96, 132, 110, 62, 32, 70, 48, 
       <pattern id="circuit-grid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".22" /></pattern>
     </defs>
     <rect width="1200" height="500" fill="url(#circuit-grid)" />
-    <g class="circuit-traces" stroke="currentColor">
-      <path d="M0 100H180L260 180H680L750 250H930L1000 320H1200" />
-      <path d="M80 500V380L200 260H750V250H930V120L1000 50H1200" />
-      <path d="M320 0V60L440 180H750V250H840V390L930 480H1200" />
-      <path d="M0 430H270L350 350V250H750V180H1040L1120 100H1200" />
-    </g>
-    <g class="circuit-signals" stroke="currentColor" stroke-width="2" pathLength="100">
-      <path pathLength="100" d="M0 100H180L260 180H680L750 250H930L1000 320H1200" />
-      <path pathLength="100" d="M80 500V380L200 260H750V250H930V120L1000 50H1200" />
-      <path pathLength="100" d="M320 0V60L440 180H750V250H840V390L930 480H1200" />
-    </g>
-    <g class="circuit-nodes" fill="var(--background)" stroke="currentColor">
-      <rect x="725" y="225" width="50" height="50" rx="3" />
-      <rect x="736" y="236" width="28" height="28" rx="1" />
-      <circle cx="180" cy="100" r="5" /><circle cx="930" cy="120" r="5" />
-      <circle cx="840" cy="390" r="5" /><circle cx="1000" cy="320" r="5" />
-      <circle cx="270" cy="430" r="4" /><circle cx="1040" cy="180" r="4" />
-    </g>
-    <g class="circuit-wave-frame" stroke="currentColor">
-      <path d="M775 250h35M1150 250h50M810 190v-26h36M1114 164h36v26M810 310v26h36M1114 336h36v-26" />
-      <path d="M820 250h320" stroke-dasharray="2 8" opacity=".35" />
-    </g>
-    <g class="circuit-wave" fill="currentColor">
-      {waveHeights.map((height, index) => (
-        <rect x={828 + index * 21} y={250 - height / 2} width="5" height={height} rx="2.5" style={`--bar: ${index}`} />
-      ))}
+    <g class="circuit-weave">
+      <g class="circuit-traces" stroke="currentColor">
+        {traces.map((d) => <path d={d} />)}
+        {branches.map((d) => <path d={d} opacity=".55" />)}
+      </g>
+      <g class="circuit-wave" stroke="currentColor" stroke-width="2">
+        {traces.map((d, index) => <path d={d} pathLength="100" style={`--channel: ${index}`} />)}
+      </g>
+      <g class="circuit-signals" stroke="currentColor" stroke-width="2">
+        {traces.map((d) => <path d={d} pathLength="100" />)}
+      </g>
+      <g class="circuit-nodes" fill="var(--background)" stroke="currentColor">
+        {nodes.map(([cx, cy]) => <circle cx={cx} cy={cy} r="4" />)}
+        <rect x="581" y="256" width="28" height="28" rx="2" />
+        <path d="M589 264h12v12h-12Z" />
+      </g>
     </g>
   </svg>
 </div>

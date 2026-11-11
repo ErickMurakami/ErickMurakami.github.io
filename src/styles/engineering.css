@@ -57,11 +57,12 @@ body { font-size: 16px; line-height: 1.8; }
 .circuit-field svg { display: block; width: 100%; height: 100%; }
 .circuit-traces { opacity: .4; }
 .circuit-nodes { opacity: .65; transition: opacity .5s; }
-.circuit-wave-frame { opacity: .45; }
-.circuit-wave rect { opacity: .65; transform-box: fill-box; transform-origin: center; animation: signal-wave 2.8s ease-in-out infinite; animation-delay: calc(var(--bar) * -170ms); animation-play-state: paused; }
-.is-visible .circuit-wave rect { animation-play-state: running; }
-.page-hidden .circuit-wave rect { animation-play-state: paused; }
-@keyframes signal-wave { 0%, 100% { transform: scaleY(.4); opacity: .35; } 45% { transform: scaleY(1); opacity: .8; } 70% { transform: scaleY(.6); opacity: .5; } }
+.circuit-weave { transform-box: fill-box; transform-origin: center; animation: circuit-breathe 3.6s ease-in-out infinite; animation-play-state: paused; }
+.circuit-wave path { stroke-dasharray: 18 82; opacity: .45; animation: signal-wave 3.6s linear infinite; animation-delay: calc(var(--channel) * -1.2s); animation-play-state: paused; }
+.is-visible .circuit-wave path, .is-visible .circuit-weave { animation-play-state: running; }
+.page-hidden .circuit-wave path, .page-hidden .circuit-weave { animation-play-state: paused; }
+@keyframes signal-wave { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes circuit-breathe { 0%, 100% { transform: scaleY(.96); } 50% { transform: scaleY(1.03); } }
 .circuit-field:hover .circuit-nodes { opacity: 1; }
 .circuit-signals path { stroke-dasharray: 3 97; animation: packet-travel 12s linear infinite; animation-play-state: paused; opacity: 0; }
 .circuit-signals path:nth-child(2) { animation-delay: -5s; animation-duration: 17s; }
@@ -115,8 +116,8 @@ h2 { font-size: clamp(30px,3.4vw,44px); font-weight: 500; }
 .portfolio-home .project-card .card-links { position: relative; z-index: 2; }
 .project-cursor { display: none; position: fixed; z-index: 60; width: 24px; height: 24px; align-items: center; justify-content: center; color: var(--foreground); filter: drop-shadow(0 1px 2px var(--background)); pointer-events: none; opacity: 0; transform: translate(-50%, -50%) scale(.85); transition: opacity 100ms ease, transform 140ms ease; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html, body, a, button, summary { cursor: url('/cursors/arrow-light.svg') 2 2, auto; }
-  .dark, .dark body, .dark a, .dark button, .dark summary { cursor: url('/cursors/arrow-dark.svg') 2 2, auto; }
+  html, body, a, button, summary { cursor: url('/cursors/arrow-light.svg') 14 12, auto; }
+  .dark, .dark body, .dark a, .dark button, .dark summary { cursor: url('/cursors/arrow-dark.svg') 14 12, auto; }
   .project-cursor { display: flex; }
   .project-cursor.is-visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   .has-view-cursor .project-title-link, .has-view-cursor .card-links > a:first-child { cursor: none; }
@@ -193,6 +194,6 @@ h2 { font-size: clamp(30px,3.4vw,44px); font-weight: 500; }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; }
   .circuit-signals { display: none; }
-  .circuit-wave rect { animation: none; transform: none; }
+  .circuit-wave path, .circuit-weave { animation: none; transform: none; }
   .circuit-field svg { animation: none; }
 }

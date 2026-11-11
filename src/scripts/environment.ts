@@ -26,16 +26,19 @@ function initializeEnvironment() {
   const cursor = document.querySelector<HTMLElement>('[data-project-cursor]');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   let hoveredCard: HTMLElement | null = null;
+  let pointer: { x: number; y: number } | undefined;
+  let cursorFrame = 0;
   const hideCursor = () => {
     cursor?.classList.remove('is-visible');
     hoveredCard?.classList.remove('has-view-cursor');
     hoveredCard = null;
   };
   if (cursor) {
-    document.addEventListener('pointermove', (event) => {
-      const target = event.target instanceof Element ? event.target : null;
+    const updateCursor = () => {
+      cursorFrame = 0;
+      const target = pointer ? document.elementFromPoint(pointer.x, pointer.y) : null;
       const card = target?.closest<HTMLElement>('.portfolio-home .project-card[data-project]') ?? null;
-      if (!finePointer.matches || media.matches || !card || target?.closest('a[target="_blank"]')) {
+      if (!pointer || !finePointer.matches || media.matches || !card || target?.closest('a[target="_blank"]')) {
         hideCursor();
         return;
       }
@@ -44,17 +47,22 @@ function initializeEnvironment() {
         hoveredCard = card;
         card.classList.add('has-view-cursor');
       }
-      cursor.style.left = `${event.clientX}px`;
-      cursor.style.top = `${event.clientY}px`;
+      cursor.style.left = `${pointer.x}px`;
+      cursor.style.top = `${pointer.y}px`;
       cursor.classList.add('is-visible');
+    };
+    const scheduleCursor = () => { if (!cursorFrame) cursorFrame = requestAnimationFrame(updateCursor); };
+    document.addEventListener('pointermove', (event) => {
+      pointer = { x: event.clientX, y: event.clientY };
+      scheduleCursor();
     }, { signal: controller.signal, passive: true });
-    document.addEventListener('pointerout', (event) => { if (!event.relatedTarget) hideCursor(); }, { signal: controller.signal });
-    document.addEventListener('keydown', hideCursor, { signal: controller.signal });
-    window.addEventListener('scroll', hideCursor, { signal: controller.signal, passive: true });
+    document.addEventListener('pointerout', (event) => { if (!event.relatedTarget) { pointer = undefined; hideCursor(); } }, { signal: controller.signal });
+    document.addEventListener('keydown', () => { pointer = undefined; hideCursor(); }, { signal: controller.signal });
+    window.addEventListener('scroll', scheduleCursor, { signal: controller.signal, passive: true });
     media.addEventListener('change', hideCursor, { signal: controller.signal });
     finePointer.addEventListener('change', hideCursor, { signal: controller.signal });
   }
-  cleanup = () => { controller.abort(); observer.disconnect(); fieldObserver.disconnect(); hideCursor(); };
+  cleanup = () => { controller.abort(); observer.disconnect(); fieldObserver.disconnect(); cancelAnimationFrame(cursorFrame); hideCursor(); };
 }
 document.addEventListener('astro:before-swap', () => cleanup(), { signal: lifecycle.signal });
 document.addEventListener('astro:page-load', initializeEnvironment, { signal: lifecycle.signal });

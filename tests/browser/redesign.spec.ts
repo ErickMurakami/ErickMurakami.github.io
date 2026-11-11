@@ -33,14 +33,14 @@ test('engineering layouts preserve content, accessibility and native scrolling',
 test('circuit motion pauses offscreen and reduced motion exposes all content', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.circuit-field')).toHaveClass(/is-visible/);
-  await expect(page.locator('.circuit-wave rect').first()).toHaveCSS('animation-play-state', 'running');
+  await expect(page.locator('.circuit-wave path').first()).toHaveCSS('animation-play-state', 'running');
   await page.locator('#contact').scrollIntoViewIfNeeded();
   await expect(page.locator('.circuit-field')).not.toHaveClass(/is-visible/);
-  await expect(page.locator('.circuit-wave rect').first()).toHaveCSS('animation-play-state', 'paused');
+  await expect(page.locator('.circuit-wave path').first()).toHaveCSS('animation-play-state', 'paused');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/pt/');
   await expect(page.locator('.circuit-signals')).toHaveCSS('display', 'none');
-  await expect(page.locator('.circuit-wave rect').first()).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('.circuit-wave path').first()).toHaveCSS('animation-name', 'none');
   for (const card of await page.locator('.project-card, .expertise-card').all()) {
     await expect(card).toHaveCSS('opacity', '1');
   }
