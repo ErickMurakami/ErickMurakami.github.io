@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "preview:content": "node scripts/local-preview.mjs",
     "preview:content:clear": "node scripts/local-preview.mjs --clear",
+    "generate:cursors": "node scripts/generate-cursors.mjs",
     "check": "astro check",
     "sync": "node scripts/github-sync.mjs",
     "test": "node tests/github-sync.test.mjs",

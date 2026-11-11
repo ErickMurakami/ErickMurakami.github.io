@@ -4,7 +4,8 @@ const lifecycle = new AbortController();
 function initializeCursor() {
   cleanup();
   const cursor = document.querySelector<HTMLElement>('[data-drift-cursor]');
-  if (!cursor || !CSS.supports('selector(:has(a:hover))')) return;
+  const shape = cursor?.querySelector<SVGPathElement>('path');
+  if (!cursor || !shape || !CSS.supports('selector(:has(a:hover))')) return;
   const root = document.documentElement;
   const media = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
   const controller = new AbortController();
@@ -14,6 +15,8 @@ function initializeCursor() {
   let x = 0, y = 0, targetX = 0, targetY = 0;
   let angle = 0, angularVelocity = 0, mouseAngle = 0;
   let lastMove = 0, lastFrame = 0;
+  let size = 28;
+  let density = matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
 
   const hide = () => {
     active = false;
@@ -41,8 +44,10 @@ function initializeCursor() {
     const turn = ((targetAngle - angle) % 360 + 540) % 360 - 180;
     angularVelocity = (angularVelocity + turn * .14 * step) * Math.pow(.68, step);
     angle += angularVelocity * step;
-    cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    cursor.style.setProperty('--cursor-angle', `${angle}deg`);
+    const pixels = window.devicePixelRatio || 1;
+    cursor.style.transform = `translate3d(${Math.round(x * pixels) / pixels}px, ${Math.round(y * pixels) / pixels}px, 0)`;
+    // Rotate vector geometry directly so the browser redraws sharp edges each frame.
+    shape.setAttribute('transform', `rotate(${angle} 3 3)`);
     if (direction || now - lastMove < 180 || Math.abs(turn) > .1 || Math.abs(angularVelocity) > .1 || Math.abs(targetX - x) + Math.abs(targetY - y) > .1)
       frame = requestAnimationFrame(render);
   };
@@ -51,7 +56,8 @@ function initializeCursor() {
   };
   document.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || !media.matches || document.hidden) { hide(); return; }
-    const nextX = event.clientX - 3, nextY = event.clientY - 3;
+    const anchor = 3 * size / 24;
+    const nextX = event.clientX - anchor, nextY = event.clientY - anchor;
     const dx = nextX - targetX, dy = nextY - targetY;
     if (!active) {
       x = nextX; y = nextY; angle = 0; angularVelocity = 0; mouseAngle = 0;
@@ -66,6 +72,20 @@ function initializeCursor() {
   }, { signal, passive: true });
   // Scroll keeps animating even when the mouse stays still.
   window.addEventListener('scroll', start, { signal, passive: true });
+  const configureSize = () => {
+    const nextSize = screen.width >= 2400 ? 40 : screen.width >= 1600 ? 32 : 28;
+    const shift = (size - nextSize) * 3 / 24;
+    x += shift; y += shift; targetX += shift; targetY += shift;
+    size = nextSize;
+    root.dataset.cursorSize = String(size);
+    density.removeEventListener('change', configureSize);
+    density = matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    density.addEventListener('change', configureSize, { signal });
+    start();
+  };
+  configureSize();
+  window.addEventListener('resize', configureSize, { signal, passive: true });
+  window.visualViewport?.addEventListener('resize', configureSize, { signal, passive: true });
   document.addEventListener('pointerout', event => {
     if (!event.relatedTarget && (event.clientX <= 0 || event.clientY <= 0 || event.clientX >= innerWidth || event.clientY >= innerHeight)) hide();
   }, { signal });

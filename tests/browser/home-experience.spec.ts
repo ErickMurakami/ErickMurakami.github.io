@@ -123,7 +123,8 @@ for (const theme of ['dark', 'light']) {
       const body = page.locator('body');
       const cursor = page.locator('[data-drift-cursor]');
       const turnFrom = (target: number) => cursor.evaluate((el, target) => {
-        const angle = parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle')) || 0;
+        const matrix = el.querySelector('path')!.getCTM()!;
+        const angle = Math.atan2(matrix.b, matrix.a) * 180 / Math.PI;
         return Math.abs(((angle - target) % 360 + 540) % 360 - 180);
       }, target);
       for (const [distance, direction] of [[120, 'down'], [-80, 'up']] as const) {
@@ -152,10 +153,17 @@ test('arrow drifts with mouse direction, settles and gives way to the native pro
   await page.mouse.move(80, 300);
   await page.mouse.move(240, 300, { steps: 8 });
   await expect(cursor).toBeVisible();
-  await expect.poll(() => cursor.evaluate(el => parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle'))), { intervals: [16, 32, 50] }).toBeGreaterThan(90);
-  await expect.poll(() => cursor.evaluate(el => Math.abs(parseFloat((el as HTMLElement).style.getPropertyValue('--cursor-angle'))))).toBeLessThan(3);
-  const box = (await cursor.boundingBox())!;
-  expect(Math.abs(box.x - 237) + Math.abs(box.y - 297)).toBeLessThan(2);
+  const heading = () => cursor.evaluate(el => {
+    const matrix = el.querySelector('path')!.getCTM()!;
+    return Math.atan2(matrix.b, matrix.a) * 180 / Math.PI;
+  });
+  await expect.poll(heading, { intervals: [16, 32, 50] }).toBeGreaterThan(90);
+  await expect.poll(async () => Math.abs(await heading())).toBeLessThan(3);
+  const tip = await cursor.evaluate(el => {
+    const matrix = el.querySelector('path')!.getScreenCTM()!;
+    return { x: matrix.a * 3 + matrix.c * 3 + matrix.e, y: matrix.b * 3 + matrix.d * 3 + matrix.f };
+  });
+  expect(Math.hypot(tip.x - 240, tip.y - 300)).toBeLessThan(1);
   const card = page.locator('[data-project="RoastMyTaste"]');
   await card.hover();
   await expect(cursor).toBeHidden();
@@ -164,3 +172,36 @@ test('arrow drifts with mouse direction, settles and gives way to the native pro
   await expect(cursor).toBeHidden();
   await expect(card).toHaveCSS('cursor', /view-dark\.svg/);
 });
+
+for (const [screenWidth, density, size] of [[1440, 1, 28], [1920, 1.5, 32], [2560, 2, 40]]) {
+  test(`cursor size follows the monitor at ${screenWidth}px and ${density}x density`, async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, screen: { width: screenWidth, height: 1440 }, deviceScaleFactor: density });
+    try {
+      const page = await context.newPage();
+      await page.goto('/');
+      await expect(page.locator('html')).toHaveAttribute('data-cursor-size', String(size));
+      const suffix = size === 28 ? '' : `-${size}`;
+      await expect(page.locator('body')).toHaveCSS('cursor', new RegExp(`arrow-dark${suffix}\\.svg`));
+      await page.mouse.move(100, 300);
+      const cursor = page.locator('[data-drift-cursor]');
+      await expect(cursor).toBeVisible();
+      await expect(cursor).toHaveCSS('width', `${size}px`);
+      await expect.poll(async () => (await cursor.boundingBox())!.x).toBeGreaterThan(80);
+      const box = (await cursor.boundingBox())!;
+      expect(Math.abs(box.x * density - Math.round(box.x * density))).toBeLessThan(.01);
+      const card = page.locator('[data-project="RoastMyTaste"]');
+      await card.hover();
+      await expect(card).toHaveCSS('cursor', new RegExp(`view-dark${suffix}\\.svg`));
+      await expect(cursor).toBeHidden();
+      const response = await page.request.get(`/cursors/view-dark${suffix}.svg`);
+      expect(response.ok()).toBe(true);
+      expect(await response.text()).toContain(`width="${size}" height="${size}"`);
+      await page.evaluate(() => {
+        Object.defineProperty(screen, 'width', { configurable: true, value: 2560 });
+        window.dispatchEvent(new Event('resize'));
+      });
+      await expect(page.locator('html')).toHaveAttribute('data-cursor-size', '40');
+      await expect(card).toHaveCSS('cursor', /view-dark-40\.svg/);
+    } finally { await context.close(); }
+  });
+}
